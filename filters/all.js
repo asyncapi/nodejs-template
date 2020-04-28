@@ -3,10 +3,9 @@ const { URL } = require('url');
 const filenamify = require('filenamify');
 const _ = require('lodash');
 
-function oneLine(string) {
-  console.log(string)
-  if (!string) return string;
-  return string.replace(/\n/g, ' ');
+function oneLine(str) {
+  if (!str) return str;
+  return str.replace(/\n/g, ' ');
 };
 filter.oneLine = oneLine;
 
@@ -37,7 +36,6 @@ function docline(field, fieldName, scopePropName) {
 
     return `${line}${description}`;
   };
-
   return buildLine(field, fieldName, scopePropName);
 };
 filter.docline = docline;
@@ -48,10 +46,7 @@ function queueName(title, version) {
 filter.queueName = queueName;
 
 function toMqttTopic(topics, appendWildcard = false) {
-  if (typeof topics === 'string') return toMqtt(topics, appendWildcard);
-  if (Array.isArray(topics)) return topics.map(toMqtt);
-
-  function toMqtt(str, appendWildcard = false) {
+  const toMqtt = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
     if (result.startsWith('/')) result = result.substr(1);
@@ -59,27 +54,27 @@ function toMqttTopic(topics, appendWildcard = false) {
     if (appendWildcard) result += '/#';
     return result;
   }
+
+  if (typeof topics === 'string') return toMqtt(topics, appendWildcard);
+  if (Array.isArray(topics)) return topics.map(toMqtt);
 };
 filter.toMqttTopic = toMqttTopic;
 
 function toKafkaTopic(topics) {
-  if (typeof topics === 'string') return toKafka(topics);
-  if (Array.isArray(topics)) return topics.map(toKafka);
-
-  function toKafka(str) {
+  const toKafka = (str) => {
     let result = str;
     if (result.startsWith('/')) result = result.substr(1);
     result = result.replace(/\//g, '__');
     return result;
   }
+
+  if (typeof topics === 'string') return toKafka(topics);
+  if (Array.isArray(topics)) return topics.map(toKafka);
 };
 filter.toKafkaTopic = toKafkaTopic;
 
 function toAmqpTopic(topics, appendWildcard = false) {
-  if (typeof topics === 'string') return toAmqp(topics, appendWildcard);
-  if (Array.isArray(topics)) return topics.map(toAmqp);
-
-  function toAmqp(str, appendWildcard = false) {
+  const toAmqp = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
     if (result.startsWith('/')) result = result.substr(1);
@@ -87,6 +82,9 @@ function toAmqpTopic(topics, appendWildcard = false) {
     if (appendWildcard) result += '.#';
     return result;
   }
+
+  if (typeof topics === 'string') return toAmqp(topics, appendWildcard);
+  if (Array.isArray(topics)) return topics.map(toAmqp);
 };
 filter.toAmqpTopic = toAmqpTopic;
 
@@ -178,7 +176,7 @@ function toJS(objFromJSON, indent = 2) {
     return JSON.stringify(objFromJSON);
   }
 
-  function maybeQuote(str) {
+  const maybeQuote = (str) => {
     if (str.match(/^[\w\d\_\$]+$/g)) return str;
     return `'${str}'`;
   }
@@ -193,10 +191,10 @@ function toJS(objFromJSON, indent = 2) {
 };
 filter.toJS = toJS;
 
-function filenamify(string, options) {
+function convertToFilename(string, options) {
   return filenamify(string, options || { replacement: '-', maxLength: 255 });
 };
-filter.filenamify = filenamify;
+filter.convertToFilename = convertToFilename;
 
 /**
  * Replaces variables in the server url with its declared values. Default or first enum in case of default is not declared
@@ -207,6 +205,24 @@ filter.filenamify = filenamify;
  * @return {String}
  */
 function replaceVariablesWithValues(url, serverVariables) {
+  const getVariablesNamesFromUrl = (url) => {
+    let result = [],
+      array;
+    const regEx = /{([^}]+)}/g;
+
+    while ((array = regEx.exec(url)) !== null) {
+      result.push([array[0], array[1]]);
+    }
+
+    return result;
+  }
+
+  const getVariableValue = (object, variable) => {
+    const keyValue = object[variable]._json;
+
+    if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
+  }
+
   const urlVariables = getVariablesNamesFromUrl(url);
   const declaredVariables =
     urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]))
@@ -225,23 +241,5 @@ function replaceVariablesWithValues(url, serverVariables) {
     return newUrl;
   }
   return url;
-
-  function getVariablesNamesFromUrl(url) {
-    let result = [],
-      array;
-    const regEx = /{([^}]+)}/g;
-
-    while ((array = regEx.exec(url)) !== null) {
-      result.push([array[0], array[1]]);
-    }
-
-    return result;
-  }
-
-  function getVariableValue(object, variable) {
-    const keyValue = object[variable]._json;
-
-    if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
-  }
 };
 filter.replaceVariablesWithValues = replaceVariablesWithValues;
