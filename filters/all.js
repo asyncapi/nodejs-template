@@ -3,43 +3,6 @@ const { URL } = require('url');
 const filenamify = require('filenamify');
 const _ = require('lodash');
 
-function oneLine(str) {
-  if (!str) return str;
-  return str.replace(/\n/g, ' ');
-};
-filter.oneLine = oneLine;
-
-function docline(field, fieldName, scopePropName) {
-  const buildLine = (f, fName, pName) => {
-    const type = f.type() ? f.type() : 'string';
-    const description = f.description() ? ` - ${f.description().replace(/\r?\n|\r/g, '')}` : '';
-    let def = f.default();
-
-    if (def && type === 'string') def = `'${def}'`;
-
-    let line;
-    if (def !== undefined) {
-      line = ` * @param {${type}} [${pName ? `${pName}.` : ''}${fName}=${def}]`;
-    } else {
-      line = ` * @param {${type}} ${pName ? `${pName}.` : ''}${fName}`;
-    }
-
-    if (type === 'object') {
-      let lines = `${line}\n`;
-      let first = true;
-      for (const propName in f.properties()) {
-        lines = `${lines}${first ? '' : '\n'}${buildLine(f.properties()[propName], propName, `${pName ? `${pName}.` : ''}${fName}`)}`;
-        first = false;
-      }
-      return lines;
-    }
-
-    return `${line}${description}`;
-  };
-  return buildLine(field, fieldName, scopePropName);
-};
-filter.docline = docline;
-
 function queueName(title, version) {
   return _.kebabCase(`${title}-${version}`.toLowerCase()).split('-').join('.');
 };
