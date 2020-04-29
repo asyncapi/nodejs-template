@@ -9,5 +9,6 @@
   "nonRenderableFiles": [
     "src/api/middlewares/*.*",
     "src/lib/config.js"
-  ]
+  ],
+  "generator": ">=0.40.1 <2.0.0"
 }
