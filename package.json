@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@asyncapi/generator-filters": "^1.0.0",
+    "@asyncapi/generator-hooks": "../generator-hooks-repo",
     "filenamify": "^4.1.0",
     "lodash": "^4.17.15"
   },
