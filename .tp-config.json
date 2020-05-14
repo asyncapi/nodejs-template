@@ -4,14 +4,20 @@
     "server": {
       "description": "The server you want to use in the code.",
       "required": true
+    },
+    "asyncapiFileDir": {
+      "description": "Custom location of the AsyncAPI file that you provided as an input in generation. By default it is located in the root of the output directory"
     }
   },
   "nonRenderableFiles": [
     "src/api/middlewares/*.*",
     "src/lib/config.js"
   ],
-  "generator": ">=0.41.0 <2.0.0",
+  "generator": ">=0.46.0 <2.0.0",
   "filters": [
     "@asyncapi/generator-filters"
-  ]
+  ],
+  "hooks": {
+    "@asyncapi/generator-hooks": "createAsyncapiFile"
+  }
 }
