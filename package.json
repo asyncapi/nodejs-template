@@ -76,7 +76,7 @@
       "src/api/middlewares/*.*",
       "src/lib/config.js"
     ],
-    "generator": ">=0.46.0 <2.0.0",
+    "generator": ">=0.50.0 <2.0.0",
     "filters": [
       "@asyncapi/generator-filters"
     ],
