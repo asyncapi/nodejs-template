@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/nodejs-template",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Node.js template for the AsyncAPI generator.",
   "keywords": [
     "asyncapi",
@@ -62,7 +62,12 @@
     ]
   },
   "generator": {
-    "supportedProtocols": ["amqp", "mqtt", "kafka", "ws"],
+    "supportedProtocols": [
+      "amqp",
+      "mqtt",
+      "kafka",
+      "ws"
+    ],
     "parameters": {
       "server": {
         "description": "The server you want to use in the code.",
@@ -98,5 +103,4 @@
       "@asyncapi/generator-hooks": "createAsyncapiFile"
     }
   }
-  
 }
