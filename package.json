@@ -85,20 +85,6 @@
     "filters": [
       "@asyncapi/generator-filters"
     ],
-    "conditionalFiles": {
-      "src/api/adapters/amqp.js": {
-        "subject": "server.protocol",
-        "validation": {
-          "const": "amqp"
-        }
-      },
-      "src/api/adapters/mqtt.js": {
-        "subject": "server.protocol",
-        "validation": {
-          "const": "mqtt"
-        }
-      }
-    },
     "hooks": {
       "@asyncapi/generator-hooks": "createAsyncapiFile"
     }
