@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/nodejs-template",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Node.js template for the AsyncAPI generator.",
   "keywords": [
     "asyncapi",
