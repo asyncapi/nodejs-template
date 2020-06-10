@@ -1,6 +1,6 @@
 const Hermes = require('hermesjs');
 const app = new Hermes();
-const { cyan, gray } = require('colors/safe');
+const { cyan, gray, yellow } = require('colors/safe');
 const buffer2string = require('./middlewares/buffer2string');
 const string2json = require('./middlewares/string2json');
 const json2string = require('./middlewares/json2string');
@@ -22,9 +22,11 @@ app.use(logger);
 // Channels
 {% for channelName, channel in asyncapi.channels() -%}
 {% if channel.hasPublish() -%}
+console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('{{channelName}}'));
 app.use({{ channelName | camelCase }});
 {% endif -%}
 {% if channel.hasSubscribe() -%}
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('{{channelName}}'));
 app.useOutbound({{ channelName | camelCase }});
 {% endif -%}
 {% endfor %}
