@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 function queueName(title, version) {
   return _.kebabCase(`${title}-${version}`.toLowerCase()).split('-').join('.');
-};
+}
 filter.queueName = queueName;
 
 function toMqttTopic(topics, appendWildcard = false) {
@@ -20,7 +20,7 @@ function toMqttTopic(topics, appendWildcard = false) {
 
   if (typeof topics === 'string') return toMqtt(topics, appendWildcard);
   if (Array.isArray(topics)) return topics.map(toMqtt);
-};
+}
 filter.toMqttTopic = toMqttTopic;
 
 function toKafkaTopic(topics) {
@@ -33,7 +33,7 @@ function toKafkaTopic(topics) {
 
   if (typeof topics === 'string') return toKafka(topics);
   if (Array.isArray(topics)) return topics.map(toKafka);
-};
+}
 filter.toKafkaTopic = toKafkaTopic;
 
 function toAmqpTopic(topics, appendWildcard = false) {
@@ -48,12 +48,12 @@ function toAmqpTopic(topics, appendWildcard = false) {
 
   if (typeof topics === 'string') return toAmqp(topics, appendWildcard);
   if (Array.isArray(topics)) return topics.map(toAmqp);
-};
+}
 filter.toAmqpTopic = toAmqpTopic;
 
 function toHermesTopic(str) {
   return str.replace(/\{([^}]+)\}/g, ':$1');
-};
+}
 filter.toHermesTopic = toHermesTopic;
 
 function commonChannel(asyncapi, removeTrailingParameters = false) {
@@ -93,7 +93,7 @@ function commonChannel(asyncapi, removeTrailingParameters = false) {
   }
 
   return result.join('/');
-};
+}
 filter.commonChannel = commonChannel;
 
 function channelNamesWithPublish(asyncapi) {
@@ -102,30 +102,30 @@ function channelNamesWithPublish(asyncapi) {
     if (asyncapi.channel(name).hasPublish()) result.push(name);
   });
   return result;
-};
+}
 filter.channelNamesWithPublish = channelNamesWithPublish;
 
 function host(url) {
   const u = new URL(url);
   return u.host;
-};
+}
 filter.host = host;
 
 function port(url, defaultPort) {
   const u = new URL(url);
   return u.port || defaultPort;
-};
+}
 filter.port = port;
 
 function stripProtocol(url) {
   const u = new URL(url);
   return url.substr(u.protocol.length + 2);
-};
+}
 filter.stripProtocol = stripProtocol;
 
 function trimLastChar(string) {
   return string.substr(0, string.length - 1);
-};
+}
 filter.trimLastChar = trimLastChar;
 
 function toJS(objFromJSON, indent = 2) {
@@ -151,12 +151,12 @@ function toJS(objFromJSON, indent = 2) {
     .map(key => `${' '.repeat(indent)}${maybeQuote(key)}: ${toJS(objFromJSON[key])}`)
     .join(",\n");
   return `{\n${props}\n}`;
-};
+}
 filter.toJS = toJS;
 
 function convertToFilename(string, options) {
   return filenamify(string, options || { replacement: '-', maxLength: 255 });
-};
+}
 filter.convertToFilename = convertToFilename;
 
 /**
@@ -204,5 +204,5 @@ function replaceVariablesWithValues(url, serverVariables) {
     return newUrl;
   }
   return url;
-};
+}
 filter.replaceVariablesWithValues = replaceVariablesWithValues;
