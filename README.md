@@ -11,13 +11,6 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
-- [Supported protocols](#supported-protocols)
-- [How to use the template](#how-to-use-the-template)
-  * [CLI](#cli)
-- [Specification requirements](#specification-requirements)
-- [Template configuration](#template-configuration)
-- [Custom hooks that you can disable](#custom-hooks-that-you-can-disable)
 
 <!-- tocstop -->
 
@@ -26,6 +19,13 @@
 This template generates a Node.js application with any of the [supported protocols](#supported-protocols) endpoint, based on [Hermesjs](https://github.com/hitchhq/hermes).
 
 Other files are for the setup of developer environment, like `.editorconfig` or `.eslint`.
+
+## Specification requirements
+
+Property name | Reason | Fallback | Default
+---|---|---|---
+`operationId` | Operation ID must be set for every operation to generate proper functions as there is no fallback in place | - | -
+
 
 ## Supported protocols
 
@@ -40,6 +40,7 @@ Other files are for the setup of developer environment, like `.editorconfig` or 
 
 This template must be used with the AsyncAPI Generator. You can find all available options [here](https://github.com/asyncapi/generator/).
 
+Note: You can find a complete tutorial on AsyncAPI generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
 ### CLI
 
 ```bash
@@ -64,11 +65,6 @@ npm i
 npm start
 ```
 
-## Specification requirements
-
-Property name | Reason | Fallback | Default
----|---|---|---
-`operationId` | Operation ID must be set for every operation to generate proper functions as there is no fallback in place | - | -
 
 
 ## Template configuration
