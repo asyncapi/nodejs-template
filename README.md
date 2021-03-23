@@ -7,14 +7,19 @@
 
 ![npm](https://img.shields.io/npm/v/@asyncapi/nodejs-template?style=for-the-badge) ![npm](https://img.shields.io/npm/dt/@asyncapi/nodejs-template?style=for-the-badge)
 
+<!-- toc is generated with GitHub Actions do not remove toc markers -->
+
+<!-- toc -->
+
 - [Overview](#overview)
 - [Supported protocols](#supported-protocols)
 - [How to use the template](#how-to-use-the-template)
-    * [CLI](#cli)
+  * [CLI](#cli)
 - [Specification requirements](#specification-requirements)
 - [Template configuration](#template-configuration)
 - [Custom hooks that you can disable](#custom-hooks-that-you-can-disable)
 
+<!-- tocstop -->
 
 ## Overview
 
