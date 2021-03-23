@@ -11,6 +11,15 @@
 
 <!-- toc -->
 
+- [Overview](#overview)
+- [Specification requirements](#specification-requirements)
+- [Supported protocols](#supported-protocols)
+- [How to use the template](#how-to-use-the-template)
+  * [CLI](#cli)
+- [Template configuration](#template-configuration)
+- [Custom hooks that you can disable](#custom-hooks-that-you-can-disable)
+- [Development](#development)
+- [Contributors](#contributors)
 
 <!-- tocstop -->
 
@@ -19,6 +28,12 @@
 This template generates a Node.js application with any of the [supported protocols](#supported-protocols) endpoint, based on [Hermesjs](https://github.com/hitchhq/hermes).
 
 Other files are for the setup of developer environment, like `.editorconfig` or `.eslint`.
+
+## Technical requirements
+
+- 0.50.0 =< [Generator](https://github.com/asyncapi/generator/) < 2.0.0,
+- Generator specific [requirements](https://github.com/asyncapi/generator/#requirements)
+
 
 ## Specification requirements
 
@@ -47,10 +62,9 @@ Note: You can find a complete tutorial on AsyncAPI generator using this template
 # Install the AsyncAPI Generator
 npm install -g @asyncapi/generator
 
-# copy your asyncapi.yaml file to the current directory or create a new file.
-
 # Run generation
-ag asyncapi.yaml @asyncapi/nodejs-template -o output -p server=production
+ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+
 ##
 ## Start the server 
 ##
@@ -63,6 +77,18 @@ npm i
 
 # Start server
 npm start
+
+##
+## Start the client 
+##
+
+#for testing your server you can use mqtt client. open a new terminal and install it using:
+npm install mqtt -g
+
+#publish your message.
+mqtt pub -t 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+
+# You should see the sent message in the logs of the previously started server.
 ```
 
 
@@ -77,7 +103,7 @@ You can configure this template by passing different parameters in the Generator
 
 ## Custom hooks that you can disable
 
-The functionality of this template is extended with different hooks that you can disable like this in the Generator CLI: `-d HOOK_TYPE1=HOOK_NAME1,HOOK_NAME2 -d HOOK_TYPE2`
+The functionality of this template is extended with different hooks that you can disable like this in the Generator CLI: `-d HOOK_TYPE=HOOK_NAME`
 
 * AMQP
 * MQTT
