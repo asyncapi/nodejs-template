@@ -118,6 +118,9 @@ function port(url, defaultPort) {
 filter.port = port;
 
 function stripProtocol(url) {
+  if(!url.includes('://')){
+    return url;
+  }
   const u = new URL(url);
   return url.substr(u.protocol.length + 2);
 }
