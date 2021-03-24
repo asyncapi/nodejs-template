@@ -56,7 +56,7 @@ Property name | Reason | Fallback | Default
 
 This template must be used with the AsyncAPI Generator. You can find all available options [here](https://github.com/asyncapi/generator/).
 
-Note: You can find a complete tutorial on AsyncAPI generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
+> You can find a complete tutorial on AsyncAPI Generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
 ### CLI
 
 ```bash
