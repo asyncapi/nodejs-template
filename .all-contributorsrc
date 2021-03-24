@@ -1,0 +1,34 @@
+ {
+   "projectName": "nodejs-template",
+   "projectOwner": "asyncapi",
+   "repoType": "github",
+   "repoHost": "https://github.com",
+   "files": [
+     "README.md"
+   ],
+   "imageSize": 100,
+   "commit": false,
+   "commitConvention": "none",
+   "contributors": [
+     {
+       "login": "fmvilas",
+       "name": "Fran Méndez",
+       "avatar_url": "https://avatars.githubusercontent.com/u/242119?v=4",
+       "profile": "http://www.fmvilas.com/",
+       "contributions": [
+         "code",
+         "ideas"
+       ]
+     },
+     {
+       "login": "derberg",
+       "name": "Lukasz Gornicki",
+       "avatar_url": "https://avatars.githubusercontent.com/u/6995927?v=4",
+       "profile": "https://dev.to/derberg",
+       "contributions": [
+         "infra"
+       ]
+     }
+   ],
+   "contributorsPerLine": 7
+ }
