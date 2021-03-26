@@ -6,7 +6,6 @@ const string2json = require('./middlewares/string2json');
 const json2string = require('./middlewares/json2string');
 const logger = require('./middlewares/logger');
 const errorLogger = require('./middlewares/error-logger');
-const messageValidator= require('./middlewares/message-validator');
 const config = require('../lib/config');
 {%- set protocol = asyncapi.server(params.server).protocol() %}
 const {{ protocol | capitalize }}Adapter = require('hermesjs-{{protocol}}');
@@ -19,7 +18,6 @@ app.addAdapter({{ protocol | capitalize }}Adapter, config.{% if protocol === 'ws
 app.use(buffer2string);
 app.use(string2json);
 app.use(logger);
-app.use(messageValidator);
 
 // Channels
 {% for channelName, channel in asyncapi.channels() -%}
