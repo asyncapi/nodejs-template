@@ -10,6 +10,7 @@
     "dotenv": "^8.1.0",
     "hermesjs": "2.x",
     "hermesjs-router": "1.x",
+    "asyncapi-validator": "^3.0.0",
     {% if asyncapi.server(params.server).protocol() === 'mqtt' -%}
     "hermesjs-mqtt": "2.x",
     {%- endif -%}

@@ -32,7 +32,6 @@
   "dependencies": {
     "@asyncapi/generator-filters": "^1.0.0",
     "@asyncapi/generator-hooks": "^0.1.0",
-    "asyncapi-validator": "^3.0.0",
     "filenamify": "^4.1.0",
     "lodash": "^4.17.15",
     "markdown-toc": "^1.2.0"

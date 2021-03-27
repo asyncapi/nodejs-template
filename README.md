@@ -18,7 +18,6 @@
 - [How to use the template](#how-to-use-the-template)
   * [CLI](#cli)
 - [Template configuration](#template-configuration)
-- [Custom hooks that you can disable](#custom-hooks-that-you-can-disable)
 - [Development](#development)
 - [Contributors](#contributors)
 
@@ -102,13 +101,6 @@ You can configure this template by passing different parameters in the Generator
 |---|---|---|---|
 |server|The server you want to use in the code.|Yes|`production`|
 
-## Custom hooks that you can disable
-
-The functionality of this template is extended with different hooks that you can disable like this in the Generator CLI: `-d HOOK_TYPE=HOOK_NAME`
-
-Type | Name | Description
----|---|---
-generate:after | createAsyncapiFile | It creates AsyncAPI file with content of the spec file passed to the generator
 
 ## Development
 
