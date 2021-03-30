@@ -85,10 +85,14 @@ npm start
 #for testing your server you can use mqtt client. open a new terminal and install it using:
 npm install mqtt -g
 
-#publish your message.
-mqtt pub -t 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+#publish an invalid message.
+mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
 
-# You should see the sent message in the logs of the previously started server.
+#publish a valid message
+mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+
+#You should see the sent message in the logs of the previously started server.
+#Notice that the server automatically validates incoming messages and logs out validation errors
 ```
 
 
