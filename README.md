@@ -18,7 +18,6 @@
 - [How to use the template](#how-to-use-the-template)
   * [CLI](#cli)
 - [Template configuration](#template-configuration)
-- [Custom hooks that you can disable](#custom-hooks-that-you-can-disable)
 - [Development](#development)
 - [Contributors](#contributors)
 
@@ -86,10 +85,14 @@ npm start
 #for testing your server you can use mqtt client. open a new terminal and install it using:
 npm install mqtt -g
 
-#publish your message.
-mqtt pub -t 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+#publish an invalid message.
+mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
 
-# You should see the sent message in the logs of the previously started server.
+#publish a valid message
+mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+
+#You should see the sent message in the logs of the previously started server.
+#Notice that the server automatically validates incoming messages and logs out validation errors
 ```
 
 
@@ -102,13 +105,6 @@ You can configure this template by passing different parameters in the Generator
 |---|---|---|---|
 |server|The server you want to use in the code.|Yes|`production`|
 
-## Custom hooks that you can disable
-
-The functionality of this template is extended with different hooks that you can disable like this in the Generator CLI: `-d HOOK_TYPE=HOOK_NAME`
-
-Type | Name | Description
----|---|---
-generate:after | createAsyncapiFile | It creates AsyncAPI file with content of the spec file passed to the generator
 
 ## Development
 
