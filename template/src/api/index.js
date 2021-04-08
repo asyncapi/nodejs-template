@@ -31,6 +31,7 @@ app.useOutbound({{ channelName | camelCase }});
 {% endif -%}
 {% endfor %}
 app.use(errorLogger);
+app.useOutbound(errorLogger);
 app.useOutbound(logger);
 app.useOutbound(json2string);
 
