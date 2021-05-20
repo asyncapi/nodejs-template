@@ -49,13 +49,14 @@ Property name | Reason | Fallback | Default
 * [Kafka](https://en.wikipedia.org/wiki/Apache_Kafka)
 * [WebSocket](https://en.wikipedia.org/wiki/WebSocket)
 
-
-
 ## How to use the template
 
 This template must be used with the AsyncAPI Generator. You can find all available options [here](https://github.com/asyncapi/generator/).
 
+In case you use X509 security and need to provide certificates, place them in the root of generated server with the following names: `ca.pem`, `service.cert`, `service.key`.
+
 > You can find a complete tutorial on AsyncAPI Generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
+
 ### CLI
 
 ```bash
@@ -95,8 +96,6 @@ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'te
 #Notice that the server automatically validates incoming messages and logs out validation errors
 ```
 
-
-
 ## Template configuration
 
 You can configure this template by passing different parameters in the Generator CLI: `-p PARAM1_NAME=PARAM1_VALUE -p PARAM2_NAME=PARAM2_VALUE`
@@ -104,7 +103,7 @@ You can configure this template by passing different parameters in the Generator
 |Name|Description|Required|Example|
 |---|---|---|---|
 |server|The server you want to use in the code.|Yes|`production`|
-
+|securityScheme|Name of the security scheme. Only scheme with X509 and Kafka protocol is supported for now.|No|'mySchemeName'|
 
 ## Development
 

@@ -34,11 +34,11 @@ default:
       retain:
       subscribe: true
 {%- endif %}
-{%- if asyncapi.server(params.server).protocol() === "kafka" %}
+{%- if asyncapi.server(params.server).protocol() === "kafka" or asyncapi.server(params.server).protocol() === "kafka-secure" %}
     kafka:
       clientId: {{ asyncapi.info().title() | camelCase }}
       brokers:
-        - {{ asyncapi.server(params.server).url() | replaceVariablesWithValues(asyncapi.server(params.server).variables()) | host }}
+        - {{ asyncapi.server(params.server).url() | replaceVariablesWithValues(asyncapi.server(params.server).variables()) | stripProtocol }}
       consumerOptions:
         groupId: {{ asyncapi.info().title() | camelCase }}
       topics:
@@ -56,13 +56,15 @@ test:
 staging:
 
 production:
-{%- if asyncapi.server(params.server).protocol() === "kafka" %}
+{%- if asyncapi.server(params.server).protocol() === "kafka" or asyncapi.server(params.server).protocol() === "kafka-secure"%}
   broker:
     kafka:
       ssl:
         rejectUnauthorized: true
+{%- if params.securityScheme and asyncapi.components().securityScheme(params.securityScheme).type() !== 'X509' %}
       sasl:
         mechanism: 'plain'
         username:
         password:
+{%- endif %}
 {%- endif %}

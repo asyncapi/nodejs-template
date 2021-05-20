@@ -209,3 +209,23 @@ function replaceVariablesWithValues(url, serverVariables) {
   return url;
 }
 filter.replaceVariablesWithValues = replaceVariablesWithValues;
+
+function getConfig(p) {
+  let protocol = p;
+  let configName = 'broker';
+
+  if (p === 'ws') configName = 'ws';
+  if (p === 'kafka-secure') protocol = 'kafka';
+
+  return `config.${configName}.${protocol}`;
+}
+filter.getConfig = getConfig;
+
+function getProtocol(p) {
+  let protocol = p;
+
+  if (p === 'kafka-secure') protocol = 'kafka';
+
+  return protocol;
+}
+filter.getProtocol = getProtocol;
