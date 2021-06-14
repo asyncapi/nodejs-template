@@ -77,6 +77,7 @@ cd output
 npm i
 
 # Start server
+# To enable production settings start the server with "NODE_ENV=production npm start"
 npm start
 
 ##
