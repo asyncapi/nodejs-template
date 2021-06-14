@@ -53,7 +53,7 @@ Property name | Reason | Fallback | Default
 
 This template must be used with the AsyncAPI Generator. You can find all available options [here](https://github.com/asyncapi/generator/).
 
-In case you use X509 security and need to provide certificates, place them in the root of generated server with the following names: `ca.pem`, `service.cert`, `service.key`. Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name fo the scheme like this: `-p securityScheme=SCHEME_NAME`.
+In case you use X509 security and need to provide certificates, place them in the root of generated server with the following names: `ca.pem`, `service.cert`, `service.key`. Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name of the scheme like this: `-p securityScheme=SCHEME_NAME`.
 
 > You can find a complete tutorial on AsyncAPI Generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
 
