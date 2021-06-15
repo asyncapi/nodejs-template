@@ -55,7 +55,7 @@ This template must be used with the AsyncAPI Generator. You can find all availab
 
 In case you use X509 security and need to provide certificates, either place them in the root of the generated server with the following names: `ca.pem`, `service.cert`, `service.key`. You can provide a custom directory where cert files are located using `certFilesDir` parameter like `-p certFilesDir=../not/in/my/app/dir`.
 
-Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name fo the scheme like this: `-p securityScheme=SCHEME_NAME`.
+Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name of the scheme like this: `-p securityScheme=SCHEME_NAME`.
 
 > You can find a complete tutorial on AsyncAPI Generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
 
