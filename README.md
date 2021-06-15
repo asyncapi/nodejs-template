@@ -53,7 +53,9 @@ Property name | Reason | Fallback | Default
 
 This template must be used with the AsyncAPI Generator. You can find all available options [here](https://github.com/asyncapi/generator/).
 
-In case you use X509 security and need to provide certificates, place them in the root of generated server with the following names: `ca.pem`, `service.cert`, `service.key`. Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name fo the scheme like this: `-p securityScheme=SCHEME_NAME`.
+In case you use X509 security and need to provide certificates, either place them in the root of the generated server with the following names: `ca.pem`, `service.cert`, `service.key`. You can provide a custom directory where cert files are located using `certFilesDir` parameter like `-p certFilesDir=../not/in/my/app/dir`.
+
+Since you can have multiple different security schemes, to use the one of X509 type, you need to pass the name fo the scheme like this: `-p securityScheme=SCHEME_NAME`.
 
 > You can find a complete tutorial on AsyncAPI Generator using this template [here](https://www.asyncapi.com/docs/tutorials/streetlights). 
 
@@ -105,6 +107,7 @@ You can configure this template by passing different parameters in the Generator
 |---|---|---|---|
 |server|The server you want to use in the code.|Yes|`production`|
 |securityScheme|Name of the security scheme. Only scheme with X509 and Kafka protocol is supported for now.|No|'mySchemeName'|
+|certFilesDir|Directory where application certificates are located. This parameter is needed when you use X509 security scheme and your cert files are not located in the root of your application.|No|`../not/in/my/app/dir`|
 
 ## Development
 

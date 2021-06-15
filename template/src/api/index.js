@@ -1,5 +1,6 @@
 const Hermes = require('hermesjs');
 const app = new Hermes();
+const path = require('path');
 const { cyan, gray, yellow } = require('colors/safe');
 const buffer2string = require('./middlewares/buffer2string');
 const string2json = require('./middlewares/string2json');
@@ -16,10 +17,16 @@ const {{ channelName | camelCase }} = require('./routes/{{ channelName | convert
 
 {%- if params.securityScheme and (asyncapi.server(params.server).protocol() === 'kafka' or asyncapi.server(params.server).protocol() === 'kafka-secure') and asyncapi.components().securityScheme(params.securityScheme).type() === 'X509' %}
 const fs = require('fs')
+const certFilesDir = '{{ params.certFilesDir }}';
 
-serverConfig.ssl.ca = fs.readFileSync('ca.pem');
-serverConfig.ssl.key = fs.readFileSync('service.key');
-serverConfig.ssl.cert = fs.readFileSync('service.cert');
+try {
+  serverConfig.ssl.ca = fs.readFileSync(path.join(process.cwd(), certFilesDir, 'ca.pem'));
+  serverConfig.ssl.key = fs.readFileSync(path.join(process.cwd(), certFilesDir,'service.key'));
+  serverConfig.ssl.cert = fs.readFileSync(path.join(process.cwd(), certFilesDir,'service.cert'));
+} catch (error) {
+  throw new Error(`Unable to set cert files in the config: ${error}`);
+}
+
 {%- endif %}
 
 app.addAdapter({{ protocol | getProtocol | capitalize }}Adapter, serverConfig);
