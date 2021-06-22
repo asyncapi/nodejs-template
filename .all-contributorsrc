@@ -39,6 +39,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "DavidBiesack",
+      "name": "David Biesack",
+      "avatar_url": "https://avatars.githubusercontent.com/u/545944?v=4",
+      "profile": "https://github.com/DavidBiesack",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

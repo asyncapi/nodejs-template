@@ -11,7 +11,7 @@ module.exports = router;
   {%- endif %}
 router.use('{{ channelName | toHermesTopic }}', async (message, next) => {
   try {
-    await validateMessage(message.payload,'{{ channelName }}','{{ channel.publish().message().name() }}','publish');
+    await validateMessage(message.payload,'{{ channelName }}','{{ channel.publish().message(0).name() }}','publish');
     await {{ channelName | camelCase }}Handler.{{ channel.publish().id() }}({message});
     next();
   } catch (e) {
@@ -28,7 +28,7 @@ router.use('{{ channelName | toHermesTopic }}', async (message, next) => {
   {%- endif %}
 router.useOutbound('{{ channelName | toHermesTopic }}', async (message, next) => {
   try {
-    await validateMessage(message.payload,'{{ channelName }}','{{ channel.subscribe().message().name() }}','subscribe');
+    await validateMessage(message.payload,'{{ channelName }}','{{ channel.subscribe().message(0).name() }}','subscribe');
     await {{ channelName | camelCase }}Handler.{{ channel.subscribe().id() }}({message});
     next();
   } catch (e) {
