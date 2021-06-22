@@ -70,6 +70,7 @@
       "amqp",
       "mqtt",
       "kafka",
+      "kafka-secure",
       "ws"
     ],
     "parameters": {
@@ -79,6 +80,13 @@
       },
       "asyncapiFileDir": {
         "description": "Custom location of the AsyncAPI file that you provided as an input in generation. By default it is located in the root of the output directory"
+      },
+      "securityScheme": {
+        "description": "Name of the security scheme. Only scheme with X509 and Kafka protocol is supported for now."
+      },
+      "certFilesDir": {
+        "description": "Directory where application certificates are located. This parameter is needed when you use X509 security scheme and your cert files are not located in the root of your application.",
+        "default": "./"
       }
     },
     "nonRenderableFiles": [
