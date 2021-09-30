@@ -8,7 +8,7 @@ function queueName(title, version) {
 }
 filter.queueName = queueName;
 
-function toMqttTopic(topics, appendWildcard = false) {
+function toMqttTopic(topics, shouldAppendWildcard = false) {
   const toMqtt = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -18,7 +18,7 @@ function toMqttTopic(topics, appendWildcard = false) {
     return result;
   }
 
-  if (typeof topics === 'string') return toMqtt(topics, appendWildcard);
+  if (typeof topics === 'string') return toMqtt(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toMqtt);
 }
 filter.toMqttTopic = toMqttTopic;
@@ -36,7 +36,7 @@ function toKafkaTopic(topics) {
 }
 filter.toKafkaTopic = toKafkaTopic;
 
-function toAmqpTopic(topics, appendWildcard = false) {
+function toAmqpTopic(topics, shouldAppendWildcard = false) {
   const toAmqp = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -46,7 +46,7 @@ function toAmqpTopic(topics, appendWildcard = false) {
     return result;
   }
 
-  if (typeof topics === 'string') return toAmqp(topics, appendWildcard);
+  if (typeof topics === 'string') return toAmqp(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toAmqp);
 }
 filter.toAmqpTopic = toAmqpTopic;
@@ -166,11 +166,11 @@ filter.convertToFilename = convertToFilename;
  * Replaces variables in the server url with its declared values. Default or first enum in case of default is not declared
  * Replace is performed only if there are variables in the URL and they are declared for a server
  * @private
- * @param {String} url The server url value.
+ * @param {String} serverUrl The server url value.
  * @param {Object} serverVariables object containing server variables.
  * @return {String}
  */
-function replaceVariablesWithValues(url, serverVariables) {
+function replaceVariablesWithValues(serverUrl, serverVariables) {
   const getVariablesNamesFromUrl = (url) => {
     let result = [],
       array;
@@ -189,13 +189,13 @@ function replaceVariablesWithValues(url, serverVariables) {
     if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
   }
 
-  const urlVariables = getVariablesNamesFromUrl(url);
+  const urlVariables = getVariablesNamesFromUrl(serverUrl);
   const declaredVariables =
     urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]))
 
   if (urlVariables.length !== 0 && declaredVariables.length !== 0) {
     let value;
-    let newUrl = url;
+    let newUrl = serverUrl;
 
     urlVariables.forEach(el => {
       value = getVariableValue(serverVariables, el[1]);
