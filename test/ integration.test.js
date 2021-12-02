@@ -12,10 +12,6 @@ const generateFolderName = () => {
 };
 
 describe('template integration tests for generated files using the generator and mqtt example', () => {
-    const generateFolderName = () => {
-        // you always want to generate to new directory to make sure test runs in clear environment
-        return path.resolve(MAIN_TEST_RESULT_PATH, crypto.randomBytes(4).toString('hex'));
-    };
 
     jest.setTimeout(30000);
 
@@ -48,6 +44,9 @@ describe('template integration tests for generated files using the generator and
 });
 
 describe('template integration tests for generated files using the generator and kafka example', () => {
+
+    jest.setTimeout(30000);
+
     const outputDir = generateFolderName();
     const params = {
         server: 'test',
