@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/asyncapi/nodejs-template#readme",
   "scripts": {
-    "test": "echo \"No test specified yet\"",
+    "test": "rimraf test/temp && jest --modulePathIgnorePatterns='./template'",
     "lint": "echo \"No linter specified yet\"",
     "release": "semantic-release",
     "generate:assets": "npm run generate:readme:toc",
@@ -37,11 +37,15 @@
     "markdown-toc": "^1.2.0"
   },
   "devDependencies": {
+    "@asyncapi/generator": "^1.8.25",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.3",
     "@semantic-release/release-notes-generator": "^9.0.1",
     "conventional-changelog-conventionalcommits": "^4.2.3",
+    "jest": "^27.3.1",
+    "node-fetch": "^2.6.1",
+    "rimraf": "^2.2.8",
     "semantic-release": "^17.0.4"
   },
   "release": {

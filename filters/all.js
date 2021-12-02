@@ -206,7 +206,7 @@ function replaceVariablesWithValues(serverUrl, serverVariables) {
     });
     return newUrl;
   }
-  return url;
+  return serverUrl;
 }
 filter.replaceVariablesWithValues = replaceVariablesWithValues;
 

@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 1`] = `
+"
+const handler = module.exports = {};
+
+/**
+ * 
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ * @param {integer} options.message.payload.percentage - Percentage to which the light should be dimmed to.
+ * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+ */
+handler.dimLight = async ({message}) => {
+  // Implement your business logic here...
+};
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 2`] = `
+"
+const handler = module.exports = {};
+
+/**
+ * 
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ * @param {string} options.message.payload.command - Whether to turn on or off the light.
+ * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+ */
+handler.turnOff = async ({message}) => {
+  // Implement your business logic here...
+};
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 3`] = `
+"
+const handler = module.exports = {};
+
+/**
+ * 
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ * @param {string} options.message.payload.command - Whether to turn on or off the light.
+ * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+ */
+handler.turnOn = async ({message}) => {
+  // Implement your business logic here...
+};
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 4`] = `
+"
+const handler = module.exports = {};
+
+/**
+ * Inform about environmental lighting conditions of a particular streetlight.
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ * @param {integer} options.message.payload.lumens - Light intensity measured in lumens.
+ * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+ */
+handler.receiveLightMeasurement = async ({message}) => {
+  // Implement your business logic here...
+};
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 5`] = `
+"const Router = require('hermesjs/lib/router');
+const {validateMessage} = require('../../lib/message-validator');
+const router = new Router();
+const smartylightingStreetlights10ActionStreetlightIdDimHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim');
+module.exports = router;
+
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
+  try {
+    await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/dim','dimLight','subscribe');
+    await smartylightingStreetlights10ActionStreetlightIdDimHandler.dimLight({message});
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 6`] = `
+"const Router = require('hermesjs/lib/router');
+const {validateMessage} = require('../../lib/message-validator');
+const router = new Router();
+const smartylightingStreetlights10ActionStreetlightIdTurnOffHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off');
+module.exports = router;
+
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
+  try {
+    await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off','turnOnOff','subscribe');
+    await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler.turnOff({message});
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 7`] = `
+"const Router = require('hermesjs/lib/router');
+const {validateMessage} = require('../../lib/message-validator');
+const router = new Router();
+const smartylightingStreetlights10ActionStreetlightIdTurnOnHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on');
+module.exports = router;
+
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
+  try {
+    await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on','turnOnOff','subscribe');
+    await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler.turnOn({message});
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
+"
+`;
+
+exports[`template integration tests for generated files using the generator and mqtt example should generate proper handlers and routes files 8`] = `
+"const Router = require('hermesjs/lib/router');
+const {validateMessage} = require('../../lib/message-validator');
+const router = new Router();
+const smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler = require('../handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured');
+module.exports = router;
+
+/**
+ * Inform about environmental lighting conditions of a particular streetlight.
+ */
+router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
+  try {
+    await validateMessage(message.payload,'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured','lightMeasured','publish');
+    await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler.receiveLightMeasurement({message});
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
+"
+`;
