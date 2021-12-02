@@ -126,13 +126,13 @@ There are two ways you can work on template development:
 - Use global Generator and template from your local sources:
   ```bash
   # assumption is that you run this command from the root of your template
-  ag https://bit.ly/asyncapi ./ -o output
+  ag https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 - Use Generator from sources and template also from local sources. This approach enables more debugging options with awesome `console.log` in the Generator sources or even the Parser located in `node_modules` of the Generator:
   ```bash
   # assumption is that you run this command from the root of your template
   # assumption is that generator sources are cloned on the same level as the template
-  ../generator/cli.js https://bit.ly/asyncapi ./ -o output
+  ../generator/cli.js https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 
 
