@@ -1,14 +1,13 @@
 const path = require('path');
 const Generator = require('@asyncapi/generator');
 const { readFile } = require('fs').promises;
-const crypto = require('crypto');
 const fetch = require('node-fetch');
 
 const MAIN_TEST_RESULT_PATH = path.join('test', 'temp', 'integrationTestResult');
 
 const generateFolderName = () => {
     // you always want to generate to new directory to make sure test runs in clear environment
-    return path.resolve(MAIN_TEST_RESULT_PATH, crypto.randomBytes(4).toString('hex'));
+    return path.resolve(MAIN_TEST_RESULT_PATH, Math.random().toString(36).substring(7));
 };
 
 describe('template integration tests for generated files using the generator and mqtt example', () => {
