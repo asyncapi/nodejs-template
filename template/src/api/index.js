@@ -1,7 +1,6 @@
 const Hermes = require('hermesjs');
 const app = new Hermes();
 const path = require('path');
-// const { cyan, gray, yellow } = require('colors/safe');
 const chalk = require('chalk');
 const buffer2string = require('./middlewares/buffer2string');
 const string2json = require('./middlewares/string2json');

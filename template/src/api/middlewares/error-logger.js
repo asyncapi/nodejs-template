@@ -1,4 +1,3 @@
-// const { red, gray } = require('colors/safe');
 const chalk = require('chalk');
 
 module.exports = (err, message, next) => {
