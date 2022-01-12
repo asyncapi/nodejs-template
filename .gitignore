@@ -2,3 +2,4 @@
 node_modules
 output
 test/temp
+template/package-lock.json

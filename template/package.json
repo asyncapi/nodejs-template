@@ -6,24 +6,24 @@
         "start": "node src/api/index.js"
     },
     "dependencies": {
-        "chalk": "^5.0.0",
-        "dotenv": "^8.1.0",
-        "hermesjs": "2.x",
-        "hermesjs-router": "1.x",
-        "asyncapi-validator": "^3.0.0",
-        { % if asyncapi.server(params.server).protocol() === 'mqtt' - % }
-        "hermesjs-mqtt": "2.x",
-        { % -endif - % } { %
-            if asyncapi.server(params.server).protocol() === 'kafka'
-            or asyncapi.server(params.server).protocol() === 'kafka-secure' - %
-        }
-        "hermesjs-kafka": "2.x",
-        { % -endif - % } { % if asyncapi.server(params.server).protocol() === 'amqp' - % }
-        "hermesjs-amqp": "1.x",
-        { % -endif % } { % if asyncapi.server(params.server).protocol() === 'ws' - % }
-        "hermesjs-ws": "1.x",
-        { % -endif % }
-        "node-fetch": "^2.6.0",
-        "node-yaml-config": "0.0.4"
+      "chalk": "^5.0.0",
+      "dotenv": "^8.1.0",
+      "hermesjs": "2.x",
+      "hermesjs-router": "1.x",
+      "asyncapi-validator": "^3.0.0",
+      {% if asyncapi.server(params.server).protocol() === 'mqtt' -%}
+      "hermesjs-mqtt": "2.x",
+      {%- endif -%}
+      {% if asyncapi.server(params.server).protocol() === 'kafka' or asyncapi.server(params.server).protocol() === 'kafka-secure' -%}
+      "hermesjs-kafka": "2.x",
+      {%- endif -%}
+      {% if asyncapi.server(params.server).protocol() === 'amqp' -%}
+      "hermesjs-amqp": "1.x",
+      {%- endif %}
+      {% if asyncapi.server(params.server).protocol() === 'ws' -%}
+      "hermesjs-ws": "1.x",
+      {%- endif %}
+      "node-fetch": "^2.6.0",
+      "node-yaml-config": "0.0.4"    
     }
 }

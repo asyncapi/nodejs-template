@@ -21,8 +21,8 @@ const certFilesDir = '{{ params.certFilesDir }}';
 
 try {
   serverConfig.ssl.ca = fs.readFileSync(path.join(process.cwd(), certFilesDir, 'ca.pem'));
-  serverConfig.ssl.key = fs.readFileSync(path.join(process.cwd(), certFilesDir,'service.key'));
-  serverConfig.ssl.cert = fs.readFileSync(path.join(process.cwd(), certFilesDir,'service.cert'));
+  serverConfig.ssl.key = fs.readFileSync(path.join(process.cwd(), certFilesDir, 'service.key'));
+  serverConfig.ssl.cert = fs.readFileSync(path.join(process.cwd(), certFilesDir, 'service.cert'));
 } catch (error) {
   throw new Error(`Unable to set cert files in the config: ${error}`);
 }
@@ -54,7 +54,7 @@ app.useOutbound(json2string);
 app
   .listen()
   .then((adapters) => {
-    console.log(cyan.underline(`${config.app.name} ${config.app.version}`), gray('is ready!'), '\n');
+    console.log(chalk.cyan.underline(`${config.app.name} ${config.app.version}`), chalk.gray('is ready!'), '\n');
     adapters.forEach(adapter => {
       console.log('🔗 ', adapter.name(), chalk.gray('is connected!'));
     });
