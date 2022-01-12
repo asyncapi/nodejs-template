@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "chalk": "4.1.2",
-    "dotenv": "^8.1.0",
+    "dotenv": "8.1.0",
     "hermesjs": "2.x",
     "hermesjs-router": "1.x",
-    "asyncapi-validator": "^3.0.0",
+    "asyncapi-validator": "3.0.0",
     {% if asyncapi.server(params.server).protocol() === 'mqtt' -%}
     "hermesjs-mqtt": "2.x",
     {%- endif -%}
@@ -23,7 +23,7 @@
     {% if asyncapi.server(params.server).protocol() === 'ws' -%}
     "hermesjs-ws": "1.x",
     {%- endif %}
-    "node-fetch": "^2.6.0",
+    "node-fetch": "2.6.0",
     "node-yaml-config": "0.0.4"
   }
 }
