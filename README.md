@@ -115,7 +115,14 @@ You can configure this template by passing different parameters in the Generator
 |securityScheme|Name of the security scheme. Only scheme with X509 and Kafka protocol is supported for now.|No|'mySchemeName'|
 |certFilesDir|Directory where application certificates are located. This parameter is needed when you use X509 security scheme and your cert files are not located in the root of your application.|No|`../not/in/my/app/dir`|
 
-## Setup Locally
+## Development
+
+The most straightforward command to use this template is:
+```bash
+$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+```
+
+**Setup locally**
 
 ```bash
 # Run following commands in terminal:
@@ -124,13 +131,6 @@ $ cd nodejs-template
 $ npm install
 ```
 **Note:** To test your changes locally refer [this](https://github.com/asyncapi/nodejs-template#cli).
-
-## Development
-
-The most straightforward command to use this template is:
-```bash
-$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
-```
 
 For local development, you need different variations of this command. First of all, you need to know about three important CLI flags:
 - `--debug` enables the debug mode in Nunjucks engine what makes filters debugging simpler.
