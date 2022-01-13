@@ -129,8 +129,8 @@ $ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=produ
 $ git clone https://github.com/{username}/nodejs-template
 $ cd nodejs-template
 $ npm install
+$ ag https://bit.ly/asyncapi ./ -o output -p server=production
 ```
-**Note:** To test your changes locally refer [this](https://github.com/asyncapi/nodejs-template#cli).
 
 For local development, you need different variations of this command. First of all, you need to know about three important CLI flags:
 - `--debug` enables the debug mode in Nunjucks engine what makes filters debugging simpler.
