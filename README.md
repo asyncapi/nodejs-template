@@ -63,37 +63,43 @@ Since you can have multiple different security schemes, to use the one of X509 t
 
 ```bash
 # Install the AsyncAPI Generator
-npm install -g @asyncapi/generator
+$ npm install -g @asyncapi/generator
 
 # Run generation
-ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+# To use the template
+$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+
+# OR
+
+# To test your local changes
+$ ag https://bit.ly/asyncapi ./ -o output -p server=production
 
 ##
 ## Start the server 
 ##
 
 # Go to the generated server
-cd output
+$ cd output
 
 # Build generated application
-npm i
+$ npm i
 
 # Start server
 # To enable production settings start the server with "NODE_ENV=production npm start"
-npm start
+$ npm start
 
 ##
 ## Start the client 
 ##
 
 #for testing your server you can use mqtt client. open a new terminal and install it using:
-npm install mqtt -g
+$ npm install mqtt -g
 
 #publish an invalid message.
-mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
+$ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
 
 #publish a valid message
-mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+$ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
 
 #You should see the sent message in the logs of the previously started server.
 #Notice that the server automatically validates incoming messages and logs out validation errors
@@ -113,7 +119,17 @@ You can configure this template by passing different parameters in the Generator
 
 The most straightforward command to use this template is:
 ```bash
-ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+```
+
+**Setup locally**
+
+```bash
+# Run following commands in terminal:
+$ git clone https://github.com/{username}/nodejs-template
+$ cd nodejs-template
+$ npm install
+$ ag https://bit.ly/asyncapi ./ -o output -p server=production
 ```
 
 For local development, you need different variations of this command. First of all, you need to know about three important CLI flags:
@@ -126,13 +142,13 @@ There are two ways you can work on template development:
 - Use global Generator and template from your local sources:
   ```bash
   # assumption is that you run this command from the root of your template
-  ag https://bit.ly/asyncapi ./ -o output -p server=production
+  $ ag https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 - Use Generator from sources and template also from local sources. This approach enables more debugging options with awesome `console.log` in the Generator sources or even the Parser located in `node_modules` of the Generator:
   ```bash
   # assumption is that you run this command from the root of your template
   # assumption is that generator sources are cloned on the same level as the template
-  ../generator/cli.js https://bit.ly/asyncapi ./ -o output -p server=production
+  $ ../generator/cli.js https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 
 
