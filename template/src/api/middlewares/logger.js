@@ -1,5 +1,5 @@
 const util = require('util');
-const { yellow, blue, magenta } = require('colors/safe');
+const { yellow, blue, magenta } = require('chalk');
 
 module.exports = (message, next) => {
   const arrow = message.inbound ? blue('←') : magenta('→');

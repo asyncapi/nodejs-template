@@ -1,4 +1,4 @@
-const { red, gray } = require('colors/safe');
+const { red, gray } = require('chalk');
 
 module.exports = (err, message, next) => {
   if (err.name === 'AsyncAPIValidationError'){
