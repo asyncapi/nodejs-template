@@ -171,21 +171,21 @@ filter.convertToFilename = convertToFilename;
  * @param {Object} serverVariables object containing server variables.
  * @return {String}
  */
-/* eslint-disable */
+
 function replaceVariablesWithValues(serverUrl, serverVariables) {
   const getVariablesNamesFromUrl = (url) => {
-    
-    let result = [],
-      array;
+    const result = [];
+    let array = [];
+  
     const regEx = /{([^}]+)}/g;
-
+  
     while ((array = regEx.exec(url)) !== null) {
       result.push([array[0], array[1]]);
     }
-
+  
     return result;
   };
-  /* eslint-enable */
+
 
   const getVariableValue = (object, variable) => {
     const keyValue = object[variable]._json;
