@@ -16,7 +16,7 @@ function toMqttTopic(topics, shouldAppendWildcard = false) {
     result = result.replace(/\{([^}]+)\}/g, '+');
     if (appendWildcard) result += '/#';
     return result;
-  }
+  };
 
   if (typeof topics === 'string') return toMqtt(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toMqtt);
@@ -29,7 +29,7 @@ function toKafkaTopic(topics) {
     if (result.startsWith('/')) result = result.substr(1);
     result = result.replace(/\//g, '__');
     return result;
-  }
+  };
 
   if (typeof topics === 'string') return toKafka(topics);
   if (Array.isArray(topics)) return topics.map(toKafka);
@@ -44,7 +44,7 @@ function toAmqpTopic(topics, shouldAppendWildcard = false) {
     result = result.replace(/\//g, '.').replace(/\{([^}]+)\}/g, '*');
     if (appendWildcard) result += '.#';
     return result;
-  }
+  };
 
   if (typeof topics === 'string') return toAmqp(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toAmqp);
@@ -94,6 +94,7 @@ function commonChannel(asyncapi, removeTrailingParameters = false) {
 
   return result.join('/');
 }
+
 filter.commonChannel = commonChannel;
 
 function channelNamesWithPublish(asyncapi) {
@@ -118,7 +119,7 @@ function port(url, defaultPort) {
 filter.port = port;
 
 function stripProtocol(url) {
-  if(!url.includes('://')){
+  if (!url.includes('://')) {
     return url;
   }
   const u = new URL(url);
@@ -132,7 +133,7 @@ function trimLastChar(string) {
 filter.trimLastChar = trimLastChar;
 
 function toJS(objFromJSON, indent = 2) {
-  if (typeof objFromJSON !== "object" || Array.isArray(objFromJSON)) {
+  if (typeof objFromJSON !== 'object' || Array.isArray(objFromJSON)) {
     // not an object, stringify using native function
     if (typeof objFromJSON === 'string') {
       const templateVars = objFromJSON.match(/\$\{[\w\d\.]+\}/g);
@@ -145,14 +146,14 @@ function toJS(objFromJSON, indent = 2) {
   const maybeQuote = (str) => {
     if (str.match(/^[\w\d\_\$]+$/g)) return str;
     return `'${str}'`;
-  }
+  };
 
   // Implements recursive object serialization according to JSON spec
   // but without quotes around the keys.
-  let props = Object
+  const props = Object
     .keys(objFromJSON)
     .map(key => `${' '.repeat(indent)}${maybeQuote(key)}: ${toJS(objFromJSON[key])}`)
-    .join(",\n");
+    .join(',\n');
   return `{\n${props}\n}`;
 }
 filter.toJS = toJS;
@@ -170,8 +171,10 @@ filter.convertToFilename = convertToFilename;
  * @param {Object} serverVariables object containing server variables.
  * @return {String}
  */
+/* eslint-disable */
 function replaceVariablesWithValues(serverUrl, serverVariables) {
   const getVariablesNamesFromUrl = (url) => {
+    
     let result = [],
       array;
     const regEx = /{([^}]+)}/g;
@@ -181,17 +184,18 @@ function replaceVariablesWithValues(serverUrl, serverVariables) {
     }
 
     return result;
-  }
+  };
+  /* eslint-enable */
 
   const getVariableValue = (object, variable) => {
     const keyValue = object[variable]._json;
 
     if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
-  }
+  };
 
   const urlVariables = getVariablesNamesFromUrl(serverUrl);
   const declaredVariables =
-    urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]))
+    urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]));
 
   if (urlVariables.length !== 0 && declaredVariables.length !== 0) {
     let value;

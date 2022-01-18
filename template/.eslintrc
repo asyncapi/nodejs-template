@@ -7,9 +7,6 @@ env:
   node: true
   es6: true
 
-ecmaFeatures:
-  forOf: true
-  modules: true
 
 rules:
   # Possible Errors

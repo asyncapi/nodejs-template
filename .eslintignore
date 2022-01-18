@@ -1,0 +1,7 @@
+node_modules
+test/temp
+template/src/lib/config.js
+template/src/api/routes/$$channel$$.js
+template/src/api/handlers/$$channel$$.js
+template/src/api/index.js
+template/.eslintrc
