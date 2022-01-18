@@ -5,3 +5,5 @@ template/src/api/routes/$$channel$$.js
 template/src/api/handlers/$$channel$$.js
 template/src/api/index.js
 template/.eslintrc
+package.json
+package-lock.json
