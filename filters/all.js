@@ -172,48 +172,6 @@ filter.convertToFilename = convertToFilename;
  * @return {String}
  */
 
-function replaceVariablesWithValues(serverUrl, serverVariables) {
-  const getVariablesNamesFromUrl = (url) => {
-    const result = [];
-    let array = [];
-  
-    const regEx = /{([^}]+)}/g;
-  
-    while ((array = regEx.exec(url)) !== null) {
-      result.push([array[0], array[1]]);
-    }
-  
-    return result;
-  };
-
-
-  const getVariableValue = (object, variable) => {
-    const keyValue = object[variable]._json;
-
-    if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
-  };
-
-  const urlVariables = getVariablesNamesFromUrl(serverUrl);
-  const declaredVariables =
-    urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]));
-
-  if (urlVariables.length !== 0 && declaredVariables.length !== 0) {
-    let value;
-    let newUrl = serverUrl;
-
-    urlVariables.forEach(el => {
-      value = getVariableValue(serverVariables, el[1]);
-
-      if (value) {
-        newUrl = newUrl.replace(el[0], value);
-      }
-    });
-    return newUrl;
-  }
-  return serverUrl;
-}
-filter.replaceVariablesWithValues = replaceVariablesWithValues;
-
 function getConfig(p) {
   let protocol = p;
   let configName = 'broker';
