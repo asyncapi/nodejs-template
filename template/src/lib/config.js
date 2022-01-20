@@ -12,7 +12,7 @@ overrideWithEnvVars(config);
  * @param {Object} cfg Config object
  * @param {String} prefix Key prefix
  */
-function overrideWithEnvVars(cfg, prefix) {
+function overrideWithEnvVars (cfg, prefix) {
   prefix = prefix || '';
   for (const key in cfg) {
     const fullKey = prefix + key.toUpperCase();
