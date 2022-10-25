@@ -11,7 +11,7 @@
     "hermesjs": "2.x",
     "hermesjs-router": "1.x",
     "asyncapi-validator": "3.0.0",
-    {% if asyncapi.server(params.server).protocol() === 'mqtt' -%}
+    {% if asyncapi.server(params.server).protocol() === 'mqtt' or asyncapi.server(params.server).protocol() === 'mqtts' -%}
     "hermesjs-mqtt": "2.x",
     {%- endif -%}
     {% if asyncapi.server(params.server).protocol() === 'kafka' or asyncapi.server(params.server).protocol() === 'kafka-secure' -%}
