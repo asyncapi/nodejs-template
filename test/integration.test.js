@@ -39,6 +39,27 @@ describe('template integration tests for generated files using the generator and
       expect(file).toMatchSnapshot();
     }
   });
+
+  it('should use mqtt logic for mqtts protocol', async() => {
+    const outputDir = generateFolderName();
+    const params = {
+      server: 'production'
+    };
+    const mqttsExamplePath = './mocks/mqtts/asyncapi.yml';
+
+    const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
+    await generator.generateFromFile(path.resolve('test', mqttsExamplePath));
+
+    const expectedFiles = [
+      '/src/api/index.js',
+      '/config/common.yml',
+      '/package.json'
+    ];
+    for (const index in expectedFiles) {
+      const file = await readFile(path.join(outputDir, expectedFiles[index]), 'utf8');
+      expect(file).toMatchSnapshot();
+    }
+  });
 });
 
 describe('template integration tests for generated files using the generator and kafka example', () => {
