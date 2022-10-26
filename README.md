@@ -1,10 +1,5 @@
-<h5 align="center">
-  <br>
-  <a href="https://www.asyncapi.org"><img src="https://github.com/asyncapi/parser-nodejs/raw/master/assets/logo.png" alt="AsyncAPI logo" width="200"></a>
-  <br>
-  AsyncAPI Node.js Template
-</h5>
-
+[![AsyncAPI logo](./assets/github-repobanner-nodetemp.png)](https://www.asyncapi.com)  
+\
 ![npm](https://img.shields.io/npm/v/@asyncapi/nodejs-template?style=for-the-badge) ![npm](https://img.shields.io/npm/dt/@asyncapi/nodejs-template?style=for-the-badge)
 
 <!-- toc is generated with GitHub Actions do not remove toc markers -->
@@ -63,37 +58,43 @@ Since you can have multiple different security schemes, to use the one of X509 t
 
 ```bash
 # Install the AsyncAPI Generator
-npm install -g @asyncapi/generator
+$ npm install -g @asyncapi/generator
 
 # Run generation
-ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+# To use the template
+$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+
+# OR
+
+# To test your local changes
+$ ag https://bit.ly/asyncapi ./ -o output -p server=production
 
 ##
 ## Start the server 
 ##
 
 # Go to the generated server
-cd output
+$ cd output
 
 # Build generated application
-npm i
+$ npm i
 
 # Start server
 # To enable production settings start the server with "NODE_ENV=production npm start"
-npm start
+$ npm start
 
 ##
 ## Start the client 
 ##
 
 #for testing your server you can use mqtt client. open a new terminal and install it using:
-npm install mqtt -g
+$ npm install mqtt -g
 
 #publish an invalid message.
-mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
+$ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
 
 #publish a valid message
-mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
+$ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
 
 #You should see the sent message in the logs of the previously started server.
 #Notice that the server automatically validates incoming messages and logs out validation errors
@@ -113,7 +114,17 @@ You can configure this template by passing different parameters in the Generator
 
 The most straightforward command to use this template is:
 ```bash
-ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+```
+
+**Setup locally**
+
+```bash
+# Run following commands in terminal:
+$ git clone https://github.com/{username}/nodejs-template
+$ cd nodejs-template
+$ npm install
+$ ag https://bit.ly/asyncapi ./ -o output -p server=production
 ```
 
 For local development, you need different variations of this command. First of all, you need to know about three important CLI flags:
@@ -126,13 +137,13 @@ There are two ways you can work on template development:
 - Use global Generator and template from your local sources:
   ```bash
   # assumption is that you run this command from the root of your template
-  ag https://bit.ly/asyncapi ./ -o output
+  $ ag https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 - Use Generator from sources and template also from local sources. This approach enables more debugging options with awesome `console.log` in the Generator sources or even the Parser located in `node_modules` of the Generator:
   ```bash
   # assumption is that you run this command from the root of your template
   # assumption is that generator sources are cloned on the same level as the template
-  ../generator/cli.js https://bit.ly/asyncapi ./ -o output
+  $ ../generator/cli.js https://bit.ly/asyncapi ./ -o output -p server=production
   ```
 
 
@@ -148,6 +159,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.fmvilas.com/"><img src="https://avatars.githubusercontent.com/u/242119?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Fran Méndez</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=fmvilas" title="Code">💻</a> <a href="#ideas-fmvilas" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://dev.to/derberg"><img src="https://avatars.githubusercontent.com/u/6995927?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lukasz Gornicki</b></sub></a><br /><a href="#infra-derberg" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=derberg" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/KhudaDad414"><img src="https://avatars.githubusercontent.com/u/32505158?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khuda Dad Nomani</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Documentation">📖</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Code">💻</a></td>
+    <td align="center"><a href="https://samridhi-98.github.io/Portfolio"><img src="https://avatars.githubusercontent.com/u/54466041?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Samriddhi</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Code">💻</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Documentation">📖</a></td>
   </tr>
 </table>
 

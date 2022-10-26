@@ -8,7 +8,7 @@ function queueName(title, version) {
 }
 filter.queueName = queueName;
 
-function toMqttTopic(topics, appendWildcard = false) {
+function toMqttTopic(topics, shouldAppendWildcard = false) {
   const toMqtt = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -16,9 +16,9 @@ function toMqttTopic(topics, appendWildcard = false) {
     result = result.replace(/\{([^}]+)\}/g, '+');
     if (appendWildcard) result += '/#';
     return result;
-  }
+  };
 
-  if (typeof topics === 'string') return toMqtt(topics, appendWildcard);
+  if (typeof topics === 'string') return toMqtt(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toMqtt);
 }
 filter.toMqttTopic = toMqttTopic;
@@ -29,14 +29,14 @@ function toKafkaTopic(topics) {
     if (result.startsWith('/')) result = result.substr(1);
     result = result.replace(/\//g, '__');
     return result;
-  }
+  };
 
   if (typeof topics === 'string') return toKafka(topics);
   if (Array.isArray(topics)) return topics.map(toKafka);
 }
 filter.toKafkaTopic = toKafkaTopic;
 
-function toAmqpTopic(topics, appendWildcard = false) {
+function toAmqpTopic(topics, shouldAppendWildcard = false) {
   const toAmqp = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -44,9 +44,9 @@ function toAmqpTopic(topics, appendWildcard = false) {
     result = result.replace(/\//g, '.').replace(/\{([^}]+)\}/g, '*');
     if (appendWildcard) result += '.#';
     return result;
-  }
+  };
 
-  if (typeof topics === 'string') return toAmqp(topics, appendWildcard);
+  if (typeof topics === 'string') return toAmqp(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toAmqp);
 }
 filter.toAmqpTopic = toAmqpTopic;
@@ -94,6 +94,7 @@ function commonChannel(asyncapi, removeTrailingParameters = false) {
 
   return result.join('/');
 }
+
 filter.commonChannel = commonChannel;
 
 function channelNamesWithPublish(asyncapi) {
@@ -118,7 +119,7 @@ function port(url, defaultPort) {
 filter.port = port;
 
 function stripProtocol(url) {
-  if(!url.includes('://')){
+  if (!url.includes('://')) {
     return url;
   }
   const u = new URL(url);
@@ -132,7 +133,7 @@ function trimLastChar(string) {
 filter.trimLastChar = trimLastChar;
 
 function toJS(objFromJSON, indent = 2) {
-  if (typeof objFromJSON !== "object" || Array.isArray(objFromJSON)) {
+  if (typeof objFromJSON !== 'object' || Array.isArray(objFromJSON)) {
     // not an object, stringify using native function
     if (typeof objFromJSON === 'string') {
       const templateVars = objFromJSON.match(/\$\{[\w\d\.]+\}/g);
@@ -145,14 +146,14 @@ function toJS(objFromJSON, indent = 2) {
   const maybeQuote = (str) => {
     if (str.match(/^[\w\d\_\$]+$/g)) return str;
     return `'${str}'`;
-  }
+  };
 
   // Implements recursive object serialization according to JSON spec
   // but without quotes around the keys.
-  let props = Object
+  const props = Object
     .keys(objFromJSON)
     .map(key => `${' '.repeat(indent)}${maybeQuote(key)}: ${toJS(objFromJSON[key])}`)
-    .join(",\n");
+    .join(',\n');
   return `{\n${props}\n}`;
 }
 filter.toJS = toJS;
@@ -166,49 +167,10 @@ filter.convertToFilename = convertToFilename;
  * Replaces variables in the server url with its declared values. Default or first enum in case of default is not declared
  * Replace is performed only if there are variables in the URL and they are declared for a server
  * @private
- * @param {String} url The server url value.
+ * @param {String} serverUrl The server url value.
  * @param {Object} serverVariables object containing server variables.
  * @return {String}
  */
-function replaceVariablesWithValues(url, serverVariables) {
-  const getVariablesNamesFromUrl = (url) => {
-    let result = [],
-      array;
-    const regEx = /{([^}]+)}/g;
-
-    while ((array = regEx.exec(url)) !== null) {
-      result.push([array[0], array[1]]);
-    }
-
-    return result;
-  }
-
-  const getVariableValue = (object, variable) => {
-    const keyValue = object[variable]._json;
-
-    if (keyValue) return keyValue.default || (keyValue.enum && keyValue.enum[0]);
-  }
-
-  const urlVariables = getVariablesNamesFromUrl(url);
-  const declaredVariables =
-    urlVariables.filter(el => serverVariables.hasOwnProperty(el[1]))
-
-  if (urlVariables.length !== 0 && declaredVariables.length !== 0) {
-    let value;
-    let newUrl = url;
-
-    urlVariables.forEach(el => {
-      value = getVariableValue(serverVariables, el[1]);
-
-      if (value) {
-        newUrl = newUrl.replace(el[0], value);
-      }
-    });
-    return newUrl;
-  }
-  return url;
-}
-filter.replaceVariablesWithValues = replaceVariablesWithValues;
 
 function getConfig(p) {
   let protocol = p;
