@@ -20,7 +20,7 @@
   "homepage": "https://github.com/asyncapi/nodejs-template#readme",
   "scripts": {
     "test": "rimraf test/temp && jest --modulePathIgnorePatterns='./template'",
-    "test.updateSnapshot": "rimraf test/temp && jest --updateSnapshot --modulePathIgnorePatterns='./template'",
+    "test:updateSnapshot": "rimraf test/temp && jest --updateSnapshot --modulePathIgnorePatterns='./template'",
     "lint": "eslint --max-warnings 0 --config .eslintrc .",
     "lint:fix": "eslint --fix --config .eslintrc .",
     "release": "semantic-release",
