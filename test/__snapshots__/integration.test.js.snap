@@ -155,10 +155,6 @@ module.exports = router;
  */
 router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
-    // TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
-    // code to just validate the message against the combined message schema which will
-    // include the \`oneOf\` in the JSON schema - let the JSON schema validator handle the
-    // oneOf semantics (rather than each generator having to emit conditional code)
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured','lightMeasured','publish');
     await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler.receiveLightMeasurement({message});

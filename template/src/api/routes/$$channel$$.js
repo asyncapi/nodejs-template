@@ -13,11 +13,13 @@ module.exports = router;
   {%- endif %}
 router.use('{{ channelName | toHermesTopic }}', async (message, next) => {
   try {
-    // TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
-    // code to just validate the message against the combined message schema which will
-    // include the `oneOf` in the JSON schema - let the JSON schema validator handle the
-    // oneOf semantics (rather than each generator having to emit conditional code)
     {% if channel.publish().hasMultipleMessages() %}
+    /*
+     * TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
+     * code to just validate the message against the combined message schema which will
+     * include the `oneOf` in the JSON schema - let the JSON schema validator handle the
+     * oneOf semantics (rather than each generator having to emit conditional code)
+     */
     let nValidated = 0;
     // For oneOf, only one message schema should match.
     // Validate payload against each message and count those which validate
