@@ -7,6 +7,7 @@ module.exports.validateMessage = async (payload, channelName, messageName, opera
     va.validate(messageName, payload, channelName, operation);
     nValidated++;
   } catch (e) {
+    return nValidated;
   }
   return nValidated;
-}
+};
