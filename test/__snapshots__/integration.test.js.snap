@@ -344,11 +344,15 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdDimHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim');
 module.exports = router;
 
+
+
 router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
   try {
+    
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/dim','dimLight','subscribe');
     await smartylightingStreetlights10ActionStreetlightIdDimHandler.dimLight({message});
     next();
+    
   } catch (e) {
     next(e);
   }
@@ -363,11 +367,15 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOffHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off');
 module.exports = router;
 
+
+
 router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
   try {
+    
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off','turnOnOff','subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler.turnOff({message});
     next();
+    
   } catch (e) {
     next(e);
   }
@@ -382,11 +390,15 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOnHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on');
 module.exports = router;
 
+
+
 router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
   try {
+    
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on','turnOnOff','subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler.turnOn({message});
     next();
+    
   } catch (e) {
     next(e);
   }
@@ -401,14 +413,18 @@ const router = new Router();
 const smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler = require('../handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured');
 module.exports = router;
 
+
+
 /**
  * Inform about environmental lighting conditions of a particular streetlight.
  */
 router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
+    
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured','lightMeasured','publish');
     await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler.receiveLightMeasurement({message});
     next();
+    
   } catch (e) {
     next(e);
   }

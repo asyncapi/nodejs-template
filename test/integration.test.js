@@ -1,7 +1,6 @@
 const path = require('path');
 const Generator = require('@asyncapi/generator');
 const { readFile } = require('fs').promises;
-const fetch = require('node-fetch');
 
 const MAIN_TEST_RESULT_PATH = path.join('test', 'temp', 'integrationTestResult');
 
@@ -22,7 +21,7 @@ describe('template integration tests for generated files using the generator and
     async ({ server}) => {
       const outputDir = generateFolderName();
       const params = {
-        server: server
+        server
       };
       const mqttExamplePath = './mocks/mqtt/asyncapi.yml';
 
@@ -47,7 +46,7 @@ describe('template integration tests for generated files using the generator and
         expect(file).toMatchSnapshot();
       }
     }
-  )
+  );
 });
 
 describe('template integration tests for generated files using the generator and kafka example', () => {
