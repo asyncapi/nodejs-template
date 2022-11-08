@@ -40,7 +40,7 @@ Property name | Reason | Fallback | Default
 ## Supported protocols
 
 * [AMQP](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol)
-* [MQTT](https://en.wikipedia.org/wiki/MQTT)
+* [MQTT and MQTTS](https://en.wikipedia.org/wiki/MQTT)
 * [Kafka](https://en.wikipedia.org/wiki/Apache_Kafka)
 * [WebSocket](https://en.wikipedia.org/wiki/WebSocket)
 

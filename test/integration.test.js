@@ -1,7 +1,6 @@
 const path = require('path');
 const Generator = require('@asyncapi/generator');
 const { readFile } = require('fs').promises;
-const fetch = require('node-fetch');
 
 const MAIN_TEST_RESULT_PATH = path.join('test', 'temp', 'integrationTestResult');
 
@@ -13,32 +12,41 @@ const generateFolderName = () => {
 describe('template integration tests for generated files using the generator and mqtt example', () => {
   jest.setTimeout(30000);
 
-  it('should generate proper handlers and routes files', async() => {
-    const outputDir = generateFolderName();
-    const params = {
-      server: 'production'
-    };
-    const basicExampleUrl = 'https://raw.githubusercontent.com/asyncapi/spec/v2.2.0/examples/streetlights-mqtt.yml';
-    const asyncapiFile = await fetch(basicExampleUrl);
+  it.each`
+    server                  | description
+    ${'production'}         | ${'should generate proper handlers and routes files'}
+    ${'production-mqtts'}   | ${'should use mqtt logic for mqtts protocol'}
+  `(
+    '$description',
+    async ({ server}) => {
+      const outputDir = generateFolderName();
+      const params = {
+        server
+      };
+      const mqttExamplePath = './mocks/mqtt/asyncapi.yml';
 
-    const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
-    await generator.generateFromString(await asyncapiFile.text());
+      const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
+      await generator.generateFromFile(path.resolve('test', mqttExamplePath));
 
-    const expectedFiles = [
-      '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim.js',
-      '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off.js',
-      '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on.js',
-      '/src/api/handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured.js',
-      '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-dim.js',
-      '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off.js',
-      '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on.js',
-      '/src/api/routes/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured.js'
-    ];
-    for (const index in expectedFiles) {
-      const file = await readFile(path.join(outputDir, expectedFiles[index]), 'utf8');
-      expect(file).toMatchSnapshot();
+      const expectedFiles = [
+        '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim.js',
+        '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off.js',
+        '/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on.js',
+        '/src/api/handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured.js',
+        '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-dim.js',
+        '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off.js',
+        '/src/api/routes/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on.js',
+        '/src/api/routes/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured.js',
+        '/src/api/index.js',
+        '/config/common.yml',
+        '/package.json'
+      ];
+      for (const index in expectedFiles) {
+        const file = await readFile(path.join(outputDir, expectedFiles[index]), 'utf8');
+        expect(file).toMatchSnapshot();
+      }
     }
-  });
+  );
 });
 
 describe('template integration tests for generated files using the generator and kafka example', () => {

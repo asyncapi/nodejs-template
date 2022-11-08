@@ -9,6 +9,9 @@ const logger = require('./middlewares/logger');
 const errorLogger = require('./middlewares/error-logger');
 const config = require('../lib/config');
 {%- set protocol = asyncapi.server(params.server).protocol() %}
+{%- if protocol === 'mqtts' %}
+  {%- set protocol = 'mqtt' %}
+{%- endif %}
 const serverConfig = {{ protocol | getConfig }};
 const {{ protocol | getProtocol | capitalize }}Adapter = require('hermesjs-{{ protocol | getProtocol }}');
 {%- for channelName, channel in asyncapi.channels() %}
