@@ -40,7 +40,7 @@ Property name | Reason | Fallback | Default
 ## Supported protocols
 
 * [AMQP](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol)
-* [MQTT](https://en.wikipedia.org/wiki/MQTT)
+* [MQTT and MQTTS](https://en.wikipedia.org/wiki/MQTT)
 * [Kafka](https://en.wikipedia.org/wiki/Apache_Kafka)
 * [WebSocket](https://en.wikipedia.org/wiki/WebSocket)
 
@@ -155,12 +155,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="http://www.fmvilas.com/"><img src="https://avatars.githubusercontent.com/u/242119?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Fran Méndez</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=fmvilas" title="Code">💻</a> <a href="#ideas-fmvilas" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://dev.to/derberg"><img src="https://avatars.githubusercontent.com/u/6995927?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lukasz Gornicki</b></sub></a><br /><a href="#infra-derberg" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=derberg" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/KhudaDad414"><img src="https://avatars.githubusercontent.com/u/32505158?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khuda Dad Nomani</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Documentation">📖</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Code">💻</a></td>
-    <td align="center"><a href="https://samridhi-98.github.io/Portfolio"><img src="https://avatars.githubusercontent.com/u/54466041?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Samriddhi</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Code">💻</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center"><a href="http://www.fmvilas.com/"><img src="https://avatars.githubusercontent.com/u/242119?v=4?s=100" width="100px;" alt="Fran Méndez"/><br /><sub><b>Fran Méndez</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=fmvilas" title="Code">💻</a> <a href="#ideas-fmvilas" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center"><a href="https://dev.to/derberg"><img src="https://avatars.githubusercontent.com/u/6995927?v=4?s=100" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub></a><br /><a href="#infra-derberg" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=derberg" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/KhudaDad414"><img src="https://avatars.githubusercontent.com/u/32505158?v=4?s=100" width="100px;" alt="Khuda Dad Nomani"/><br /><sub><b>Khuda Dad Nomani</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Documentation">📖</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=KhudaDad414" title="Code">💻</a></td>
+      <td align="center"><a href="https://samridhi-98.github.io/Portfolio"><img src="https://avatars.githubusercontent.com/u/54466041?v=4?s=100" width="100px;" alt="Samriddhi"/><br /><sub><b>Samriddhi</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Code">💻</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=Samridhi-98" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/wandertaker"><img src="https://avatars.githubusercontent.com/u/23746861?v=4?s=100" width="100px;" alt="Julius Jann"/><br /><sub><b>Julius Jann</b></sub></a><br /><a href="https://github.com/asyncapi/nodejs-template/commits?author=wandertaker" title="Code">💻</a> <a href="https://github.com/asyncapi/nodejs-template/commits?author=wandertaker" title="Tests">⚠️</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->

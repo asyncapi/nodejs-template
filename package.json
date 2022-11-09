@@ -78,6 +78,7 @@
     "supportedProtocols": [
       "amqp",
       "mqtt",
+      "mqtts",
       "kafka",
       "kafka-secure",
       "ws"

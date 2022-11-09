@@ -25,9 +25,9 @@ default:
         durable: true
         autoDelete: true
 {%- endif %}
-{%- if asyncapi.server(params.server).protocol() === "mqtt" %}
+{%- if asyncapi.server(params.server).protocol() === "mqtt" or asyncapi.server(params.server).protocol() === "mqtts"%}
     mqtt:
-      url: mqtt://{{ asyncapi.server(params.server).url() |  replaceServerVariablesWithValues(asyncapi.server(params.server).variables()) | stripProtocol  }}
+      url: {{ asyncapi.server(params.server).protocol() }}://{{ asyncapi.server(params.server).url() |  replaceServerVariablesWithValues(asyncapi.server(params.server).variables()) | stripProtocol  }}
       topics: {{ asyncapi | channelNamesWithPublish | toMqttTopic | dump | safe }}
       qos:
       protocol: mqtt
