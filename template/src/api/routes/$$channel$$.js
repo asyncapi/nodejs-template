@@ -24,7 +24,9 @@ router.use('{{ channelName | toHermesTopic }}', async (message, next) => {
     // For oneOf, only one message schema should match.
     // Validate payload against each message and count those which validate
     {% for i in range(0, channel.publish().messages().length) -%}
-    nValidated = await validateMessage(message.payload,'{{ channelName }}','{{ channel.publish().message(i).name() }}','publish', nValidated);
+    try {
+      nValidated = await validateMessage(message.payload,'{{ channelName }}','{{ channel.publish().message(i).name() }}','publish', nValidated);  
+    } catch { };
     {% endfor -%}
     if (nValidated === 1) {
       await {{ channelName | camelCase }}Handler.{{ channel.publish().id() }}({message});
