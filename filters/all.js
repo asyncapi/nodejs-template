@@ -176,7 +176,11 @@ function getConfig(p) {
   let protocol = p;
   let configName = 'broker';
 
-  if (p === 'ws') configName = 'ws';
+  if (p === 'ws') {
+    configName = 'ws';
+    return `config.${configName}`;
+  }
+
   if (p === 'kafka-secure') protocol = 'kafka';
 
   return `config.${configName}.${protocol}`;
