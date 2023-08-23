@@ -63,3 +63,5 @@ app
     });
   })
   .catch(console.error);
+
+exports.app = app;
