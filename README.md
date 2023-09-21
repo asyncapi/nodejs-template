@@ -109,39 +109,21 @@ Consider a scenario where you intend to introduce a new channel or section to th
 
 To avoid this, user code remains external to the generated code, functioning as an independent entity that consumes the generated code as a library. By adopting this approach, the user code remains unaffected during template regenerations.
 
-Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `registerMiddleware` method becomes the bridge between the user-written handlers and the generated code.
+Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.<operationId>` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
 
 > The AsyncAPI file used for the example is [here](https://bit.ly/asyncapi)
 
 ```js
+// output refers to the generated template folder
 // You require the generated server. Running this code starts the server
 // App exposes API to send messages
-const { app } = require('./output/src/api/index');
-// Requiring generated handler that you should use if you want to react on consumed messages
-const receiveLightMeasurementHandler = require('./output/src/api/handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured');
-// Requiring generated handler that you should use if you want to react on produced messages
-const sendDimLightHandler = require('./output/src/api/handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim');
+const { client } = require("./output");
 
-/**
- *
- * 
- * Example of how to work with generated code as a consumer
- *
- * 
-*/
+// to start the app
+client.init();
 
-// Writing your custom logic that should be triggered when your app receives as message from a given channel
-function triggeredByLightMeasurementHandler(message) {
-  console.log('reading message in triggeredByLightMeasurementHandler', message.payload);
-
-  console.log('sending another message in triggeredByLightMeasurementHandler to another channel');
-  app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/dim');   
-}
-
-// Registering your custom logic in a channel-specific handler
-// triggeredByLightMeasurementHandler function is called once the app gets message sent to the channel like:
-// "mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'"
-receiveLightMeasurementHandler.registerMiddleware(triggeredByLightMeasurementHandler);
+// Generated handlers that we use to react on consumer / produced messages are attached to the client
+// through which we can register middleware functions
 
 /**
  * 
@@ -150,16 +132,54 @@ receiveLightMeasurementHandler.registerMiddleware(triggeredByLightMeasurementHan
  * 
  * 
  */
+function testPublish() {
+    // mosquitto_sub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/action/12/turn/on"
 
-// Writing your custom logic that should be triggered when your app receives as message from a given channel
-function triggeredByDimLight(message) {
-  console.log('reading message in triggeredByDimLight before it is sent to the broker', message.payload.percentage);
+    // Registering your custom logic in a channel-specific handler
+    // the passed handler function is called once the app sends a message to the channel
+    // For example `client.app.send` sends a message to some channel using and before it is sent, you want to perform some other actions
+    // in such a case, you can register middlewares like below
+    client.turnOn((message) => { // `turnOn` is the respective operationId
+        console.log("hitting the middleware before publishing the message");
+        console.log(
+            `sending turn on message to streetlight ${message.params.streetlightId}`,
+            message.payload
+        );
+    });
+
+    client.app.send(
+        { command: "off" },
+        {},
+        "smartylighting/streetlights/1/0/action/12/turn/on"
+    );
 }
 
-// Registering your custom logic in a channel-specific handler
-// triggeredByDimLight function is called once the app sends a message to the channel
-// For example "triggeredByLightMeasurementHandler" sends a message to some channel using "app.send" and before it is sent, you want to perform some other actions
-sendDimLightHandler.registerMiddleware(triggeredByDimLight);
+
+/**
+ *
+ * 
+ * Example of how to work with generated code as a consumer
+ *
+ * 
+*/
+function testSubscribe() {
+    // mosquitto_pub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/event/101/lighting/measured" -m '{"lumens": 10}'
+
+    // Writing your custom logic that should be triggered when your app receives as message from a given channel
+    // Registering your custom logic in a channel-specific handler
+    // the passed handler functions are called once the app gets message sent to the channel
+
+    client.receiveLightMeasurement((message) => { // `recieveLightMeasurement` is the respective operationId
+        console.log("recieved in middleware 1", message.payload);
+    });
+
+    client.receiveLightMeasurement((message) => {
+        console.log("recieved in middleware 2", message.payload);
+    });
+}
+
+testPublish();
+testSubscribe();
 
 /**
  * 
@@ -172,15 +192,16 @@ sendDimLightHandler.registerMiddleware(triggeredByDimLight);
 (function myLoop (i) {
   setTimeout(() => {
     console.log('producing custom message');
-    app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/turn/on');   
+    client.app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/turn/on');
     if (--i) myLoop(i);
   }, 1000);
 }(3));
 ```
 
-You can run the above code and test the working of the handlers by sending a message using the mqtt cli to the `smartylighting/streetlights/1/0/event/123/lighting/measured` channel using this command
-`mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
-`
+You can run the above code and test the working of the handlers by sending a message using the mqtt cli / mosquitto broker software to the `smartylighting/streetlights/1/0/event/123/lighting/measured` channel using this command
+`mosquitto_pub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/event/101/lighting/measured" -m '{"lumens": 10, "sentAt": "2017-06-07T12:34:32.000Z"}'`
+or 
+`mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, }'` (if you are using the mqtt cli)
 
 ## Template configuration
 
