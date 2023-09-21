@@ -2,6 +2,7 @@
   "name": "{{ asyncapi.info().title() | kebabCase }}",
   "description": "{{ asyncapi.info().description() | oneLine }}",
   "version": "{{ asyncapi.info().version() }}",
+  "main": "./src/api",
   "scripts": {
     "start": "node src/api/index.js"
   },

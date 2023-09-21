@@ -29,14 +29,14 @@ router.use('{{ channelName | toHermesTopic }}', async (message, next) => {
     } catch { };
     {% endfor -%}
     if (nValidated === 1) {
-      await {{ channelName | camelCase }}Handler.{{ channel.publish().id() }}({message});
+      await {{ channelName | camelCase }}Handler._{{ channel.publish().id() }}({message});
       next()
     } else {
       throw new Error(`${nValidated} of {{ channel.publish().messages().length }} message schemas matched when exactly 1 should match`);
     }
     {% else %}
     await validateMessage(message.payload,'{{ channelName }}','{{ channel.publish().message().name() }}','publish');
-    await {{ channelName | camelCase }}Handler.{{ channel.publish().id() }}({message});
+    await {{ channelName | camelCase }}Handler._{{ channel.publish().id() }}({message});
     next();
     {% endif %}
   } catch (e) {
@@ -61,14 +61,14 @@ router.useOutbound('{{ channelName | toHermesTopic }}', async (message, next) =>
     nValidated = await validateMessage(message.payload,'{{ channelName }}','{{ channel.subscribe().message(i).name() }}','subscribe', nValidated);
     {% endfor -%}
     if (nValidated === 1) {
-      await {{ channelName | camelCase }}Handler.{{ channel.subscribe().id() }}({message});
+      await {{ channelName | camelCase }}Handler._{{ channel.subscribe().id() }}({message});
       next()
     } else {
       throw new Error(`${nValidated} of {{ channel.subscribe().messages().length }} message schemas matched when exactly 1 should match`);
     }
     {% else %}
     await validateMessage(message.payload,'{{ channelName }}','{{ channel.subscribe().message().name() }}','subscribe');
-    await {{ channelName | camelCase }}Handler.{{ channel.subscribe().id() }}({message});
+    await {{ channelName | camelCase }}Handler._{{ channel.subscribe().id() }}({message});
     next();
     {% endif %}
   } catch (e) {

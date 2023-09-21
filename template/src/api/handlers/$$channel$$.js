@@ -1,24 +1,24 @@
 {%- if channel.hasPublish() and channel.publish().ext('x-lambda') %}const fetch = require('node-fetch');{%- endif %}
 const handler = module.exports = {};
 
-const middlewares = [];
+{% if channel.hasPublish() %}
+const {{ channel.publish().id() }}Middlewares = [];
 
 /**
- * Registers a middleware function to be executed during request processing.
+ * Registers a middleware function for the {{ channel.publish().id() }} operation to be executed during request processing.
  *
  * Middleware functions have access to options object that you can use to access the message content and other helper functions
  *
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.registerMiddleware = (middlewareFn) => {
+handler.{{ channel.publish().id() }} = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
-  middlewares.push(middlewareFn);
+  {{ channel.publish().id() }}Middlewares.push(middlewareFn);
 }
 
-{% if channel.hasPublish() %}
 /**
  * {{ channel.publish().summary() }}
  *
@@ -35,7 +35,7 @@ handler.registerMiddleware = (middlewareFn) => {
 {%- endfor %}
 {%- endif %}
  */
-handler.{{ channel.publish().id() }} = async ({message}) => {
+handler._{{ channel.publish().id() }} = async ({message}) => {
   {%- if channel.publish().ext('x-lambda') %}
   {%- set lambda = channel.publish().ext('x-lambda') %}
   fetch('{{ lambda.url }}', {
@@ -49,7 +49,7 @@ handler.{{ channel.publish().id() }} = async ({message}) => {
     .then(json => console.log(json))
     .catch(err => { throw err; });
   {%-  else %}
-  for (const middleware of middlewares) {
+  for (const middleware of {{ channel.publish().id() }}Middlewares) {
     await middleware(message);
   }
   {%- endif %}
@@ -58,6 +58,23 @@ handler.{{ channel.publish().id() }} = async ({message}) => {
 {%- endif %}
 
 {%- if channel.hasSubscribe() %}
+const {{ channel.subscribe().id() }}Middlewares = [];
+
+/**
+ * Registers a middleware function for the {{ channel.subscribe().id() }} operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.{{ channel.subscribe().id() }} = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  {{ channel.subscribe().id() }}Middlewares.push(middlewareFn);
+}
+
 /**
  * {{ channel.subscribe().summary() }}
  *
@@ -74,8 +91,8 @@ handler.{{ channel.publish().id() }} = async ({message}) => {
  {%- endfor %}
  {%- endif %}
  */
-handler.{{ channel.subscribe().id() }} = async ({message}) => {
-  for (const middleware of middlewares) {
+handler._{{ channel.subscribe().id() }} = async ({message}) => {
+  for (const middleware of {{ channel.subscribe().id() }}Middlewares) {
     await middleware(message);
   }
 };
