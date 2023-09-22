@@ -4,16 +4,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const dimLightMiddlewares = [];
+
+/**
+ * Registers a middleware function for the dimLight operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.dimLight = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  dimLightMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {integer} options.message.payload.percentage - Percentage to which the light should be dimmed to.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {integer} options.message.payload.percentage - Percentage to which the light should be dimmed to.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.dimLight = async ({message}) => {
-  // Implement your business logic here...
+handler._dimLight = async ({message}) => {
+  for (const middleware of dimLightMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -22,16 +43,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const turnOffMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOff operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.turnOff = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOffMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {string} options.message.payload.command - Whether to turn on or off the light.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {string} options.message.payload.command - Whether to turn on or off the light.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.turnOff = async ({message}) => {
-  // Implement your business logic here...
+handler._turnOff = async ({message}) => {
+  for (const middleware of turnOffMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -40,16 +82,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const turnOnMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOn operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.turnOn = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOnMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {string} options.message.payload.command - Whether to turn on or off the light.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {string} options.message.payload.command - Whether to turn on or off the light.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.turnOn = async ({message}) => {
-  // Implement your business logic here...
+handler._turnOn = async ({message}) => {
+  for (const middleware of turnOnMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -58,16 +121,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const receiveLightMeasurementMiddlewares = [];
+
+/**
+ * Registers a middleware function for the receiveLightMeasurement operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.receiveLightMeasurement = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  receiveLightMeasurementMiddlewares.push(middlewareFn);
+}
+
 /**
  * Inform about environmental lighting conditions of a particular streetlight.
+ *
  * @param {object} options
  * @param {object} options.message
  * @param {integer} options.message.headers.my-app-header
  * @param {integer} options.message.payload.lumens - Light intensity measured in lumens.
  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.receiveLightMeasurement = async ({message}) => {
-  // Implement your business logic here...
+handler._receiveLightMeasurement = async ({message}) => {
+  for (const middleware of receiveLightMeasurementMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -85,7 +169,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', 
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/dim','dimLight','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdDimHandler.dimLight({message});
+    await smartylightingStreetlights10ActionStreetlightIdDimHandler._dimLight({message});
     next();
     
   } catch (e) {
@@ -108,7 +192,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off','turnOnOff','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler.turnOff({message});
+    await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler._turnOff({message});
     next();
     
   } catch (e) {
@@ -131,7 +215,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on','turnOnOff','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler.turnOn({message});
+    await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler._turnOn({message});
     next();
     
   } catch (e) {
@@ -157,7 +241,7 @@ router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measur
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured','lightMeasured','publish');
-    await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler.receiveLightMeasurement({message});
+    await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler._receiveLightMeasurement({message});
     next();
     
   } catch (e) {
@@ -206,15 +290,36 @@ app.useOutbound(errorLogger);
 app.useOutbound(logger);
 app.useOutbound(json2string);
 
-app
-  .listen()
-  .then((adapters) => {
-    console.log(cyan.underline(\`\${config.app.name} \${config.app.version}\`), gray('is ready!'), '\\\\n');
-    adapters.forEach(adapter => {
-      console.log('🔗 ', adapter.name(), gray('is connected!'));
-    });
-  })
-  .catch(console.error);
+function init() {
+  app
+    .listen()
+    .then((adapters) => {
+      console.log(cyan.underline(\`\${config.app.name} \${config.app.version}\`), gray('is ready!'), '\\\\n');
+      adapters.forEach(adapter => {
+        console.log('🔗 ', adapter.name(), gray('is connected!'));
+      });
+    })
+    .catch(console.error);
+}
+
+const handlers = {
+  receiveLightMeasurement: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').receiveLightMeasurement,
+  turnOn: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').turnOn,
+
+  turnOff: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').turnOff,
+
+  dimLight: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').dimLight,
+};
+
+const client = {
+  app,
+  init,
+  ...handlers
+};
+
+module.exports = {
+  client
+};
 "
 `;
 
@@ -248,6 +353,7 @@ exports[`template integration tests for generated files using the generator and 
   \\"name\\": \\"streetlights-mqtt-api\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈 \\",
   \\"version\\": \\"1.0.0\\",
+  \\"main\\": \\"./src/api\\",
   \\"scripts\\": {
     \\"start\\": \\"node src/api/index.js\\"
   },
@@ -269,16 +375,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const dimLightMiddlewares = [];
+
+/**
+ * Registers a middleware function for the dimLight operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.dimLight = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  dimLightMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {integer} options.message.payload.percentage - Percentage to which the light should be dimmed to.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {integer} options.message.payload.percentage - Percentage to which the light should be dimmed to.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.dimLight = async ({message}) => {
-  // Implement your business logic here...
+handler._dimLight = async ({message}) => {
+  for (const middleware of dimLightMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -287,16 +414,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const turnOffMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOff operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.turnOff = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOffMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {string} options.message.payload.command - Whether to turn on or off the light.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {string} options.message.payload.command - Whether to turn on or off the light.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.turnOff = async ({message}) => {
-  // Implement your business logic here...
+handler._turnOff = async ({message}) => {
+  for (const middleware of turnOffMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -305,16 +453,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const turnOnMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOn operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.turnOn = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOnMiddlewares.push(middlewareFn);
+}
+
 /**
  * 
+ *
  * @param {object} options
  * @param {object} options.message
- * @param {integer} options.message.headers.my-app-header
- * @param {string} options.message.payload.command - Whether to turn on or off the light.
- * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
+  * @param {integer} options.message.headers.my-app-header
+  * @param {string} options.message.payload.command - Whether to turn on or off the light.
+  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.turnOn = async ({message}) => {
-  // Implement your business logic here...
+handler._turnOn = async ({message}) => {
+  for (const middleware of turnOnMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -323,16 +492,37 @@ exports[`template integration tests for generated files using the generator and 
 "
 const handler = module.exports = {};
 
+
+const receiveLightMeasurementMiddlewares = [];
+
+/**
+ * Registers a middleware function for the receiveLightMeasurement operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.receiveLightMeasurement = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  receiveLightMeasurementMiddlewares.push(middlewareFn);
+}
+
 /**
  * Inform about environmental lighting conditions of a particular streetlight.
+ *
  * @param {object} options
  * @param {object} options.message
  * @param {integer} options.message.headers.my-app-header
  * @param {integer} options.message.payload.lumens - Light intensity measured in lumens.
  * @param {string} options.message.payload.sentAt - Date and time when the message was sent.
  */
-handler.receiveLightMeasurement = async ({message}) => {
-  // Implement your business logic here...
+handler._receiveLightMeasurement = async ({message}) => {
+  for (const middleware of receiveLightMeasurementMiddlewares) {
+    await middleware(message);
+  }
 };
 "
 `;
@@ -350,7 +540,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', 
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/dim','dimLight','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdDimHandler.dimLight({message});
+    await smartylightingStreetlights10ActionStreetlightIdDimHandler._dimLight({message});
     next();
     
   } catch (e) {
@@ -373,7 +563,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off','turnOnOff','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler.turnOff({message});
+    await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler._turnOff({message});
     next();
     
   } catch (e) {
@@ -396,7 +586,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on','turnOnOff','subscribe');
-    await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler.turnOn({message});
+    await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler._turnOn({message});
     next();
     
   } catch (e) {
@@ -422,7 +612,7 @@ router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measur
   try {
     
     await validateMessage(message.payload,'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured','lightMeasured','publish');
-    await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler.receiveLightMeasurement({message});
+    await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler._receiveLightMeasurement({message});
     next();
     
   } catch (e) {
@@ -471,15 +661,36 @@ app.useOutbound(errorLogger);
 app.useOutbound(logger);
 app.useOutbound(json2string);
 
-app
-  .listen()
-  .then((adapters) => {
-    console.log(cyan.underline(\`\${config.app.name} \${config.app.version}\`), gray('is ready!'), '\\\\n');
-    adapters.forEach(adapter => {
-      console.log('🔗 ', adapter.name(), gray('is connected!'));
-    });
-  })
-  .catch(console.error);
+function init() {
+  app
+    .listen()
+    .then((adapters) => {
+      console.log(cyan.underline(\`\${config.app.name} \${config.app.version}\`), gray('is ready!'), '\\\\n');
+      adapters.forEach(adapter => {
+        console.log('🔗 ', adapter.name(), gray('is connected!'));
+      });
+    })
+    .catch(console.error);
+}
+
+const handlers = {
+  receiveLightMeasurement: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').receiveLightMeasurement,
+  turnOn: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').turnOn,
+
+  turnOff: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').turnOff,
+
+  dimLight: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').dimLight,
+};
+
+const client = {
+  app,
+  init,
+  ...handlers
+};
+
+module.exports = {
+  client
+};
 "
 `;
 
@@ -513,6 +724,7 @@ exports[`template integration tests for generated files using the generator and 
   \\"name\\": \\"streetlights-mqtt-api\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈 \\",
   \\"version\\": \\"1.0.0\\",
+  \\"main\\": \\"./src/api\\",
   \\"scripts\\": {
     \\"start\\": \\"node src/api/index.js\\"
   },
