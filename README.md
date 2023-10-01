@@ -109,7 +109,7 @@ Consider a scenario where you intend to introduce a new channel or section to th
 
 To avoid this, user code remains external to the generated code, functioning as an independent entity that consumes the generated code as a library. By adopting this approach, the user code remains unaffected during template regenerations.
 
-Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.<operationId>` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
+Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.register<operationId>Middleware` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
 
 > The AsyncAPI file used for the example is [here](https://bit.ly/asyncapi)
 
@@ -139,7 +139,7 @@ function testPublish() {
     // the passed handler function is called once the app sends a message to the channel
     // For example `client.app.send` sends a message to some channel using and before it is sent, you want to perform some other actions
     // in such a case, you can register middlewares like below
-    client.turnOn((message) => { // `turnOn` is the respective operationId
+    client.registerTurnOnMiddleware((message) => { // `turnOn` is the respective operationId
         console.log("hitting the middleware before publishing the message");
         console.log(
             `sending turn on message to streetlight ${message.params.streetlightId}`,
