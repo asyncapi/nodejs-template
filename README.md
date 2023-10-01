@@ -169,11 +169,11 @@ function testSubscribe() {
     // Registering your custom logic in a channel-specific handler
     // the passed handler functions are called once the app gets message sent to the channel
 
-    client.receiveLightMeasurement((message) => { // `recieveLightMeasurement` is the respective operationId
+    client.registerReceiveLightMeasurementMiddleware((message) => { // `recieveLightMeasurement` is the respective operationId
         console.log("recieved in middleware 1", message.payload);
     });
 
-    client.receiveLightMeasurement((message) => {
+    client.registerReceiveLightMeasurementMiddleware((message) => {
         console.log("recieved in middleware 2", message.payload);
     });
 }
