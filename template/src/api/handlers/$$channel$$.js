@@ -12,7 +12,7 @@ const {{ channel.publish().id() }}Middlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.{{ channel.publish().id() }} = (middlewareFn) => {
+handler.{{ channel.publish().id() | convertOpertionIdToMiddlewareFn }} = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -68,7 +68,7 @@ const {{ channel.subscribe().id() }}Middlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.{{ channel.subscribe().id() }} = (middlewareFn) => {
+handler.{{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }} = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
