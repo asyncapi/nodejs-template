@@ -15,7 +15,7 @@ const dimLightMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.dimLight = (middlewareFn) => {
+handler.registerDimLightMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -54,7 +54,7 @@ const turnOffMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.turnOff = (middlewareFn) => {
+handler.registerTurnOffMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -93,7 +93,7 @@ const turnOnMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.turnOn = (middlewareFn) => {
+handler.registerTurnOnMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -132,7 +132,7 @@ const receiveLightMeasurementMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.receiveLightMeasurement = (middlewareFn) => {
+handler.registerReceiveLightMeasurementMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -303,12 +303,12 @@ function init() {
 }
 
 const handlers = {
-  receiveLightMeasurement: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').receiveLightMeasurement,
-  turnOn: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').turnOn,
+  registerReceiveLightMeasurementMiddleware: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').registerReceiveLightMeasurementMiddleware,
+  registerTurnOnMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').registerTurnOnMiddleware,
 
-  turnOff: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').turnOff,
+  registerTurnOffMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').registerTurnOffMiddleware,
 
-  dimLight: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').dimLight,
+  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware,
 };
 
 const client = {
@@ -386,7 +386,7 @@ const dimLightMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.dimLight = (middlewareFn) => {
+handler.registerDimLightMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -425,7 +425,7 @@ const turnOffMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.turnOff = (middlewareFn) => {
+handler.registerTurnOffMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -464,7 +464,7 @@ const turnOnMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.turnOn = (middlewareFn) => {
+handler.registerTurnOnMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -503,7 +503,7 @@ const receiveLightMeasurementMiddlewares = [];
  * @param {function} middlewareFn - The middleware function to be registered.
  * @throws {TypeError} If middlewareFn is not a function.
  */
-handler.receiveLightMeasurement = (middlewareFn) => {
+handler.registerReceiveLightMeasurementMiddleware = (middlewareFn) => {
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
@@ -674,12 +674,12 @@ function init() {
 }
 
 const handlers = {
-  receiveLightMeasurement: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').receiveLightMeasurement,
-  turnOn: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').turnOn,
+  registerReceiveLightMeasurementMiddleware: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').registerReceiveLightMeasurementMiddleware,
+  registerTurnOnMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').registerTurnOnMiddleware,
 
-  turnOff: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').turnOff,
+  registerTurnOffMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').registerTurnOffMiddleware,
 
-  dimLight: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').dimLight,
+  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware,
 };
 
 const client = {

@@ -69,10 +69,10 @@ function init() {
 const handlers = {
 {%- for channelName, channel in asyncapi.channels() -%}
 {% if channel.hasPublish() %}
-  {{ channel.publish().id() }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.publish().id() }},
+  {{ channel.publish().id() | convertOpertionIdToMiddlewareFn }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.publish().id() | convertOpertionIdToMiddlewareFn }},
 {%- endif -%}
 {% if channel.hasSubscribe() %}
-  {{ channel.subscribe().id() }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.subscribe().id() }},
+  {{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }},
 {% endif %}
 {%- endfor -%}
 };
