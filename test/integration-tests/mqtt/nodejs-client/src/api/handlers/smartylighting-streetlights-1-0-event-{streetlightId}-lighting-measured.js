@@ -13,6 +13,7 @@ const receiveLightMeasurementMiddlewares = [];
  * @throws {TypeError} If middlewareFn is not a function.
  */
 handler.registerReceiveLightMeasurementMiddleware = (middlewareFn) => {
+  console.log("registering middleware");
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }

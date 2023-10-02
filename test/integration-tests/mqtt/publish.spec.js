@@ -4,7 +4,7 @@ const {
   setupSubscribe,
   setupPublishMiddleware,
   setupPublish,
-} = require('./index');
+} = require('./publish-utils');
 
 // Mocking the console.debug function to prevent console output during testing
 jest.spyOn(global.console, 'debug').mockImplementation(() => {
@@ -12,7 +12,7 @@ jest.spyOn(global.console, 'debug').mockImplementation(() => {
 });
 const consoleDebugSpy = jest.spyOn(global.console, 'debug');
 
-describe('MQTT Connection Setup and Message Processing', () => {
+describe('[PUBLISH] MQTT Connection Setup and Message Processing', () => {
   jest.setTimeout(10000);
 
   beforeAll(() => {
@@ -41,8 +41,7 @@ describe('MQTT Connection Setup and Message Processing', () => {
 
     // Parsing and comparing the received JSON payload
     const jsonMessage = JSON.stringify(JSON.parse(message));
-    console.log('bois the json message is ', jsonMessage);
-
     expect(jsonMessage).toBe('{"command":"on"}');
   });
 });
+

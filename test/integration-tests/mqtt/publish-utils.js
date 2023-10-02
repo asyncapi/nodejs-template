@@ -26,7 +26,7 @@ async function waitForMessage() {
  */
 async function setupSubscribe() {
   const mqtt = require('mqtt');
-  const client = mqtt.connect(brokerUrl);
+  const client = mqtt.connect(BROKER_URL);
 
   return new Promise((resolve, reject) => {
     const topic = TURN_ON_TOPIC;
