@@ -54,12 +54,35 @@ app.useOutbound(errorLogger);
 app.useOutbound(logger);
 app.useOutbound(json2string);
 
-app
-  .listen()
-  .then((adapters) => {
-    console.log(cyan.underline(`${config.app.name} ${config.app.version}`), gray('is ready!'), '\n');
-    adapters.forEach(adapter => {
-      console.log('🔗 ', adapter.name(), gray('is connected!'));
-    });
-  })
-  .catch(console.error);
+function init() {
+  app
+    .listen()
+    .then((adapters) => {
+      console.log(cyan.underline(`${config.app.name} ${config.app.version}`), gray('is ready!'), '\n');
+      adapters.forEach(adapter => {
+        console.log('🔗 ', adapter.name(), gray('is connected!'));
+      });
+    })
+    .catch(console.error);
+}
+
+const handlers = {
+{%- for channelName, channel in asyncapi.channels() -%}
+{% if channel.hasPublish() %}
+  {{ channel.publish().id() | convertOpertionIdToMiddlewareFn }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.publish().id() | convertOpertionIdToMiddlewareFn }},
+{%- endif -%}
+{% if channel.hasSubscribe() %}
+  {{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }}: require('./handlers/{{ channelName | convertToFilename }}').{{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }},
+{% endif %}
+{%- endfor -%}
+};
+
+const client = {
+  app,
+  init,
+  ...handlers
+};
+
+module.exports = {
+  client
+};

@@ -132,6 +132,12 @@ function trimLastChar(string) {
 }
 filter.trimLastChar = trimLastChar;
 
+function convertOpertionIdToMiddlewareFn(operationId) {
+  const capitalizedOperationId = operationId.charAt(0).toUpperCase() + operationId.slice(1);
+  return `register${  capitalizedOperationId  }Middleware`;
+}
+filter.convertOpertionIdToMiddlewareFn = convertOpertionIdToMiddlewareFn;
+
 function toJS(objFromJSON, indent = 2) {
   if (typeof objFromJSON !== 'object' || Array.isArray(objFromJSON)) {
     // not an object, stringify using native function
