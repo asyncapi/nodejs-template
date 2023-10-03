@@ -3,7 +3,7 @@ description: This template generates a server using your AsyncAPI document. It s
 filters:
   language: javascript
   technology:
-  - nodejs
+  - Nodejs
   categories:
   - generator-template
   hasCommercial: false
