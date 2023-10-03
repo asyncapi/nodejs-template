@@ -1,5 +1,4 @@
 title: Node.js Multiprotocol Template
-description: This template generates a server using your AsyncAPI document. It supports multiple different protocols, like Kafka or MQTT. It is designed in the way that generated code is a library and with it's API you can start the server, send messages or register a middleware for listening incoming messages. Runtime message validation included.
 filters:
   language: javascript
   technology:
