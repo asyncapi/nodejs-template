@@ -12,7 +12,7 @@
 - [Supported protocols](#supported-protocols)
 - [How to use the template](#how-to-use-the-template)
   * [CLI](#cli)
-  * [Adding custom code](#adding-custom-code--handlers)
+  * [Adding custom code / handlers](#adding-custom-code--handlers)
 - [Template configuration](#template-configuration)
 - [Development](#development)
 - [Contributors](#contributors)
