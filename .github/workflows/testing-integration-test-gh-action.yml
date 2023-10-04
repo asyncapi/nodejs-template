@@ -23,11 +23,9 @@ jobs:
         run: cd test/integration-tests && docker-compose up -d
       - name: Check running containers
         run: docker ps
-      - if: steps.packagejson.outputs.exists == 'true'
-        name: Setup libraries and dependencies for integration testing examples
+      - name: Setup libraries and dependencies for integration testing examples
         run: npm run setup:integrationTestExamples
-      - if: steps.packagejson.outputs.exists == 'true'
-        name: Test examples
+      - name: Test examples
         run: npm run test
       - name: Dump docker logs on failure
         if: failure()
