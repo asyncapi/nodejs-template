@@ -1,7 +1,7 @@
 {
   "config": {
-    "example_name": "mqtt",
-    "root_dir": "../../.."
+    "example_name": "mqtt/publish",
+    "root_dir": "../../../.."
   },
   "scripts": {
     "setup": "npm run generate:client && npm install",

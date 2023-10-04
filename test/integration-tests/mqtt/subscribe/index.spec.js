@@ -2,7 +2,7 @@ const {
   waitForMessage,
   setupSubscribe,
   publishMessage, client
-} = require('./subscribe-utils');
+} = require('./index');
 
 // Mocking the console.debug function to prevent console output during testing
 jest.spyOn(global.console, 'debug').mockImplementation(() => {
@@ -14,7 +14,7 @@ describe('MQTT Connection Setup and Data Reception', () => {
   jest.setTimeout(10000);
 
   beforeAll(async () => {
-      await client.init();
+    await client.init();
   });
   test('Recieves and Validates data', async () => {
     // Setting up subscription
