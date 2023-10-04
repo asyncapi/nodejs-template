@@ -25,7 +25,8 @@
     "lint:fix": "eslint --fix --config .eslintrc .",
     "generate:assets": "npm run generate:readme:toc",
     "generate:readme:toc": "markdown-toc -i README.md",
-    "bump:version": "npm --no-git-tag-version --allow-same-version version $VERSION"
+    "bump:version": "npm --no-git-tag-version --allow-same-version version $VERSION",
+    "setup:integrationTestExamples": "cd scripts && node setup-integration-tests.js"
   },
   "publishConfig": {
     "access": "public"

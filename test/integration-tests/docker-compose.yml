@@ -1,0 +1,5 @@
+# TODO: need to add more documentation
+# add more services like kafka / amqp here
+services:
+  mqtt:
+    image: "eclipse-mosquitto:1.5"

@@ -1,0 +1,34 @@
+name: Testing working of github actions
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - 'testing-actions'
+
+jobs:
+  test:
+    name: 'Run example tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the docker-compose stack
+        run: cd test/integration-tests && docker-compose up -d
+      - name: Check running containers
+        run: docker ps
+      - if: steps.packagejson.outputs.exists == 'true'
+        name: Setup libraries and dependencies for integration testing examples
+        run: npm run setup:integrationTestExamples
+      - if: steps.packagejson.outputs.exists == 'true'
+        name: Test examples
+        run: npm run test
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
