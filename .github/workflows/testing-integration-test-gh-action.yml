@@ -27,6 +27,8 @@ jobs:
         run: npm run setup:integrationTestExamples
       - name: Test examples
         run: npm run test
+      - name: Check running containers
+        run: docker ps
       - name: Dump docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v1
