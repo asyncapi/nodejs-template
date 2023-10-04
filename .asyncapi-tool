@@ -1,0 +1,8 @@
+title: Node.js Multiprotocol Template
+filters:
+  language: javascript
+  technology:
+  - Node.js
+  categories:
+  - generator-template
+  hasCommercial: false
