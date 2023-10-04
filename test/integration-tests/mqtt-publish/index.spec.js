@@ -41,7 +41,6 @@ describe('MQTT Connection Setup and Message Processing', () => {
 
     // Parsing and comparing the received JSON payload
     const jsonMessage = JSON.stringify(JSON.parse(message));
-    console.log('bois the json message is ', jsonMessage);
 
     expect(jsonMessage).toBe('{"command":"on"}');
   });
