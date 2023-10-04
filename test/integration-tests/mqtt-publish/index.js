@@ -1,6 +1,7 @@
 const { client } = require('./nodejs-client');
 
-const BROKER_URL = 'mqtt://localhost:1883';
+// const BROKER_URL = 'mqtt://localhost:1883';
+const BROKER_URL = 'mqtt://test.mosquitto.org';
 const TURN_ON_TOPIC = 'smartylighting/streetlights/1/0/action/101/turn/on';
 
 let enteredMiddleware = false;

@@ -5,7 +5,7 @@ default:
 
   broker:
     mqtt:
-      url: mqtt://localhost:1883
+      url: mqtt://test.mosquitto.org:1883
       topics: ["smartylighting/streetlights/1/0/event/+/lighting/measured"]
       qos:
       protocol: mqtt

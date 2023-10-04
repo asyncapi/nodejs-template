@@ -5,7 +5,7 @@
   },
   "scripts": {
     "setup": "npm run generate:client && npm install",
-    "generate:client": "$npm_package_config_root_dir/node_modules/.bin/ag --output \"./nodejs-client\" \"$npm_package_config_root_dir/test/mocks/mqtt/asyncapi.yml\" \"$npm_package_config_root_dir\" --force-write --param \"server=test\" && cd ./nodejs-client && npm i && cd ..",
+    "generate:client": "$npm_package_config_root_dir/node_modules/.bin/ag --output \"./nodejs-client\" \"$npm_package_config_root_dir/test/mocks/mqtt/asyncapi.yml\" \"$npm_package_config_root_dir\" --force-write --param \"server=production\" && cd ./nodejs-client && npm i && cd ..",
     "test": "$npm_package_config_root_dir/node_modules/.bin/jest --forceExit ./index.spec.js"
   },
   "dependencies": {

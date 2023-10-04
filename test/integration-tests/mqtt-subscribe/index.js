@@ -1,7 +1,8 @@
 const {client} = require("./nodejs-client")
 
 const LIGHTING_MEASURED_TOPIC = 'smartylighting/streetlights/1/0/event/101/lighting/measured';
-const BROKER_URL = "mqtt://localhost:1883";
+// const BROKER_URL = "mqtt://localhost:1883";
+const BROKER_URL = 'mqtt://test.mosquitto.org';
 const MESSAGE_PUBLISHED = {lumens: 10};
 
 let recievedMessage = false;
