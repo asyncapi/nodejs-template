@@ -2,7 +2,7 @@ title: Node.js Multiprotocol Template
 filters:
   language: javascript
   technology:
-  - Nodejs
+  - Node.js
   categories:
   - generator-template
   hasCommercial: false
