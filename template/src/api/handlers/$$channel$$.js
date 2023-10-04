@@ -72,7 +72,6 @@ handler.{{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }} = (midd
   if (typeof middlewareFn !== 'function') {
     throw new TypeError('middlewareFn must be a function');
   }
-  {{ channel.subscribe().id() }}Middlewares.push(middlewareFn);
 }
 
 /**
