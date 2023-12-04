@@ -38,7 +38,7 @@
     "markdown-toc": "^1.2.0"
   },
   "devDependencies": {
-    "@asyncapi/generator": "^1.9.4",
+    "@asyncapi/generator": "^1.15.4",
     "eslint": "^8.7.0",
     "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-sonarjs": "^0.11.0",
