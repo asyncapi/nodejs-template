@@ -1,100 +1,145 @@
-{%- if channel.hasPublish() and channel.publish().ext('x-lambda') %}const fetch = require('node-fetch');{%- endif %}
-const handler = module.exports = {};
+import { docline } from "@asyncapi/generator-filters/src/customFilters";
+import { convertOpertionIdToMiddlewareFn } from "../../../../utils/index";
+import { File } from "@asyncapi/generator-react-sdk";
 
-{% if channel.hasPublish() %}
-const {{ channel.publish().id() }}Middlewares = [];
-
-/**
- * Registers a middleware function for the {{ channel.publish().id() }} operation to be executed during request processing.
- *
- * Middleware functions have access to options object that you can use to access the message content and other helper functions
- *
- * @param {function} middlewareFn - The middleware function to be registered.
- * @throws {TypeError} If middlewareFn is not a function.
- */
-handler.{{ channel.publish().id() | convertOpertionIdToMiddlewareFn }} = (middlewareFn) => {
-  if (typeof middlewareFn !== 'function') {
-    throw new TypeError('middlewareFn must be a function');
+function publishHandler(channel) {
+  if (!channel.hasPublish()) {
+    return "";
   }
-  {{ channel.publish().id() }}Middlewares.push(middlewareFn);
+
+  const lambdaChannel = channel.publish().ext('x-lambda');
+  const publishOperationId = channel.publish().id();
+  const publishMessage = channel.publish().message(0);
+
+
+  const exportedHandler = `
+  /**
+   * Registers a middleware function for the ${ publishOperationId } operation to be executed during request processing.
+   *
+   * Middleware functions have access to options object that you can use to access the message content and other helper functions
+   *
+   * @param {function} middlewareFn - The middleware function to be registered.
+   * @throws {TypeError} If middlewareFn is not a function.
+   */
+  handler.${ convertOpertionIdToMiddlewareFn(channel.publish().id()) } = (middlewareFn) => {
+    if (typeof middlewareFn !== 'function') {
+      throw new TypeError('middlewareFn must be a function');
+    }
+    ${ publishOperationId }Middlewares.push(middlewareFn);
+  }
+  `;
+
+  const privateHandlerLogic = `
+  /**
+   * ${ channel.publish().summary() || "" }
+   *
+   * @param {object} options
+   * @param {object} options.message
+  ${publishMessage.headers() ? Object.entries(publishMessage.headers().properties()).map(([fieldName, field]) => {
+    return docline(field, fieldName, 'options.message.headers');
+  }).join('\n') : ""}
+  *
+  ${publishMessage.payload() ? Object.entries(publishMessage.payload().properties()).map(([fieldName, field]) => {
+    return docline(field, fieldName, 'options.message.headers');
+  }).join('\n'): ""}
+  */
+  handler._${ publishOperationId } = async ({message}) => {
+    ${lambdaChannel ? `
+    fetch('${ lambdaChannel.url }}', {
+      method: '${lambdaChannel.method || 'POST'}',
+      body: JSON.stringify(${lambda.body}),
+      ${lambda.headers ? `headers: ${lambda.headers}`: "" }
+    })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => { throw err; });` 
+      : 
+    `for (const middleware of ${ publishOperationId }Middlewares) {
+      await middleware(message);
+    }`
+    }
+  };
+  `;
+  
+  return `
+  ${lambdaChannel ? "const fetch = require('node-fetch');" : ""}
+  
+  const ${publishOperationId}Middlewares = [];
+
+  ${exportedHandler}
+
+  ${privateHandlerLogic}
+  `;
 }
 
-/**
- * {{ channel.publish().summary() }}
- *
- * @param {object} options
- * @param {object} options.message
-{%- if channel.publish().message(0).headers() %}
-{%- for fieldName, field in channel.publish().message(0).headers().properties() %}
-{{ field | docline(fieldName, 'options.message.headers') }}
-{%- endfor %}
-{%- endif %}
-{%- if channel.publish().message(0).payload() %}
-{%- for fieldName, field in channel.publish().message(0).payload().properties() %}
-{{ field | docline(fieldName, 'options.message.payload') }}
-{%- endfor %}
-{%- endif %}
- */
-handler._{{ channel.publish().id() }} = async ({message}) => {
-  {%- if channel.publish().ext('x-lambda') %}
-  {%- set lambda = channel.publish().ext('x-lambda') %}
-  fetch('{{ lambda.url }}', {
-    method: '{% if lambda.method %}{{ lambda.method }}{% else %}POST{% endif %}',
-    body: JSON.stringify({{ lambda.body | toJS | indent(4) | trimLastChar | safe }}),
-    {%- if lambda.headers %}
-    headers: {{ lambda.headers | toJS | indent(4) | trimLastChar | safe }}
-    {%- endif %}
-  })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => { throw err; });
-  {%-  else %}
-  for (const middleware of {{ channel.publish().id() }}Middlewares) {
-    await middleware(message);
+function subscribeHandler(channel) {
+  if (!channel.hasSubscribe()) {
+    return "";
   }
-  {%- endif %}
-};
 
-{%- endif %}
+  const subscribeOperationId = channel.subscribe().id();
+  const subscribeMessage = channel.subscribe().message(0);
 
-{%- if channel.hasSubscribe() %}
-const {{ channel.subscribe().id() }}Middlewares = [];
-
-/**
- * Registers a middleware function for the {{ channel.subscribe().id() }} operation to be executed during request processing.
- *
- * Middleware functions have access to options object that you can use to access the message content and other helper functions
- *
- * @param {function} middlewareFn - The middleware function to be registered.
- * @throws {TypeError} If middlewareFn is not a function.
- */
-handler.{{ channel.subscribe().id() | convertOpertionIdToMiddlewareFn }} = (middlewareFn) => {
-  if (typeof middlewareFn !== 'function') {
-    throw new TypeError('middlewareFn must be a function');
+  const exportedHandler = `
+  /**
+   * Registers a middleware function for the ${ subscribeOperationId } operation to be executed during request processing.
+   *
+   * Middleware functions have access to options object that you can use to access the message content and other helper functions
+   *
+   * @param {function} middlewareFn - The middleware function to be registered.
+   * @throws {TypeError} If middlewareFn is not a function.
+   */
+  handler.${ convertOpertionIdToMiddlewareFn(channel.subscribe().id()) } = (middlewareFn) => {
+    if (typeof middlewareFn !== 'function') {
+      throw new TypeError('middlewareFn must be a function');
+    }
+    ${ subscribeOperationId }Middlewares.push(middlewareFn);
   }
-  {{ channel.subscribe().id() }}Middlewares.push(middlewareFn);
+  `;
+
+  const privateHandlerLogic = `
+  /**
+   * ${ channel.subscribe().summary() || "" }
+   *
+   * @param {object} options
+   * @param {object} options.message
+  ${subscribeMessage.headers() ? Object.entries(subscribeMessage.headers().properties()).map(([fieldName, field]) => {
+    return docline(field, fieldName, 'options.message.headers');
+  }).join('\n'): ""}
+  *
+  ${subscribeMessage.payload() ? Object.entries(subscribeMessage.payload().properties()).map(([fieldName, field]) => {
+    return docline(field, fieldName, 'options.message.headers');
+  }).join('\n'): ""}
+  */
+  handler._${ subscribeOperationId } = async ({message}) => {
+    for (const middleware of ${ subscribeOperationId }Middlewares) {
+      await middleware(message);
+    }
+  };
+  `;
+  
+  return `
+  const ${subscribeOperationId}Middlewares = [];
+
+  ${exportedHandler}
+  
+  ${privateHandlerLogic}
+  `;
 }
 
-/**
- * {{ channel.subscribe().summary() }}
- *
- * @param {object} options
- * @param {object} options.message
- {%- if channel.subscribe().message(0).headers() %}
- {%- for fieldName, field in channel.subscribe().message(0).headers().properties() %}
- {{ field | docline(fieldName, 'options.message.headers') }}
- {%- endfor %}
- {%- endif %}
- {%- if channel.subscribe().message(0).payload() %}
- {%- for fieldName, field in channel.subscribe().message(0).payload().properties() %}
- {{ field | docline(fieldName, 'options.message.payload') }}
- {%- endfor %}
- {%- endif %}
- */
-handler._{{ channel.subscribe().id() }} = async ({message}) => {
-  for (const middleware of {{ channel.subscribe().id() }}Middlewares) {
-    await middleware(message);
-  }
-};
-
-{%- endif %}
+export default function handlerRender({channel, channelName, params}) {
+  let hasPublish = channel.publish();
+  let hasSubscribe = channel.hasSubscribe();
+  
+  const general = `
+  const handler = module.exports = {};
+  `;
+  
+  return <File>
+    {`
+    ${general}
+    ${hasPublish ? publishHandler(channel): ""}
+    ${hasSubscribe ? subscribeHandler(channel): ""}
+    `}
+  </File>;
+}

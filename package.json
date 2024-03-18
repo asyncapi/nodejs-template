@@ -33,7 +33,9 @@
   "dependencies": {
     "@asyncapi/generator-filters": "^2.1.0",
     "@asyncapi/generator-hooks": "^0.1.0",
+    "@asyncapi/generator-react-sdk": "^1.0.14",
     "filenamify": "^4.1.0",
+    "js-beautify": "^1.15.1",
     "lodash": "^4.17.15",
     "markdown-toc": "^1.2.0"
   },
@@ -55,6 +57,7 @@
       "kafka-secure",
       "ws"
     ],
+    "renderer": "react",
     "parameters": {
       "server": {
         "description": "The server you want to use in the code.",
@@ -73,7 +76,7 @@
     },
     "nonRenderableFiles": [
       "src/api/middlewares/*.*",
-      "src/lib/config.js"
+      "src/lib/*.*"
     ],
     "generator": ">=0.50.0 <2.0.0",
     "filters": [
