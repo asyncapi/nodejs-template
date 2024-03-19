@@ -1,4 +1,4 @@
-import { kebabCase, oneLine } from "../utils/index";
+import { kebabCase, oneLine } from "../helpers/index";
 import { File } from "@asyncapi/generator-react-sdk";
 
 export default function packageFile({ asyncapi, params }) {

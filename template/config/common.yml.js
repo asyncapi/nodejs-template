@@ -1,5 +1,5 @@
 import { File } from "@asyncapi/generator-react-sdk";
-import { camelCase, channelNamesWithPublish, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from "../../utils/index";
+import { camelCase, channelNamesWithPublish, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from "../../helpers/index";
 import { replaceServerVariablesWithValues } from "@asyncapi/generator-filters/src/customFilters";
 
 export default function CommonConfigYAMLRender({ asyncapi, params }) {

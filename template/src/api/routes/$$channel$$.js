@@ -1,5 +1,5 @@
 import { File } from "@asyncapi/generator-react-sdk";
-import { camelCase, convertToFilename, toHermesTopic } from "../../../../utils/index";
+import { camelCase, convertToFilename, toHermesTopic } from "../../../../helpers/index";
 
 function publishHandler(channel, channelName) {
   if (!channel.hasPublish()) {

@@ -1,5 +1,5 @@
 import { docline } from "@asyncapi/generator-filters/src/customFilters";
-import { convertOpertionIdToMiddlewareFn } from "../../../../utils/index";
+import { convertOpertionIdToMiddlewareFn } from "../../../../helpers/index";
 import { File } from "@asyncapi/generator-react-sdk";
 
 function publishHandler(channel) {
