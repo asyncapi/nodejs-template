@@ -6,7 +6,6 @@ function publishHandler(channel, channelName) {
     return "";
   }
 
-  const lambdaChannel = channel.publish().ext('x-lambda');
   const publishOperationId = channel.publish().id();
   const publishMessage = channel.publish().message(0);
 
