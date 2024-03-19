@@ -104,10 +104,10 @@ function subscribeHandler(channel, channelName) {
   `;
 }
 
-export default function routeRender({channel, channelName, params}) {
+function routeCode(channel, channelName) {
   let hasPublish = channel.publish();
   let hasSubscribe = channel.hasSubscribe();
-  
+
   const generalImport = `
   const Router = require('hermesjs/lib/router');
   const { validateMessage } = require('../../lib/message-validator');
@@ -116,11 +116,21 @@ export default function routeRender({channel, channelName, params}) {
   module.exports = router;
   `;
   
-  return <File>
-    {`
-    ${generalImport}
-    ${hasPublish ? publishHandler(channel, channelName): ""}
-    ${hasSubscribe ? subscribeHandler(channel, channelName): ""}
-    `}
-  </File>;
+  return (
+    <File name={`${convertToFilename(channelName)}.js`}>
+      {`
+  ${generalImport}
+  ${hasPublish ? publishHandler(channel, channelName): ""}
+  ${hasSubscribe ? subscribeHandler(channel, channelName): ""}
+  `}
+    </File>
+  );
+}
+
+export default function routeRender({asyncapi}) {
+  const channels = asyncapi.channels();
+  
+  return Object.entries(channels).map(([channelName, channel]) => {
+    return routeCode(channel, channelName);
+  });
 }
