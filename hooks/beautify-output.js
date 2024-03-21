@@ -51,8 +51,11 @@ const beautifyAllOutputFiles = function(dirPath) {
  */
 module.exports = {
   'generate:after': (generator) => {
-    beautifyAllOutputFiles(path.resolve(generator.targetDir, 'src/api/handlers'));
-    beautifyAllOutputFiles(path.resolve(generator.targetDir, 'src/api/routes'));
-    beautifySingleFile(path.resolve(generator.targetDir, 'src/api/index.js'));
+    const entryPointFilePath = path.resolve(generator.targetDir, 'src/api/index.js');
+    const handlersPath = path.resolve(generator.targetDir, 'src/api/handlers');
+    const routesPath = path.resolve(generator.targetDir, 'src/api/routes');
+    beautifyAllOutputFiles(handlersPath);
+    beautifyAllOutputFiles(routesPath);
+    beautifySingleFile(entryPointFilePath);
   }
 };
