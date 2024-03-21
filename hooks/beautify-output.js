@@ -27,7 +27,7 @@ const beautifySingleFile = (filePath) => {
   const fileData = fs.readFileSync(filePath);
   const beautifiedData = beautify(fileData.toString(), beautifyConfig);
   fs.writeFileSync(filePath, beautifiedData);
-}
+};
 
 /**
  * Recursively beautify all files in directory
