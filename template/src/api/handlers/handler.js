@@ -1,16 +1,19 @@
-import { docline } from "@asyncapi/generator-filters/src/customFilters";
+/* eslint-disable indent */
+import { docline } from '@asyncapi/generator-filters/src/customFilters';
 import {
   convertOpertionIdToMiddlewareFn,
   convertToFilename,
-} from "../../../../helpers/index";
-import { File } from "@asyncapi/generator-react-sdk";
+} from '../../../../helpers/index';
+import { File } from '@asyncapi/generator-react-sdk';
+
+const OPTIONS_MESSAGE_HEADERS_STRING = 'options.message.headers';
 
 function publishHandler(channel) {
   if (!channel.hasPublish()) {
-    return "";
+    return '';
   }
 
-  const lambdaChannel = channel.publish().ext("x-lambda");
+  const lambdaChannel = channel.publish().ext('x-lambda');
   const publishOperationId = channel.publish().id();
   const publishMessage = channel.publish().message(0);
 
@@ -35,28 +38,28 @@ function publishHandler(channel) {
 
   const privateHandlerLogic = `
   /**
-   * ${channel.publish().summary() || ""}
+   * ${channel.publish().summary() || ''}
    *
    * @param {object} options
    * @param {object} options.message
   ${
-    publishMessage.headers()
-      ? Object.entries(publishMessage.headers().properties())
-          .map(([fieldName, field]) => {
-            return docline(field, fieldName, "options.message.headers");
-          })
-          .join("\n")
-      : ""
+  publishMessage.headers()
+    ? Object.entries(publishMessage.headers().properties())
+        .map(([fieldName, field]) => {
+          return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
+        })
+        .join('\n')
+    : ''
   }
   *
   ${
     publishMessage.payload()
       ? Object.entries(publishMessage.payload().properties())
           .map(([fieldName, field]) => {
-            return docline(field, fieldName, "options.message.headers");
+            return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
-          .join("\n")
-      : ""
+          .join('\n')
+      : ''
   }
   */
   handler._${publishOperationId} = async ({message}) => {
@@ -64,9 +67,9 @@ function publishHandler(channel) {
       lambdaChannel
         ? `
     fetch('${lambdaChannel.url}}', {
-      method: '${lambdaChannel.method || "POST"}',
-      body: JSON.stringify(${lambda.body}),
-      ${lambda.headers ? `headers: ${lambda.headers}` : ""}
+      method: "${lambdaChannel.method || 'POST'}",
+      body: JSON.stringify(${lambdaChannel.body}),
+      ${lambdaChannel.headers ? `headers: ${lambdaChannel.headers}` : ''}
     })
       .then(res => res.json())
       .then(json => console.log(json))
@@ -79,7 +82,7 @@ function publishHandler(channel) {
   `;
 
   return `
-  ${lambdaChannel ? "const fetch = require('node-fetch');" : ""}
+  ${lambdaChannel ? 'const fetch = require("node-fetch");' : ''}
   
   const ${publishOperationId}Middlewares = [];
 
@@ -91,7 +94,7 @@ function publishHandler(channel) {
 
 function subscribeHandler(channel) {
   if (!channel.hasSubscribe()) {
-    return "";
+    return '';
   }
 
   const subscribeOperationId = channel.subscribe().id();
@@ -118,7 +121,7 @@ function subscribeHandler(channel) {
 
   const privateHandlerLogic = `
   /**
-   * ${channel.subscribe().summary() || ""}
+   * ${channel.subscribe().summary() || ''}
    *
    * @param {object} options
    * @param {object} options.message
@@ -126,20 +129,20 @@ function subscribeHandler(channel) {
     subscribeMessage.headers()
       ? Object.entries(subscribeMessage.headers().properties())
           .map(([fieldName, field]) => {
-            return docline(field, fieldName, "options.message.headers");
+            return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
-          .join("\n")
-      : ""
+          .join('\n')
+      : ''
   }
   *
   ${
     subscribeMessage.payload()
       ? Object.entries(subscribeMessage.payload().properties())
           .map(([fieldName, field]) => {
-            return docline(field, fieldName, "options.message.headers");
+            return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
-          .join("\n")
-      : ""
+          .join('\n')
+      : ''
   }
   */
   handler._${subscribeOperationId} = async ({message}) => {
@@ -168,15 +171,15 @@ export default function handlerRender({
   const channels = asyncapi.channels();
   
   return Object.entries(channels).map(([channelName, channel]) => {
-    let hasPublish = channel.publish();
-    let hasSubscribe = channel.hasSubscribe();
+    const hasPublish = channel.publish();
+    const hasSubscribe = channel.hasSubscribe();
 
     return (
       <File name={`${convertToFilename(channelName)}.js`}>
         {`
         ${general}
-        ${hasPublish ? publishHandler(channel) : ""}
-        ${hasSubscribe ? subscribeHandler(channel) : ""}
+        ${hasPublish ? publishHandler(channel) : ''}
+        ${hasSubscribe ? subscribeHandler(channel) : ''}
         `}
       </File>
     );

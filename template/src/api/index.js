@@ -1,5 +1,5 @@
-import { File } from "@asyncapi/generator-react-sdk";
-import { capitalize, getProtocol, getConfig, camelCase, convertToFilename, convertOpertionIdToMiddlewareFn } from "../../../helpers/index";
+import { File } from '@asyncapi/generator-react-sdk';
+import { capitalize, getProtocol, getConfig, camelCase, convertToFilename, convertOpertionIdToMiddlewareFn } from '../../../helpers/index';
 
 export default function indexEntrypointFile({asyncapi, params}) {
     const protocol = asyncapi.server(params.server).protocol() === 'mqtts' ? 'mqtt' : asyncapi.server(params.server).protocol();

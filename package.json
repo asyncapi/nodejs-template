@@ -34,6 +34,7 @@
     "@asyncapi/generator-filters": "^2.1.0",
     "@asyncapi/generator-hooks": "^0.1.0",
     "@asyncapi/generator-react-sdk": "^1.0.14",
+    "eslint-plugin-react": "^7.34.1",
     "filenamify": "^4.1.0",
     "js-beautify": "^1.15.1",
     "lodash": "^4.17.15",

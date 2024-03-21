@@ -1,9 +1,10 @@
-import { File } from "@asyncapi/generator-react-sdk";
-import { camelCase, convertToFilename, toHermesTopic } from "../../../../helpers/index";
+/* eslint-disable indent */
+import { File } from '@asyncapi/generator-react-sdk';
+import { camelCase, convertToFilename, toHermesTopic } from '../../../../helpers/index';
 
 function publishHandler(channel, channelName) {
   if (!channel.hasPublish()) {
-    return "";
+    return '';
   }
 
   const publishOperationId = channel.publish().id();
@@ -14,7 +15,7 @@ function publishHandler(channel, channelName) {
   /**
    * ${ channel.publish().summary() }
    */
-  `: ""}
+  `: ''}
   router.use('${toHermesTopic(channelName)}', async (message, next) => {
     try {
       ${channel.publish().hasMultipleMessages() 
@@ -52,12 +53,12 @@ function publishHandler(channel, channelName) {
       next(e);
     }
   });
-  `
+  `;
 }
 
 function subscribeHandler(channel, channelName) {
   if (!channel.hasSubscribe()) {
-    return "";
+    return '';
   }
 
   const subscribeOperationId = channel.subscribe().id();
@@ -68,7 +69,7 @@ function subscribeHandler(channel, channelName) {
   /**
    * ${ channel.subscribe().summary() }
    */
-  `: ""}
+  `: ''}
   router.use('${toHermesTopic(channelName)}', async (message, next) => {
     try {
       ${channel.subscribe().hasMultipleMessages() 
@@ -104,8 +105,8 @@ function subscribeHandler(channel, channelName) {
 }
 
 function routeCode(channel, channelName) {
-  let hasPublish = channel.publish();
-  let hasSubscribe = channel.hasSubscribe();
+  const hasPublish = channel.publish();
+  const hasSubscribe = channel.hasSubscribe();
 
   const generalImport = `
   const Router = require('hermesjs/lib/router');
@@ -119,8 +120,8 @@ function routeCode(channel, channelName) {
     <File name={`${convertToFilename(channelName)}.js`}>
       {`
   ${generalImport}
-  ${hasPublish ? publishHandler(channel, channelName): ""}
-  ${hasSubscribe ? subscribeHandler(channel, channelName): ""}
+  ${hasPublish ? publishHandler(channel, channelName): ''}
+  ${hasSubscribe ? subscribeHandler(channel, channelName): ''}
   `}
     </File>
   );

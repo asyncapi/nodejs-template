@@ -19,7 +19,7 @@ const beautifyConfig = {
   indent_inner_html: false,
   comma_first: false,
   e4x: false,
-  indent_empty_lines: false
+  indent_empty_lines: false,
 };
 
 const beautifySingleFile = (filePath) => {
@@ -30,10 +30,10 @@ const beautifySingleFile = (filePath) => {
 
 /**
  * Recursively beautify all files in directory
- * 
+ *
  * @param {string} dirPath to recursively beautify files in
  */
-const beautifyAllOutputFiles = function(dirPath) {
+const beautifyAllOutputFiles = function (dirPath) {
   const files = fs.readdirSync(dirPath);
   files.forEach((file) => {
     const filePath = path.join(dirPath, file);
@@ -41,7 +41,7 @@ const beautifyAllOutputFiles = function(dirPath) {
       beautifyAllOutputFiles(filePath);
     } else {
       beautifySingleFile(filePath);
-    } 
+    }
   });
 };
 
@@ -50,12 +50,15 @@ const beautifyAllOutputFiles = function(dirPath) {
  */
 module.exports = {
   'generate:after': (generator) => {
-    const entryPointFilePath = path.resolve(generator.targetDir, 'src/api/index.js');
+    const entryPointFilePath = path.resolve(
+      generator.targetDir,
+      'src/api/index.js'
+    );
     const handlersPath = path.resolve(generator.targetDir, 'src/api/handlers');
     const routesPath = path.resolve(generator.targetDir, 'src/api/routes');
 
     beautifyAllOutputFiles(handlersPath);
     beautifyAllOutputFiles(routesPath);
     beautifySingleFile(entryPointFilePath);
-  }
+  },
 };

@@ -1,6 +1,6 @@
-import { File } from "@asyncapi/generator-react-sdk";
-import { camelCase, channelNamesWithPublish, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from "../../helpers/index";
-import { replaceServerVariablesWithValues } from "@asyncapi/generator-filters/src/customFilters";
+import { File } from '@asyncapi/generator-react-sdk';
+import { camelCase, channelNamesWithPublish, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from '../../helpers/index';
+import { replaceServerVariablesWithValues } from '@asyncapi/generator-filters/src/customFilters';
 
 export default function CommonConfigYAMLRender({ asyncapi, params }) {
   const serverProtocol = asyncapi.server(params.server).protocol();
@@ -8,17 +8,17 @@ export default function CommonConfigYAMLRender({ asyncapi, params }) {
   const resolvedBrokerUrlWithReplacedVariables = replaceServerVariablesWithValues(asyncapi.server(params.server).url(), serverVariables);
 
   return (
-      <File name={"common.yml"}>
-          {`default:
+    <File name={'common.yml'}>
+      {`default:
   app:
     name: ${asyncapi.info().title()}
     version: ${asyncapi.info().version()}
-${serverProtocol === "ws" ? wsBlock(resolvedBrokerUrlWithReplacedVariables) : ""}
-${serverProtocol !== "ws" ? `  broker:
-` : ""}
-${serverProtocol === "amqp" ? amqpBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ""}
-${serverProtocol === "mqtt" || serverProtocol === "mqtts" ? mqttBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi, params) : ""}
-${serverProtocol === "kafka" || serverProtocol === "kafka-secure" ? kafkaBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ""}
+${serverProtocol === 'ws' ? wsBlock(resolvedBrokerUrlWithReplacedVariables) : ''}
+${serverProtocol !== 'ws' ? `  broker:
+` : ''}
+${serverProtocol === 'amqp' ? amqpBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ''}
+${serverProtocol === 'mqtt' || serverProtocol === 'mqtts' ? mqttBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi, params) : ''}
+${serverProtocol === 'kafka' || serverProtocol === 'kafka-secure' ? kafkaBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ''}
 development:
 
 test:
@@ -26,9 +26,9 @@ test:
 staging:
 
 production:
-${serverProtocol === "kafka" || serverProtocol === "kafka-secure" ? kafkaProductionBlock(params, asyncapi) : ""}
+${serverProtocol === 'kafka' || serverProtocol === 'kafka-secure' ? kafkaProductionBlock(params, asyncapi) : ''}
 `}
-      </File>
+    </File>
   );
 }
 
@@ -88,7 +88,7 @@ function kafkaProductionBlock(params, asyncapi) {
         rejectUnauthorized: true
 `;
   if (params.securityScheme && asyncapi.components().securityScheme(params.securityScheme).type() !== 'X509') {
-      productionBlock += `      sasl:
+    productionBlock += `      sasl:
         mechanism: 'plain'
         username:
         password:
