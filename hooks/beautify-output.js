@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
 const fs = require('fs');
 const path = require('path');
 const beautify = require('js-beautify').js;
@@ -54,6 +53,7 @@ module.exports = {
     const entryPointFilePath = path.resolve(generator.targetDir, 'src/api/index.js');
     const handlersPath = path.resolve(generator.targetDir, 'src/api/handlers');
     const routesPath = path.resolve(generator.targetDir, 'src/api/routes');
+
     beautifyAllOutputFiles(handlersPath);
     beautifyAllOutputFiles(routesPath);
     beautifySingleFile(entryPointFilePath);
