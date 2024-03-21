@@ -17,7 +17,7 @@ ${serverProtocol === "ws" ? wsBlock(resolvedBrokerUrlWithReplacedVariables) : ""
 ${serverProtocol !== "ws" ? `  broker:
 ` : ""}
 ${serverProtocol === "amqp" ? amqpBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ""}
-${serverProtocol === "mqtt" || serverProtocol === "mqtts" ? mqttBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ""}
+${serverProtocol === "mqtt" || serverProtocol === "mqtts" ? mqttBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi, params) : ""}
 ${serverProtocol === "kafka" || serverProtocol === "kafka-secure" ? kafkaBlock(resolvedBrokerUrlWithReplacedVariables, asyncapi) : ""}
 development:
 
@@ -56,9 +56,9 @@ function amqpBlock(url, asyncapi) {
 `;
 }
 
-function mqttBlock(url, asyncapi) {
+function mqttBlock(url, asyncapi, params) {
   return `    mqtt:
-      url: mqtt://${stripProtocol(url)}
+      url: ${asyncapi.server(params.server).protocol()}://${stripProtocol(url)}
       topics: ${dump(toMqttTopic(channelNamesWithPublish(asyncapi)))}
       qos:
       protocol: mqtt
@@ -75,7 +75,7 @@ function kafkaBlock(url, asyncapi) {
       consumerOptions:
         groupId: ${camelCase(asyncapi.info().title())}
       topics:
-      ${asyncapi.map(channelNamesWithPublish).map(topic => `- ${toKafkaTopic(topic)}`).join('\n')}
+      ${channelNamesWithPublish(asyncapi).map(topic => `- ${toKafkaTopic(topic)}`).join('\n')}
       topicSeparator: '__'
       topicPrefix:
 `;
