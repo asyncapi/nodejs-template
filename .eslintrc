@@ -6,17 +6,19 @@ env:
 plugins:
   - jest
   - sonarjs
+  - react
 
 extends:
   - plugin:sonarjs/recommended
+  - plugin:react/recommended
 
 parserOptions:
   ecmaVersion: 2018
-  
-
+  sourceType: module
 
 rules:
   # Ignore Rules
+  react/react-in-jsx-scope: 0
   strict: 0
   no-underscore-dangle: 0
   no-mixed-requires: 0
@@ -99,3 +101,8 @@ rules:
   prefer-const: 2
   prefer-spread: 2
   prefer-template: 2
+  space-before-function-paren: "off"
+
+  react/prop-types: "off"
+  react/jsx-key: "off"
+  sonarjs/no-nested-template-literals: "off"

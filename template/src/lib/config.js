@@ -12,12 +12,16 @@ overrideWithEnvVars(config);
  * @param {Object} cfg Config object
  * @param {String} prefix Key prefix
  */
-function overrideWithEnvVars (cfg, prefix) {
+function overrideWithEnvVars(cfg, prefix) {
   prefix = prefix || '';
   for (const key in cfg) {
     const fullKey = prefix + key.toUpperCase();
 
-    if (typeof cfg[key] === 'object' && !Array.isArray(cfg[key]) && cfg[key] !== null) {
+    if (
+      typeof cfg[key] === 'object' &&
+      !Array.isArray(cfg[key]) &&
+      cfg[key] !== null
+    ) {
       overrideWithEnvVars(cfg[key], `${fullKey}_`);
     } else {
       if (!(fullKey in env)) continue;

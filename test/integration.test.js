@@ -62,12 +62,12 @@ describe('template integration tests for generated files using the generator and
 
   it('should generate proper config for X509 security', async() => {
     const expectedSecuritySetting = 'rejectUnauthorized: true';
-    const expectedCofigFile = '/config/common.yml';
+    const expectedConfigFile = '/config/common.yml';
 
     const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
     await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
 
-    const file = await readFile(path.join(outputDir, expectedCofigFile), 'utf8');
+    const file = await readFile(path.join(outputDir, expectedConfigFile), 'utf8');
     expect(file.includes(expectedSecuritySetting)).toBeTruthy();
   });
 

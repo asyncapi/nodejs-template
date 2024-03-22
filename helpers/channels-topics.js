@@ -1,14 +1,12 @@
-const filter = module.exports;
-const { URL } = require('url');
-const filenamify = require('filenamify');
-const _ = require('lodash');
+import { URL } from 'url';
+import filenamify from 'filenamify';
+import _ from 'lodash';
 
-function queueName(title, version) {
+export function queueName(title, version) {
   return _.kebabCase(`${title}-${version}`.toLowerCase()).split('-').join('.');
 }
-filter.queueName = queueName;
 
-function toMqttTopic(topics, shouldAppendWildcard = false) {
+export function toMqttTopic(topics, shouldAppendWildcard = false) {
   const toMqtt = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -21,9 +19,8 @@ function toMqttTopic(topics, shouldAppendWildcard = false) {
   if (typeof topics === 'string') return toMqtt(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toMqtt);
 }
-filter.toMqttTopic = toMqttTopic;
 
-function toKafkaTopic(topics) {
+export function toKafkaTopic(topics) {
   const toKafka = (str) => {
     let result = str;
     if (result.startsWith('/')) result = result.substr(1);
@@ -34,9 +31,8 @@ function toKafkaTopic(topics) {
   if (typeof topics === 'string') return toKafka(topics);
   if (Array.isArray(topics)) return topics.map(toKafka);
 }
-filter.toKafkaTopic = toKafkaTopic;
 
-function toAmqpTopic(topics, shouldAppendWildcard = false) {
+export function toAmqpTopic(topics, shouldAppendWildcard = false) {
   const toAmqp = (str, appendWildcard = false) => {
     let result = str;
     if (result === '/') return '#';
@@ -49,98 +45,50 @@ function toAmqpTopic(topics, shouldAppendWildcard = false) {
   if (typeof topics === 'string') return toAmqp(topics, shouldAppendWildcard);
   if (Array.isArray(topics)) return topics.map(toAmqp);
 }
-filter.toAmqpTopic = toAmqpTopic;
 
-function toHermesTopic(str) {
+export function toHermesTopic(str) {
   return str.replace(/\{([^}]+)\}/g, ':$1');
 }
-filter.toHermesTopic = toHermesTopic;
 
-function commonChannel(asyncapi, removeTrailingParameters = false) {
-  const channelNames = asyncapi.channelNames().sort().map(ch => ch.split('/'));
-  if (!channelNames.length) return '';
-  if (channelNames.length === 1) return asyncapi.channelNames()[0];
-
-  let result = [];
-  for (let i = 0; i < channelNames.length - 1; i++) {
-    let ch1;
-    if (i === 0) {
-      ch1 = channelNames[0];
-    } else {
-      ch1 = result.concat(); // Makes a copy
-      result = [];
-    }
-    const ch2 = channelNames[i + 1];
-    let x = 0;
-    let shouldContinue = true;
-    while (shouldContinue) {
-      if (x > Math.max(ch1.length, ch2.length) - 1 || ch1[x] !== ch2[x]) {
-        shouldContinue = false;
-      } else {
-        result.push(ch1[x]);
-        x++;
-      }
-    }
-  }
-
-  if (removeTrailingParameters) {
-    for (let index = result.length - 1; index >= 0; index--) {
-      const chunk = result[index];
-      if (chunk.match(/^\{.+\}$/)) {
-        result.pop();
-      }
-    }
-  }
-
-  return result.join('/');
-}
-
-filter.commonChannel = commonChannel;
-
-function channelNamesWithPublish(asyncapi) {
+export function channelNamesWithPublish(asyncapi) {
   const result = [];
-  asyncapi.channelNames().forEach(name => {
+  asyncapi.channelNames().forEach((name) => {
     if (asyncapi.channel(name).hasPublish()) result.push(name);
   });
   return result;
 }
-filter.channelNamesWithPublish = channelNamesWithPublish;
 
-function host(url) {
+export function host(url) {
   const u = new URL(url);
   return u.host;
 }
-filter.host = host;
 
-function port(url, defaultPort) {
+export function port(url, defaultPort) {
   const u = new URL(url);
   return u.port || defaultPort;
 }
-filter.port = port;
 
-function stripProtocol(url) {
+export function stripProtocol(url) {
   if (!url.includes('://')) {
     return url;
   }
   const u = new URL(url);
   return url.substr(u.protocol.length + 2);
 }
-filter.stripProtocol = stripProtocol;
 
-function trimLastChar(string) {
+export function trimLastChar(string) {
   return string.substr(0, string.length - 1);
 }
-filter.trimLastChar = trimLastChar;
 
-function convertOpertionIdToMiddlewareFn(operationId) {
-  const capitalizedOperationId = operationId.charAt(0).toUpperCase() + operationId.slice(1);
-  return `register${  capitalizedOperationId  }Middleware`;
+export function convertOpertionIdToMiddlewareFn(operationId) {
+  const capitalizedOperationId =
+    operationId.charAt(0).toUpperCase() + operationId.slice(1);
+  return `register${capitalizedOperationId}Middleware`;
 }
-filter.convertOpertionIdToMiddlewareFn = convertOpertionIdToMiddlewareFn;
 
-function toJS(objFromJSON, indent = 2) {
+export function toJS(objFromJSON, indent = 2) {
   if (typeof objFromJSON !== 'object' || Array.isArray(objFromJSON)) {
-    // not an object, stringify using native function
+    // not an object, stringify using native export function
     if (typeof objFromJSON === 'string') {
       const templateVars = objFromJSON.match(/\$\{[\w\d\.]+\}/g);
       if (templateVars) return `\`${objFromJSON}\``;
@@ -156,18 +104,18 @@ function toJS(objFromJSON, indent = 2) {
 
   // Implements recursive object serialization according to JSON spec
   // but without quotes around the keys.
-  const props = Object
-    .keys(objFromJSON)
-    .map(key => `${' '.repeat(indent)}${maybeQuote(key)}: ${toJS(objFromJSON[key])}`)
+  const props = Object.keys(objFromJSON)
+    .map(
+      (key) =>
+        `${' '.repeat(indent)}${maybeQuote(key)}: ${toJS(objFromJSON[key])}`
+    )
     .join(',\n');
   return `{\n${props}\n}`;
 }
-filter.toJS = toJS;
 
-function convertToFilename(string, options) {
+export function convertToFilename(string, options) {
   return filenamify(string, options || { replacement: '-', maxLength: 255 });
 }
-filter.convertToFilename = convertToFilename;
 
 /**
  * Replaces variables in the server url with its declared values. Default or first enum in case of default is not declared
@@ -178,7 +126,7 @@ filter.convertToFilename = convertToFilename;
  * @return {String}
  */
 
-function getConfig(p) {
+export function getConfig(p) {
   let protocol = p;
   let configName = 'broker';
 
@@ -191,13 +139,16 @@ function getConfig(p) {
 
   return `config.${configName}.${protocol}`;
 }
-filter.getConfig = getConfig;
 
-function getProtocol(p) {
+export function getProtocol(p) {
   let protocol = p;
 
   if (p === 'kafka-secure') protocol = 'kafka';
 
   return protocol;
 }
-filter.getProtocol = getProtocol;
+
+// https://mozilla.github.io/nunjucks/templating.html#dump
+export function dump(obj) {
+  return JSON.stringify(obj);
+}

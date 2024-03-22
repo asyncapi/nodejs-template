@@ -11,8 +11,8 @@
 - [Specification requirements](#specification-requirements)
 - [Supported protocols](#supported-protocols)
 - [How to use the template](#how-to-use-the-template)
-  * [CLI](#cli)
-  * [Adding custom code / handlers](#adding-custom-code--handlers)
+  - [CLI](#cli)
+  - [Adding custom code / handlers](#adding-custom-code--handlers)
 - [Template configuration](#template-configuration)
 - [Development](#development)
 - [Contributors](#contributors)
@@ -231,7 +231,7 @@ $ ag https://bit.ly/asyncapi ./ -o output -p server=production
 ```
 
 For local development, you need different variations of this command. First of all, you need to know about three important CLI flags:
-- `--debug` enables the debug mode in Nunjucks engine what makes filters debugging simpler.
+- `--debug` enables the debug mode in React rendering engine what makes filters debugging simpler.
 - `--watch-template` enables a watcher of changes that you make in the template. It regenerates your template whenever it detects a change.
 - `--install` enforces reinstallation of the template.
 
