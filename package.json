@@ -79,7 +79,7 @@
       "src/api/middlewares/*.*",
       "src/lib/*.*"
     ],
-    "generator": ">=0.50.0 <2.0.0",
+    "generator": ">=1.15.0 <2.0.0",
     "filters": [
       "@asyncapi/generator-filters"
     ],
