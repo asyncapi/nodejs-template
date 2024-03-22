@@ -79,12 +79,18 @@
       "src/api/middlewares/*.*",
       "src/lib/*.*"
     ],
-    "generator": ">=1.15.0 <2.0.0",
+    "generator": ">=0.50.0 <2.0.0",
     "filters": [
       "@asyncapi/generator-filters"
     ],
     "hooks": {
       "@asyncapi/generator-hooks": "createAsyncapiFile"
+    }
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^nimma/legacy$": "<rootDir>/node_modules/nimma/dist/legacy/cjs/index.js",
+      "^nimma/(.*)": "<rootDir>/node_modules/nimma/dist/cjs/$1"
     }
   }
 }
