@@ -1,9 +1,8 @@
 import { File } from '@asyncapi/generator-react-sdk';
 
 export default function exampleCustomHandlerRegistrationScript() {
-    return <File name='script.js'>
-    {`
-// output refers to the generated template folder
+  return <File name='script.js'>
+    {`// output refers to the generated template folder
 // You require the generated server. Running this code starts the server
 // App exposes API to send messages
 const { client } = require("../"); // library is in the current directory
@@ -92,7 +91,6 @@ testSubscribe();
     client.app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/turn/on');
     if (--i) myLoop(i);
   }, 1000);
-}(3));
-    `}
-    </File>;
+}(3));`}
+  </File>;
 }
