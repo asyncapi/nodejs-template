@@ -366,9 +366,6 @@ exports[`template integration tests for generated files using the generator and 
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈\\",
   \\"main\\": \\"./src/api\\",
-  \\"scripts\\": {
-    \\"start\\": \\"node src/api/index.js\\"
-  },
   \\"dependencies\\": {
     \\"chalk\\": \\"4.1.2\\",
     \\"dotenv\\": \\"8.1.0\\",
@@ -748,9 +745,6 @@ exports[`template integration tests for generated files using the generator and 
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈\\",
   \\"main\\": \\"./src/api\\",
-  \\"scripts\\": {
-    \\"start\\": \\"node src/api/index.js\\"
-  },
   \\"dependencies\\": {
     \\"chalk\\": \\"4.1.2\\",
     \\"dotenv\\": \\"8.1.0\\",
