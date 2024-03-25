@@ -11,8 +11,8 @@
 - [Specification requirements](#specification-requirements)
 - [Supported protocols](#supported-protocols)
 - [How to use the template](#how-to-use-the-template)
-  * [CLI](#cli)
-  * [Adding custom code / handlers](#adding-custom-code--handlers)
+  - [CLI](#cli)
+  - [Adding custom code / handlers](#adding-custom-code--handlers)
 - [Template configuration](#template-configuration)
 - [Development](#development)
 - [Contributors](#contributors)
@@ -80,15 +80,9 @@ $ cd output
 # Build generated application
 $ npm i
 
-# Start server
-# To enable production settings start the server with "NODE_ENV=production npm start"
-$ npm start
+# Import the library and add your custom code and handlers
 
-##
-## Start the client 
-##
-
-#for testing your server you can use mqtt client. open a new terminal and install it using:
+# for testing your server you can use mqtt client. open a new terminal and install it using:
 $ npm install mqtt -g
 
 #publish an invalid message.
