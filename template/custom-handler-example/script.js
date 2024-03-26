@@ -1,33 +1,13 @@
 import { File } from '@asyncapi/generator-react-sdk';
 
-export default function readmeFile({asyncapi, params}) {
-  return <File name={'README.md'}>
-    {`# ${ asyncapi.info().title() }
-
-${ asyncapi.info().description() || '' }
-
-## Set up your template
-
-1. Install dependencies
-    \`\`\`sh
-    npm i
-    \`\`\`
-${(params.securityScheme && (asyncapi.server(params.server).protocol() === 'kafka' || asyncapi.server(params.server).protocol() === 'kafka-secure') && asyncapi.components().securityScheme(params.securityScheme).type() === 'X509') ? '1. (Optional) For X509 security provide files with all data required to establish secure connection using certificates. Place files like `ca.pem`, `service.cert`, `service.key` in the root of the project or the location that you explicitly specified during generation.' : ''}
-
-## Use the generated template by adding custom code / handlers
-
-- use the \`client.register<OperationId>Middleware\` method as a bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
-
-> The AsyncAPI file used for the example is [here](https://bit.ly/asyncapi)
-
-\`\`\`js
-// output refers to the generated template folder
+export default function exampleCustomHandlerRegistrationScript() {
+  return <File name='script.js'>
+    {`// output refers to the generated template folder
 // You require the generated server. Running this code starts the server
 // App exposes API to send messages
-const { client } = require("./output");
+const { client } = require("../"); // library is in the current directory
 
-// to start the app
-client.init();
+client.init(); // starts the app
 
 // Generated handlers that we use to react on consumer / produced messages are attached to the client
 // through which we can register middleware functions
@@ -37,7 +17,10 @@ client.init();
  * 
  * Example of how to process a message before it is sent to the broker
  * 
- * 
+ * Modify the following in the function \`testPublish\` according to your usecase
+ * 1. channel / topic name
+ * 2. tool used to publish message according to the procotol used (amqp/mqtt/etc ...)
+ * 3. name of the invocated middleware function (based on operation Id)
  */
 function testPublish() {
     // mosquitto_sub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/action/12/turn/on"
@@ -66,7 +49,11 @@ function testPublish() {
  *
  * 
  * Example of how to work with generated code as a consumer
- *
+ * 
+ * Modify the following in the function \`testSubscribe\` according to your usecase
+ * 1. channel / topic name
+ * 2. tool used to publish message according to the procotol used (amqp/mqtt/etc ...)
+ * 3. name of the invocated middleware function (based on operation Id)
  * 
 */
 function testSubscribe() {
@@ -92,7 +79,9 @@ testSubscribe();
  * 
  * 
  * Example of how to produce a message using API of generated app independently from the handlers
- * 
+ * Again, will have to modify the below according to your usecase:
+ * 1. payload
+ * 2. channel / topic name
  * 
 */
 
@@ -102,13 +91,6 @@ testSubscribe();
     client.app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/turn/on');
     if (--i) myLoop(i);
   }, 1000);
-}(3));
-\`\`\`
-
-You can run the above code and test the working of the handlers by sending a message using the mqtt cli / mosquitto broker software to the \`smartylighting/streetlights/1/0/event/123/lighting/measured\` channel using this command
-\`mosquitto_pub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/event/101/lighting/measured" -m '{"lumens": 10, "sentAt": "2017-06-07T12:34:32.000Z"}'\`
-or 
-\`mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, }'\` (if you are using the mqtt cli)
-`}
+}(3));`}
   </File>;
 }
