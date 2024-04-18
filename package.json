@@ -33,7 +33,7 @@
   "dependencies": {
     "@asyncapi/generator-filters": "^2.1.0",
     "@asyncapi/generator-hooks": "^0.1.0",
-    "@asyncapi/generator-react-sdk": "^1.0.15",
+    "@asyncapi/generator-react-sdk": "^1.0.18",
     "eslint-plugin-react": "^7.34.1",
     "filenamify": "^4.1.0",
     "js-beautify": "^1.15.1",
@@ -41,7 +41,7 @@
     "markdown-toc": "^1.2.0"
   },
   "devDependencies": {
-    "@asyncapi/generator": "^1.17.22",
+    "@asyncapi/generator": "^1.17.23",
     "eslint": "^8.7.0",
     "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-sonarjs": "^0.11.0",
