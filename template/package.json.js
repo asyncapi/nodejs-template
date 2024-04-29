@@ -37,9 +37,6 @@ export default function packageFile({ asyncapi, params }) {
 
   packageJSON = {
     ...packageJSON,
-    scripts: {
-      test: 'node custom-handler-example/script.js'
-    },
     main: './src/api',
     dependencies,
   };
