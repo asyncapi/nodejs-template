@@ -21,6 +21,7 @@
   "scripts": {
     "test": "rimraf test/temp && jest --modulePathIgnorePatterns='./template'",
     "test:updateSnapshot": "rimraf test/temp && jest --updateSnapshot --modulePathIgnorePatterns='./template'",
+    "test:example": "node test/example/script.js",
     "lint": "eslint --max-warnings 0 --config .eslintrc .",
     "lint:fix": "eslint --fix --config .eslintrc .",
     "generate:assets": "npm run generate:readme:toc",

@@ -11,8 +11,8 @@
 - [Specification requirements](#specification-requirements)
 - [Supported protocols](#supported-protocols)
 - [How to use the template](#how-to-use-the-template)
-  * [CLI](#cli)
-  * [Adding custom code / handlers](#adding-custom-code--handlers)
+  - [CLI](#cli)
+  - [Adding custom code / handlers](#adding-custom-code--handlers)
 - [Template configuration](#template-configuration)
 - [Development](#development)
 - [Contributors](#contributors)
@@ -58,38 +58,49 @@ Since you can have multiple different security schemes, to use the one of X509 t
 ### CLI
 
 ```bash
-# Install the AsyncAPI Generator
-$ npm install -g @asyncapi/generator
+# Install the AsyncAPI CLI
+# Follow https://www.asyncapi.com/docs/tools/generator/installation-guide for more installation options
+$ npm install -g @asyncapi/cli
 
-# Run generation
+# Run generation from the root of the template to use tes MQTT example
 # To use the template
-$ ag https://bit.ly/asyncapi @asyncapi/nodejs-template -o output -p server=production
+$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi.yml @asyncapi/nodejs-template -o test/output -p server=production
 
 # OR
 
-# To test your local changes
-$ ag https://bit.ly/asyncapi ./ -o output -p server=production
+# To test your local changes provided inside template
+$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi.yml ./ -o test/output -p server=production
 
 ##
-## Start the server 
+## Install dependencies of generated library
 ##
 
 # Go to the generated server
-$ cd output
+$ cd test/output
 
 # Build generated application
 $ npm i
 
-# Start server
-# To enable production settings start the server with "NODE_ENV=production npm start"
-$ npm start
-
 ##
-## Start the client 
+## Start an example script that uses generated library
 ##
 
-#for testing your server you can use mqtt client. open a new terminal and install it using:
+# Go back to root
+$ cd ../..
+
+# Start the script
+# It is located in test/example/script.js
+$ npm run test:example
+
+##
+## Install MQTT client locally to start simulating some traffic on the broker, to test if sample code works
+##
+
+# for testing your server you can use mqtt client. Open a new terminal and install it using:
 $ npm install mqtt -g
+
+#You should see the sent message in the logs of the started example.
+#Notice that the server automatically validates incoming messages and logs out validation errors
 
 #publish an invalid message.
 $ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
@@ -97,8 +108,8 @@ $ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h '
 #publish a valid message
 $ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
 
-#You should see the sent message in the logs of the previously started server.
-#Notice that the server automatically validates incoming messages and logs out validation errors
+#you can also restart the example app that on startup produces some messages as well. Before you do it, subscribe with MQTT client to selected topic, to see actuall messages comming in from the broker
+$ mqtt sub -t 'smartylighting/streetlights/1/0/action/1/turn/on' -h 'test.mosquitto.org'
 ```
 
 ### Adding custom code / handlers
@@ -111,97 +122,8 @@ To avoid this, user code remains external to the generated code, functioning as 
 
 Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.register<operationId>Middleware` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
 
-> The AsyncAPI file used for the example is [here](https://bit.ly/asyncapi)
-
-```js
-// output refers to the generated template folder
-// You require the generated server. Running this code starts the server
-// App exposes API to send messages
-const { client } = require("./output");
-
-// to start the app
-client.init();
-
-// Generated handlers that we use to react on consumer / produced messages are attached to the client
-// through which we can register middleware functions
-
-/**
- * 
- * 
- * Example of how to process a message before it is sent to the broker
- * 
- * 
- */
-function testPublish() {
-    // mosquitto_sub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/action/12/turn/on"
-
-    // Registering your custom logic in a channel-specific handler
-    // the passed handler function is called once the app sends a message to the channel
-    // For example `client.app.send` sends a message to some channel using and before it is sent, you want to perform some other actions
-    // in such a case, you can register middlewares like below
-    client.registerTurnOnMiddleware((message) => { // `turnOn` is the respective operationId
-        console.log("hitting the middleware before publishing the message");
-        console.log(
-            `sending turn on message to streetlight ${message.params.streetlightId}`,
-            message.payload
-        );
-    });
-
-    client.app.send(
-        { command: "off" },
-        {},
-        "smartylighting/streetlights/1/0/action/12/turn/on"
-    );
-}
-
-
-/**
- *
- * 
- * Example of how to work with generated code as a consumer
- *
- * 
-*/
-function testSubscribe() {
-    // mosquitto_pub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/event/101/lighting/measured" -m '{"lumens": 10}'
-
-    // Writing your custom logic that should be triggered when your app receives as message from a given channel
-    // Registering your custom logic in a channel-specific handler
-    // the passed handler functions are called once the app gets message sent to the channel
-
-    client.registerReceiveLightMeasurementMiddleware((message) => { // `recieveLightMeasurement` is the respective operationId
-        console.log("recieved in middleware 1", message.payload);
-    });
-
-    client.registerReceiveLightMeasurementMiddleware((message) => {
-        console.log("recieved in middleware 2", message.payload);
-    });
-}
-
-testPublish();
-testSubscribe();
-
-/**
- * 
- * 
- * Example of how to produce a message using API of generated app independently from the handlers
- * 
- * 
-*/
-
-(function myLoop (i) {
-  setTimeout(() => {
-    console.log('producing custom message');
-    client.app.send({percentage: 1}, {}, 'smartylighting/streetlights/1/0/action/1/turn/on');
-    if (--i) myLoop(i);
-  }, 1000);
-}(3));
+Look closely into [example script](test/example/script.js) that works with library generated using [this MQTT based AsyncAPI document](test/mocks/mqtt/asyncapi.yml). Look at available handlers API for reading incomming messages and processing outgoing messages. Learn how to start generated server with `init()` and also learn how to send messages, if needed.
 ```
-
-You can run the above code and test the working of the handlers by sending a message using the mqtt cli / mosquitto broker software to the `smartylighting/streetlights/1/0/event/123/lighting/measured` channel using this command
-`mosquitto_pub -h test.mosquitto.org -p 1883 -t "smartylighting/streetlights/1/0/event/101/lighting/measured" -m '{"lumens": 10, "sentAt": "2017-06-07T12:34:32.000Z"}'`
-or 
-`mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, }'` (if you are using the mqtt cli)
 
 ## Template configuration
 
