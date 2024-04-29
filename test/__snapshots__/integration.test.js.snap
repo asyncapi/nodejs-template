@@ -365,9 +365,6 @@ exports[`template integration tests for generated files using the generator and 
   \\"name\\": \\"streetlights-mqtt-api\\",
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈\\",
-  \\"scripts\\": {
-    \\"test\\": \\"node custom-handler-example/script.js\\"
-  },
   \\"main\\": \\"./src/api\\",
   \\"dependencies\\": {
     \\"chalk\\": \\"4.1.2\\",
@@ -747,9 +744,6 @@ exports[`template integration tests for generated files using the generator and 
   \\"name\\": \\"streetlights-mqtt-api\\",
   \\"version\\": \\"1.0.0\\",
   \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈\\",
-  \\"scripts\\": {
-    \\"test\\": \\"node custom-handler-example/script.js\\"
-  },
   \\"main\\": \\"./src/api\\",
   \\"dependencies\\": {
     \\"chalk\\": \\"4.1.2\\",
