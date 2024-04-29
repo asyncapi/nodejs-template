@@ -1,11 +1,12 @@
 import { File } from '@asyncapi/generator-react-sdk';
-import { camelCase, channelNamesWithPublish, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from '../../helpers/index';
+import { camelCase, channelNamesWithReceive, dump, host, port, queueName, stripProtocol, toAmqpTopic, toKafkaTopic, toMqttTopic } from '../../helpers/index';
 import { replaceServerVariablesWithValues } from '@asyncapi/generator-filters/src/customFilters';
 
 export default function CommonConfigYAMLRender({ asyncapi, params }) {
-  const serverProtocol = asyncapi.server(params.server).protocol();
-  const serverVariables = asyncapi.server(params.server).variables();
-  const resolvedBrokerUrlWithReplacedVariables = replaceServerVariablesWithValues(asyncapi.server(params.server).url(), serverVariables);
+  const server = asyncapi.allServers().get(params.server);
+  const serverProtocol = server.protocol();
+  const serverVariables = server.variables();
+  const resolvedBrokerUrlWithReplacedVariables = replaceServerVariablesWithValues(server.url(), serverVariables);
 
   return (
     <File name={'common.yml'}>
@@ -47,7 +48,7 @@ function amqpBlock(url, asyncapi) {
       password:
       host: ${host(url)}
       port:
-      topics: ${dump(toAmqpTopic(channelNamesWithPublish(asyncapi)))}
+      topics: ${dump(toAmqpTopic(channelNamesWithReceive(asyncapi)))}
       queue: ${queueName(asyncapi.info().title(), asyncapi.info().version())}
       queueOptions:
         exclusive: false
@@ -57,9 +58,10 @@ function amqpBlock(url, asyncapi) {
 }
 
 function mqttBlock(url, asyncapi, params) {
+  const server = asyncapi.allServers().get(params.server);
   return `    mqtt:
-      url: ${asyncapi.server(params.server).protocol()}://${stripProtocol(url)}
-      topics: ${dump(toMqttTopic(channelNamesWithPublish(asyncapi)))}
+      url: ${server.protocol()}://${stripProtocol(url)}
+      topics: ${dump(toMqttTopic(channelNamesWithReceive(asyncapi)))}
       qos:
       protocol: mqtt
       retain:
@@ -75,7 +77,7 @@ function kafkaBlock(url, asyncapi) {
       consumerOptions:
         groupId: ${camelCase(asyncapi.info().title())}
       topics:
-      ${channelNamesWithPublish(asyncapi).map(topic => `- ${toKafkaTopic(topic)}`).join('\n')}
+      ${channelNamesWithReceive(asyncapi).map(topic => `- ${toKafkaTopic(topic)}`).join('\n')}
       topicSeparator: '__'
       topicPrefix:
 `;
@@ -87,7 +89,7 @@ function kafkaProductionBlock(params, asyncapi) {
       ssl:
         rejectUnauthorized: true
 `;
-  if (params.securityScheme && asyncapi.components().securityScheme(params.securityScheme).type() !== 'X509') {
+  if (params.securityScheme && asyncapi.components().securitySchemes().get(params.securityScheme).type() !== 'X509') {
     productionBlock += `      sasl:
         mechanism: 'plain'
         username:

@@ -54,11 +54,11 @@ module.exports = {
       generator.targetDir,
       'src/api/index.js'
     );
-    const handlersPath = path.resolve(generator.targetDir, 'src/api/handlers');
-    const routesPath = path.resolve(generator.targetDir, 'src/api/routes');
+    // const handlersPath = path.resolve(generator.targetDir, 'src/api/handlers');
+    // const routesPath = path.resolve(generator.targetDir, 'src/api/routes');
 
-    beautifyAllOutputFiles(handlersPath);
-    beautifyAllOutputFiles(routesPath);
-    beautifySingleFile(entryPointFilePath);
+    // beautifyAllOutputFiles(handlersPath);
+    // beautifyAllOutputFiles(routesPath);
+    // beautifySingleFile(entryPointFilePath);
   },
 };

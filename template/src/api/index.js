@@ -2,7 +2,8 @@ import { File } from '@asyncapi/generator-react-sdk';
 import { capitalize, getProtocol, getConfig, camelCase, convertToFilename, convertOpertionIdToMiddlewareFn } from '../../../helpers/index';
 
 export default function indexEntrypointFile({asyncapi, params}) {
-    const protocol = asyncapi.server(params.server).protocol() === 'mqtts' ? 'mqtt' : asyncapi.server(params.server).protocol();
+    const server = asyncapi.allServers().get(params.server);
+    const protocol = server.protocol() === 'mqtts' ? 'mqtt' : server.protocol();
     const capitalizedProtocol = capitalize(getProtocol(protocol));
 
     const standardImports = `
@@ -20,11 +21,12 @@ export default function indexEntrypointFile({asyncapi, params}) {
     const ${capitalizedProtocol}Adapter = require('hermesjs-${protocol}');
     `;
 
-    const channelHandlerImports = Object.entries(asyncapi.channels()).map(([channelName, channel]) => {
+    const channelHandlerImports = asyncapi.channels().all().map(channel => {
+        const channelName = channel.address();
         return `const ${camelCase(channelName)} = require('./routes/${convertToFilename(channelName)}.js');`;
     }).join('\n');
 
-    const isSecurityEnabled = params.securityScheme && (asyncapi.server(params.server).protocol() === 'kafka' || asyncapi.server(params.server).protocol() === 'kafka-secure') && (asyncapi.components().securityScheme(params.securityScheme).type() === 'X509');
+    const isSecurityEnabled = params.securityScheme && (server.protocol() === 'kafka' || server.protocol() === 'kafka-secure') && (asyncapi.components().securitySchemes().get(params.securityScheme).type() !== 'X509');
     let securitySchemeImports = isSecurityEnabled ? `
     const fs = require('fs')
     const certFilesDir = '${params.certFilesDir}';
@@ -44,18 +46,21 @@ export default function indexEntrypointFile({asyncapi, params}) {
     `
 
     const channelsMiddleware = `
-    ${Object.entries(asyncapi.channels()).map(([channelName, channel]) => {
+    ${asyncapi.channels().filterByReceive().map(channel => {
+        const channelAddress = channel.address();
         let channelLogic = '';
-        if (channel.hasPublish()) {
-            channelLogic += `console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('${channelName}'));
-            app.use(${camelCase(channelName)});`;
-        }
-        if (channel.hasSubscribe()) {
-            channelLogic += `console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('${channelName}'));
-            app.useOutbound(${camelCase(channelName)});`;
-        }
+        channelLogic += `console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('${channelAddress}'));
+        app.use(${camelCase(channelAddress)});`;
         return channelLogic;
-    }).join('\n')}`;
+    }).join('\n')}
+    ${asyncapi.channels().filterBySend().map(channel => {
+        const channelAddress = channel.address();
+        let channelLogic = '';
+        channelLogic += `console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('${channelAddress}'));
+        app.useOutbound(${camelCase(channelAddress)});`;
+        return channelLogic;
+    }).join('\n')}
+    `;
     
     const middlewares = `
     app.addAdapter(${capitalizedProtocol}Adapter, serverConfig);
@@ -71,7 +76,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
     app.useOutbound(errorLogger);
     app.useOutbound(logger);
     app.useOutbound(json2string);
-    `
+    `;
 
     const initFunction = `
     function init() {
@@ -87,17 +92,16 @@ export default function indexEntrypointFile({asyncapi, params}) {
     }
     `;
 
-    const handlers = Object.entries(asyncapi.channels()).map(([channelName, channel]) => {
-        let handler = '';
-        if (channel.hasPublish()) {
-            handler += `${convertOpertionIdToMiddlewareFn(channel.publish().id())} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(channel.publish().id())},`;
-        }
-        if (channel.hasSubscribe()) {
-            handler += `${convertOpertionIdToMiddlewareFn(channel.subscribe().id())} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(channel.subscribe().id())},`;
-        }
-        return handler;
-    }).join('\n');
-
+    const handlers = asyncapi.channels()
+        .all()
+        .map(
+        (channel) => {
+            const channelAddress = channel.address();
+            const operationId = channel.operations()[0].
+            return `${convertOpertionIdToMiddlewareFn(channel.id())} : require('./handlers/${convertToFilename(channelAddress)}').${convertOpertionIdToMiddlewareFn(channel.id())},`;
+        })
+        .join("\n");
+    
     return <File name={'index.js'}>
         {`
 ${imports}

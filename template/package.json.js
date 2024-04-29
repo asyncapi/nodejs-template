@@ -12,7 +12,7 @@ export default function packageFile({ asyncapi, params }) {
     'node-yaml-config': '0.0.4',
   };
 
-  const serverProtocol = asyncapi.server(params.server).protocol();
+  const serverProtocol = asyncapi.allServers().get(params.server).protocol();
   if (serverProtocol === 'mqtt' || serverProtocol === 'mqtts') {
     dependencies['hermesjs-mqtt'] = '2.x';
   } else if (serverProtocol === 'kafka' || serverProtocol === 'kafka-secure') {
