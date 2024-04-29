@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/nodejs-template",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "Node.js template for the AsyncAPI generator.",
   "keywords": [
     "asyncapi",
@@ -21,7 +21,6 @@
   "scripts": {
     "test": "rimraf test/temp && jest --modulePathIgnorePatterns='./template'",
     "test:updateSnapshot": "rimraf test/temp && jest --updateSnapshot --modulePathIgnorePatterns='./template'",
-    "test:example": "node test/example/script.js",
     "lint": "eslint --max-warnings 0 --config .eslintrc .",
     "lint:fix": "eslint --fix --config .eslintrc .",
     "generate:assets": "npm run generate:readme:toc",
@@ -34,23 +33,24 @@
   "dependencies": {
     "@asyncapi/generator-filters": "^2.1.0",
     "@asyncapi/generator-hooks": "^0.1.0",
-    "@asyncapi/generator-react-sdk": "^1.0.18",
+    "@asyncapi/generator-react-sdk": "^1.0.14",
     "eslint-plugin-react": "^7.34.1",
-    "filenamify": "^4.1.0",
+    "filenamify": "^4.3.0",
     "js-beautify": "^1.15.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "markdown-toc": "^1.2.0"
   },
   "devDependencies": {
-    "@asyncapi/generator": "^1.17.25",
-    "eslint": "^8.7.0",
+    "@asyncapi/generator": "^1.17.12",
+    "eslint": "^8.57.0",
     "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-sonarjs": "^0.11.0",
-    "jest": "^27.3.1",
-    "node-fetch": "^2.6.1",
-    "rimraf": "^5.0.1"
+    "jest": "^27.5.1",
+    "node-fetch": "^2.7.0",
+    "rimraf": "^5.0.5"
   },
   "generator": {
+    "apiVersion": "v3",
     "supportedProtocols": [
       "amqp",
       "mqtt",
