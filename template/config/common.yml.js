@@ -5,7 +5,12 @@ import { replaceServerVariablesWithValues } from '@asyncapi/generator-filters/sr
 export default function CommonConfigYAMLRender({ asyncapi, params }) {
   const server = asyncapi.allServers().get(params.server);
   const serverProtocol = server.protocol();
-  const serverVariables = server.variables();
+  const serverVariablesArray = server.variables();
+  const serverVariables = {};
+  serverVariablesArray.forEach(item => {
+    serverVariables[item.id()] = item;
+  });
+  
   const resolvedBrokerUrlWithReplacedVariables = replaceServerVariablesWithValues(server.url(), serverVariables);
 
   return (
