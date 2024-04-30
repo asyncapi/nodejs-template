@@ -123,7 +123,6 @@ To avoid this, user code remains external to the generated code, functioning as 
 Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.register<operationId>Middleware` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
 
 Look closely into [example script](test/example/script.js) that works with library generated using [this MQTT based AsyncAPI document](test/mocks/mqtt/asyncapi.yml). Look at available handlers API for reading incomming messages and processing outgoing messages. Learn how to start generated server with `init()` and also learn how to send messages, if needed.
-```
 
 ## Template configuration
 
