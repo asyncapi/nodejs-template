@@ -26,7 +26,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
         return `const ${camelCase(channelName)} = require('./routes/${convertToFilename(channelName)}.js');`;
     }).join('\n');
 
-    const isSecurityEnabled = params.securityScheme && (server.protocol() === 'kafka' || server.protocol() === 'kafka-secure') && (asyncapi.components().securitySchemes().get(params.securityScheme).type() !== 'X509');
+    const isSecurityEnabled = params.securityScheme && (server.protocol() === 'kafka' || server.protocol() === 'kafka-secure') && (asyncapi.components().securitySchemes().get(params.securityScheme).type() === 'X509');
     let securitySchemeImports = isSecurityEnabled ? `
     const fs = require('fs')
     const certFilesDir = '${params.certFilesDir}';
