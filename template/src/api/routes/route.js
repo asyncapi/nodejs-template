@@ -2,7 +2,7 @@
 import { File } from '@asyncapi/generator-react-sdk';
 import { camelCase, convertToFilename, toHermesTopic } from '../../../../helpers/index';
 
-function receiveHandler(operation, channelName) {
+function receiveHandler(operation, channelName, channelAddress) {
   if (!operation.isReceive()) {
     return '';
   }
@@ -16,7 +16,7 @@ function receiveHandler(operation, channelName) {
    * ${ operation.summary() }
    */
   `: ''}
-  router.use('${toHermesTopic(channelName)}', async (message, next) => {
+  router.use('${toHermesTopic(channelAddress)}', async (message, next) => {
     try {
       ${(operation.messages().length > 1)
         ? `
@@ -32,7 +32,7 @@ function receiveHandler(operation, channelName) {
 
       ${
         operation.messages().all().map(message => `try {
-          nValidated = await validateMessage(message.payload,'${ channelName }','${ message.name() }','publish', nValidated);
+          nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', nValidated);
         } catch { };`).join('\n')
       }
 
@@ -44,7 +44,7 @@ function receiveHandler(operation, channelName) {
       }
         `
         : `
-      await validateMessage(message.payload,'${ channelName }','${ message.name() }','publish');
+      await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish');
       await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
         `
@@ -56,7 +56,7 @@ function receiveHandler(operation, channelName) {
   `;
 }
 
-function sendHandler(operation, channelName) {
+function sendHandler(operation, channelName, channelAddress) {
   if (!operation.isSend()) {
     return '';
   }
@@ -70,7 +70,7 @@ function sendHandler(operation, channelName) {
    * ${ operation.summary() }
    */
   `: ''}
-  router.use('${toHermesTopic(channelName)}', async (message, next) => {
+  router.use('${toHermesTopic(channelAddress)}', async (message, next) => {
     try {
       ${(operation.messages().length > 1)
         ? `
@@ -80,7 +80,7 @@ function sendHandler(operation, channelName) {
 
       ${
         operation.messages().all().map(message => `try {
-          nValidated = await validateMessage(message.payload,'${ channelName }','${ message.name() }','subscribe', nValidated);
+          nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', nValidated);
         } catch { };`).join('\n')
       }
 
@@ -92,7 +92,7 @@ function sendHandler(operation, channelName) {
       }
         `
         : `
-      await validateMessage(message.payload,'${ channelName }','${ message.name() }','subscribe');
+      await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');
       await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
         `
@@ -120,10 +120,10 @@ function routeCode(channel) {
 
   for (const operation of channel.operations()) {
     if (operation.isSend()) {
-      routeHandler += sendHandler(operation, channel.id());
+      routeHandler += sendHandler(operation, channel.id(), channel.address());
     }
     if (operation.isReceive()) {
-      routeHandler += receiveHandler(operation, channel.id());
+      routeHandler += receiveHandler(operation, channel.id(), channel.address());
     }
   }
 

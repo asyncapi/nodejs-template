@@ -923,10 +923,10 @@ const router = new Router();
 const lightTurnOffHandler = require('../handlers/lightTurnOff');
 module.exports = router;
 
-router.use('lightTurnOff', async (message, next) => {
+router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'lightTurnOff', 'turnOnOff', 'subscribe');
+    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off', 'turnOnOff', 'subscribe');
     await lightTurnOffHandler._turnOff({
       message
     });
@@ -951,10 +951,10 @@ module.exports = router;
  * Inform about environmental lighting conditions of a particular streetlight.
  */
 
-router.use('lightingMeasured', async (message, next) => {
+router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'lightingMeasured', 'lightMeasured', 'publish');
+    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'lightMeasured', 'publish');
     await lightingMeasuredHandler._receiveLightMeasurement({
       message
     });
@@ -975,10 +975,10 @@ const router = new Router();
 const lightTurnOnHandler = require('../handlers/lightTurnOn');
 module.exports = router;
 
-router.use('lightTurnOn', async (message, next) => {
+router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'lightTurnOn', 'turnOnOff', 'subscribe');
+    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'turnOnOff', 'subscribe');
     await lightTurnOnHandler._turnOn({
       message
     });
@@ -999,10 +999,10 @@ const router = new Router();
 const lightsDimHandler = require('../handlers/lightsDim');
 module.exports = router;
 
-router.use('lightsDim', async (message, next) => {
+router.use('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'lightsDim', 'dimLight', 'subscribe');
+    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/dim', 'dimLight', 'subscribe');
     await lightsDimHandler._dimLight({
       message
     });
