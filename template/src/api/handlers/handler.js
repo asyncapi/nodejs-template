@@ -8,43 +8,41 @@ import { File } from '@asyncapi/generator-react-sdk';
 
 const OPTIONS_MESSAGE_HEADERS_STRING = 'options.message.headers';
 
-function publishHandler(channel) {
-  if (!channel.hasPublish()) {
+function receiveHandler(operation) {
+  if (!operation.isReceive()) {
     return '';
   }
 
-  const lambdaChannel = channel.publish().ext('x-lambda');
-  const publishOperationId = channel.publish().id();
-  const publishMessage = channel.publish().message(0);
+  const operationId = operation.id();
+  const message = operation.messages().all()[0];
+  const lambdaChannel = operation.extensions().get('x-lambda');
 
   const exportedHandler = `
   /**
-   * Registers a middleware function for the ${publishOperationId} operation to be executed during request processing.
+   * Registers a middleware function for the ${operationId} operation to be executed during request processing.
    *
    * Middleware functions have access to options object that you can use to access the message content and other helper functions
    *
    * @param {function} middlewareFn - The middleware function to be registered.
    * @throws {TypeError} If middlewareFn is not a function.
    */
-  handler.${convertOpertionIdToMiddlewareFn(
-    channel.publish().id()
-  )} = (middlewareFn) => {
+  handler.${convertOpertionIdToMiddlewareFn(operationId)} = (middlewareFn) => {
     if (typeof middlewareFn !== 'function') {
       throw new TypeError('middlewareFn must be a function');
     }
-    ${publishOperationId}Middlewares.push(middlewareFn);
+    ${operationId}Middlewares.push(middlewareFn);
   }
   `;
 
   const privateHandlerLogic = `
   /**
-   * ${channel.publish().summary() || ''}
+   * ${operation.hasSummary() ? operation.summary() : ''}
    *
    * @param {object} options
    * @param {object} options.message
   ${
-  publishMessage.headers()
-    ? Object.entries(publishMessage.headers().properties())
+  message.headers()
+    ? Object.entries(message.headers().properties())
         .map(([fieldName, field]) => {
           return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
         })
@@ -53,8 +51,8 @@ function publishHandler(channel) {
   }
   *
   ${
-    publishMessage.payload()
-      ? Object.entries(publishMessage.payload().properties())
+    message.payload()
+      ? Object.entries(message.payload().properties())
           .map(([fieldName, field]) => {
             return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
@@ -62,7 +60,7 @@ function publishHandler(channel) {
       : ''
   }
   */
-  handler._${publishOperationId} = async ({message}) => {
+  handler._${operationId} = async ({message}) => {
     ${
       lambdaChannel
         ? `
@@ -74,7 +72,7 @@ function publishHandler(channel) {
       .then(res => res.json())
       .then(json => console.log(json))
       .catch(err => { throw err; });`
-        : `for (const middleware of ${publishOperationId}Middlewares) {
+        : `for (const middleware of ${operationId}Middlewares) {
       await middleware(message);
     }`
     }
@@ -84,7 +82,7 @@ function publishHandler(channel) {
   return `
   ${lambdaChannel ? 'const fetch = require("node-fetch");' : ''}
   
-  const ${publishOperationId}Middlewares = [];
+  const ${operationId}Middlewares = [];
 
   ${exportedHandler}
 
@@ -92,42 +90,40 @@ function publishHandler(channel) {
   `;
 }
 
-function subscribeHandler(channel) {
-  if (!channel.hasSubscribe()) {
+function sendHandler(operation) {
+  if (!operation.isSend()) {
     return '';
   }
 
-  const subscribeOperationId = channel.subscribe().id();
-  const subscribeMessage = channel.subscribe().message(0);
+  const operationId = operation.id();
+  const message = operation.messages().all()[0];
 
   const exportedHandler = `
   /**
-   * Registers a middleware function for the ${subscribeOperationId} operation to be executed during request processing.
+   * Registers a middleware function for the ${operationId} operation to be executed during request processing.
    *
    * Middleware functions have access to options object that you can use to access the message content and other helper functions
    *
    * @param {function} middlewareFn - The middleware function to be registered.
    * @throws {TypeError} If middlewareFn is not a function.
    */
-  handler.${convertOpertionIdToMiddlewareFn(
-    channel.subscribe().id()
-  )} = (middlewareFn) => {
+  handler.${convertOpertionIdToMiddlewareFn(operationId)} = (middlewareFn) => {
     if (typeof middlewareFn !== 'function') {
       throw new TypeError('middlewareFn must be a function');
     }
-    ${subscribeOperationId}Middlewares.push(middlewareFn);
+    ${operationId}Middlewares.push(middlewareFn);
   }
   `;
 
   const privateHandlerLogic = `
   /**
-   * ${channel.subscribe().summary() || ''}
+   * ${operation.hasSummary() ? operation.summary() : ''}
    *
    * @param {object} options
    * @param {object} options.message
   ${
-    subscribeMessage.headers()
-      ? Object.entries(subscribeMessage.headers().properties())
+    message.headers()
+      ? Object.entries(message.headers().properties())
           .map(([fieldName, field]) => {
             return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
@@ -136,8 +132,8 @@ function subscribeHandler(channel) {
   }
   *
   ${
-    subscribeMessage.payload()
-      ? Object.entries(subscribeMessage.payload().properties())
+    message.payload()
+      ? Object.entries(message.payload().properties())
           .map(([fieldName, field]) => {
             return docline(field, fieldName, OPTIONS_MESSAGE_HEADERS_STRING);
           })
@@ -145,15 +141,15 @@ function subscribeHandler(channel) {
       : ''
   }
   */
-  handler._${subscribeOperationId} = async ({message}) => {
-    for (const middleware of ${subscribeOperationId}Middlewares) {
+  handler._${operationId} = async ({message}) => {
+    for (const middleware of ${operationId}Middlewares) {
       await middleware(message);
     }
   };
   `;
 
   return `
-  const ${subscribeOperationId}Middlewares = [];
+  const ${operationId}Middlewares = [];
 
   ${exportedHandler}
   
@@ -167,21 +163,22 @@ export default function handlerRender({
   const general = `
   const handler = module.exports = {};
   `;
-
-  const channels = asyncapi.channels();
   
-  return Object.entries(channels).map(([channelName, channel]) => {
-    const hasPublish = channel.publish();
-    const hasSubscribe = channel.hasSubscribe();
-
-    return (
-      <File name={`${convertToFilename(channelName)}.js`}>
-        {`
-        ${general}
-        ${hasPublish ? publishHandler(channel) : ''}
-        ${hasSubscribe ? subscribeHandler(channel) : ''}
-        `}
-      </File>
-    );
+  return asyncapi.channels().all().map(channel => {
+    const channelName = channel.id();
+    
+    let routeHandler = `
+      ${general}
+    `;
+    
+    for (let operation of channel.operations()) {
+      if (operation.isSend()) {
+        routeHandler += sendHandler(operation);
+      }
+      if (operation.isReceive()) {
+        routeHandler += receiveHandler(operation);
+      }
+    }
+    return <File name={`${convertToFilename(channelName)}.js`}>{routeHandler}</File>;
   });
 }

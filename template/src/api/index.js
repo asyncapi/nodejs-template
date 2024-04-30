@@ -91,11 +91,12 @@ export default function indexEntrypointFile({asyncapi, params}) {
 
     const handlers = asyncapi.channels().all().map(channel => {
         const channelName = channel.id();
-        return channel.operations().all().map(operation => {
+        const x = channel.operations().all().map(operation => {
             let operationId = operation.id();
             return `${convertOpertionIdToMiddlewareFn(operationId)} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(operationId)}`
-        }).join(',');
-    }).join('\n');
+        });
+        return x;
+    }).join(',');
 
     return <File name={'index.js'}>
         {`

@@ -2,23 +2,23 @@
 import { File } from '@asyncapi/generator-react-sdk';
 import { camelCase, convertToFilename, toHermesTopic } from '../../../../helpers/index';
 
-function publishHandler(channel, channelName) {
-  if (!channel.hasPublish()) {
+function receiveHandler(operation, channelName) {
+  if (!operation.isReceive()) {
     return '';
   }
 
-  const publishOperationId = channel.publish().id();
-  const publishMessage = channel.publish().message(0);
+  const operationId = operation.id();
+  const message = operation.messages().all()[0];
 
   return `
-  ${channel.publish().summary()  ? `
+  ${operation.hasSummary()  ? `
   /**
-   * ${ channel.publish().summary() }
+   * ${ operation.summary() }
    */
   `: ''}
   router.use('${toHermesTopic(channelName)}', async (message, next) => {
     try {
-      ${channel.publish().hasMultipleMessages() 
+      ${(operation.messages().length > 1)
         ? `
       /*
       * TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
@@ -31,21 +31,21 @@ function publishHandler(channel, channelName) {
       // Validate payload against each message and count those which validate
 
       ${
-        Array.from(Array(channel.publish().messages().length).keys()).map(i => `try {
-          nValidated = await validateMessage(message.payload,'${ channelName }','${ channel.publish().message(i).name() }','publish', nValidated);
+        operation.messages().all().map(message => `try {
+          nValidated = await validateMessage(message.payload,'${ channelName }','${ message.name() }','publish', nValidated);
         } catch { };`).join('\n')
       }
 
       if (nValidated === 1) {
-        await ${camelCase(channelName)}Handler._${publishOperationId}({message});
+        await ${camelCase(channelName)}Handler._${operationId}({message});
         next()
       } else {
-        throw new Error(\`\${nValidated} of ${ channel.publish().messages().length } message schemas matched when exactly 1 should match\`);
+        throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
       }
         `
         : `
-      await validateMessage(message.payload,'${ channelName }','${ publishMessage.name() }','publish');
-      await ${camelCase(channelName)}Handler._${ publishOperationId }({message});
+      await validateMessage(message.payload,'${ channelName }','${ message.name() }','publish');
+      await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
         `
       }
@@ -56,44 +56,44 @@ function publishHandler(channel, channelName) {
   `;
 }
 
-function subscribeHandler(channel, channelName) {
-  if (!channel.hasSubscribe()) {
+function sendHandler(operation, channelName) {
+  if (!operation.isSend()) {
     return '';
   }
 
-  const subscribeOperationId = channel.subscribe().id();
-  const subscribeMessage = channel.subscribe().message(0);
+  const operationId = operation.id();
+  const message = operation.messages().all()[0];
   
   return `
-  ${channel.subscribe().summary()  ? `
+  ${operation.hasSummary()  ? `
   /**
-   * ${ channel.subscribe().summary() }
+   * ${ operation.summary() }
    */
   `: ''}
   router.use('${toHermesTopic(channelName)}', async (message, next) => {
     try {
-      ${channel.subscribe().hasMultipleMessages() 
+      ${(operation.messages().length > 1)
         ? `
       let nValidated = 0;
       // For oneOf, only one message schema should match.
       // Validate payload against each message and count those which validate
 
       ${
-        Array.from(Array(channel.subscribe().messages().length).keys()).map(i => `try {
-          nValidated = await validateMessage(message.payload,'${ channelName }','${ channel.subscribe().message(i).name() }','subscribe', nValidated);
+        operation.messages().all().map(message => `try {
+          nValidated = await validateMessage(message.payload,'${ channelName }','${ operation.message(i).name() }','subscribe', nValidated);
         } catch { };`).join('\n')
       }
 
       if (nValidated === 1) {
-        await ${camelCase(channelName)}Handler._${subscribeOperationId}({message});
+        await ${camelCase(channelName)}Handler._${operationId}({message});
         next()
       } else {
-        throw new Error(\`\${nValidated} of ${ channel.subscribe().messages().length } message schemas matched when exactly 1 should match\`);
+        throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
       }
         `
         : `
-      await validateMessage(message.payload,'${ channelName }','${ subscribeMessage.name() }','subscribe');
-      await ${camelCase(channelName)}Handler._${ subscribeOperationId }({message});
+      await validateMessage(message.payload,'${ channelName }','${ message.name() }','subscribe');
+      await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
         `
       }
@@ -104,10 +104,8 @@ function subscribeHandler(channel, channelName) {
   `;
 }
 
-function routeCode(channel, channelName) {
-  const hasPublish = channel.publish();
-  const hasSubscribe = channel.hasSubscribe();
-
+function routeCode(channel) {
+  const channelName = channel.id();
   const generalImport = `
   const Router = require('hermesjs/lib/router');
   const { validateMessage } = require('../../lib/message-validator');
@@ -116,21 +114,24 @@ function routeCode(channel, channelName) {
   module.exports = router;
   `;
   
-  return (
-    <File name={`${convertToFilename(channelName)}.js`}>
-      {`
-  ${generalImport}
-  ${hasPublish ? publishHandler(channel, channelName): ''}
-  ${hasSubscribe ? subscribeHandler(channel, channelName): ''}
-  `}
-    </File>
-  );
+  let routeHandler = `
+    ${generalImport}
+  `;
+
+  for (let operation of channel.operations()) {
+    if (operation.isSend()) {
+      routeHandler += sendHandler(operation, channel.id());
+    }
+    if (operation.isReceive()) {
+      routeHandler += receiveHandler(operation, channel.id());
+    }
+  }
+
+  return <File name={`${convertToFilename(channelName)}.js`}>{routeHandler}</File>;
 }
 
 export default function routeRender({asyncapi}) {
-  const channels = asyncapi.channels();
-  
-  return Object.entries(channels).map(([channelName, channel]) => {
-    return routeCode(channel, channelName);
+  return asyncapi.channels().all().map(channel => {
+    return routeCode(channel);
   });
 }
