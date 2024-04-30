@@ -1,5 +1,391 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 1`] = `
+"const handler = module.exports = {};
+
+const turnOffMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOff operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.registerTurnOffMiddleware = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOffMiddlewares.push(middlewareFn);
+}
+
+/**
+ * 
+ *
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ *
+ * @param {string} options.message.headers.command - Whether to turn on or off the light.
+ * @param {string} options.message.headers.sentAt - Date and time when the message was sent.
+ */
+handler._turnOff = async ({
+  message
+}) => {
+  for (const middleware of turnOffMiddlewares) {
+    await middleware(message);
+  }
+};"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 2`] = `
+"const handler = module.exports = {};
+
+const receiveLightMeasurementMiddlewares = [];
+
+/**
+ * Registers a middleware function for the receiveLightMeasurement operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.registerReceiveLightMeasurementMiddleware = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  receiveLightMeasurementMiddlewares.push(middlewareFn);
+}
+
+/**
+ * Inform about environmental lighting conditions of a particular streetlight.
+ *
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ *
+ * @param {integer} options.message.headers.lumens - Light intensity measured in lumens.
+ * @param {string} options.message.headers.sentAt - Date and time when the message was sent.
+ */
+handler._receiveLightMeasurement = async ({
+  message
+}) => {
+  for (const middleware of receiveLightMeasurementMiddlewares) {
+    await middleware(message);
+  }
+};"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 3`] = `
+"const handler = module.exports = {};
+
+const turnOnMiddlewares = [];
+
+/**
+ * Registers a middleware function for the turnOn operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.registerTurnOnMiddleware = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  turnOnMiddlewares.push(middlewareFn);
+}
+
+/**
+ * 
+ *
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ *
+ * @param {string} options.message.headers.command - Whether to turn on or off the light.
+ * @param {string} options.message.headers.sentAt - Date and time when the message was sent.
+ */
+handler._turnOn = async ({
+  message
+}) => {
+  for (const middleware of turnOnMiddlewares) {
+    await middleware(message);
+  }
+};"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 4`] = `
+"const handler = module.exports = {};
+
+const dimLightMiddlewares = [];
+
+/**
+ * Registers a middleware function for the dimLight operation to be executed during request processing.
+ *
+ * Middleware functions have access to options object that you can use to access the message content and other helper functions
+ *
+ * @param {function} middlewareFn - The middleware function to be registered.
+ * @throws {TypeError} If middlewareFn is not a function.
+ */
+handler.registerDimLightMiddleware = (middlewareFn) => {
+  if (typeof middlewareFn !== 'function') {
+    throw new TypeError('middlewareFn must be a function');
+  }
+  dimLightMiddlewares.push(middlewareFn);
+}
+
+/**
+ * 
+ *
+ * @param {object} options
+ * @param {object} options.message
+ * @param {integer} options.message.headers.my-app-header
+ *
+ * @param {integer} options.message.headers.percentage - Percentage to which the light should be dimmed to.
+ * @param {string} options.message.headers.sentAt - Date and time when the message was sent.
+ */
+handler._dimLight = async ({
+  message
+}) => {
+  for (const middleware of dimLightMiddlewares) {
+    await middleware(message);
+  }
+};"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 5`] = `
+"const Router = require('hermesjs/lib/router');
+const {
+  validateMessage
+} = require('../../lib/message-validator');
+const router = new Router();
+const lightTurnOffHandler = require('../handlers/lightTurnOff');
+module.exports = router;
+
+router.use('smartylighting.streetlights.1.0.action.:streetlightId.turn.off', async (message, next) => {
+  try {
+
+    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.turn.off', 'turnOnOff', 'subscribe');
+    await lightTurnOffHandler._turnOff({
+      message
+    });
+    next();
+
+  } catch (e) {
+    next(e);
+  }
+});"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 6`] = `
+"const Router = require('hermesjs/lib/router');
+const {
+  validateMessage
+} = require('../../lib/message-validator');
+const router = new Router();
+const lightingMeasuredHandler = require('../handlers/lightingMeasured');
+module.exports = router;
+
+/**
+ * Inform about environmental lighting conditions of a particular streetlight.
+ */
+
+router.use('smartylighting.streetlights.1.0.event.:streetlightId.lighting.measured', async (message, next) => {
+  try {
+
+    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.event.{streetlightId}.lighting.measured', 'lightMeasured', 'publish');
+    await lightingMeasuredHandler._receiveLightMeasurement({
+      message
+    });
+    next();
+
+  } catch (e) {
+    next(e);
+  }
+});"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 7`] = `
+"const Router = require('hermesjs/lib/router');
+const {
+  validateMessage
+} = require('../../lib/message-validator');
+const router = new Router();
+const lightTurnOnHandler = require('../handlers/lightTurnOn');
+module.exports = router;
+
+router.use('smartylighting.streetlights.1.0.action.:streetlightId.turn.on', async (message, next) => {
+  try {
+
+    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.turn.on', 'turnOnOff', 'subscribe');
+    await lightTurnOnHandler._turnOn({
+      message
+    });
+    next();
+
+  } catch (e) {
+    next(e);
+  }
+});"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 8`] = `
+"const Router = require('hermesjs/lib/router');
+const {
+  validateMessage
+} = require('../../lib/message-validator');
+const router = new Router();
+const lightsDimHandler = require('../handlers/lightsDim');
+module.exports = router;
+
+router.use('smartylighting.streetlights.1.0.action.:streetlightId.dim', async (message, next) => {
+  try {
+
+    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.dim', 'dimLight', 'subscribe');
+    await lightsDimHandler._dimLight({
+      message
+    });
+    next();
+
+  } catch (e) {
+    next(e);
+  }
+});"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 9`] = `
+"const Hermes = require('hermesjs');
+const app = new Hermes();
+const path = require('path');
+const {
+  yellow,
+  gray,
+  cyan
+} = require('chalk');
+const buffer2string = require('./middlewares/buffer2string');
+const string2json = require('./middlewares/string2json');
+const json2string = require('./middlewares/json2string');
+const logger = require('./middlewares/logger');
+const errorLogger = require('./middlewares/error-logger');
+const config = require('../lib/config');
+const serverConfig = config.broker.kafka;
+const KafkaAdapter = require('hermesjs-kafka-secure');
+
+const lightingMeasured = require('./routes/lightingMeasured.js');
+const lightTurnOn = require('./routes/lightTurnOn.js');
+const lightTurnOff = require('./routes/lightTurnOff.js');
+const lightsDim = require('./routes/lightsDim.js');
+
+app.addAdapter(KafkaAdapter, serverConfig);
+
+app.use(buffer2string);
+app.use(string2json);
+app.use(logger);
+
+// Channels
+
+console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('lightingMeasured'));
+app.use(lightingMeasured);
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOn'));
+app.useOutbound(lightTurnOn);
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOff'));
+app.useOutbound(lightTurnOff);
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightsDim'));
+app.useOutbound(lightsDim);
+
+app.use(errorLogger);
+app.useOutbound(errorLogger);
+app.useOutbound(logger);
+app.useOutbound(json2string);
+
+function init() {
+  app
+    .listen()
+    .then((adapters) => {
+      console.log(cyan.underline(\`\${config.app.name} \${config.app.version}\`), gray('is ready!'), '\\\\n');
+      adapters.forEach(adapter => {
+        console.log('🔗 ', adapter.name(), gray('is connected!'));
+      });
+    })
+    .catch(console.error);
+}
+
+const handlers = {
+  registerReceiveLightMeasurementMiddleware: require('./handlers/lightingMeasured').registerReceiveLightMeasurementMiddleware,
+  registerTurnOnMiddleware: require('./handlers/lightTurnOn').registerTurnOnMiddleware,
+  registerTurnOffMiddleware: require('./handlers/lightTurnOff').registerTurnOffMiddleware,
+  registerDimLightMiddleware: require('./handlers/lightsDim').registerDimLightMiddleware
+}
+
+const client = {
+  app,
+  init,
+  ...handlers
+};
+
+module.exports = {
+  client
+};"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 10`] = `
+"default:
+  app:
+    name: Streetlights Kafka API
+    version: 1.0.0
+
+  broker:
+
+
+
+    kafka:
+      clientId: streetlightsKafkaApi
+      brokers:
+        - test.mykafkacluster.org:18092/
+      consumerOptions:
+        groupId: streetlightsKafkaApi
+      topics:
+      - lightingMeasured
+      topicSeparator: '__'
+      topicPrefix:
+
+development:
+
+test:
+
+staging:
+
+production:
+  broker:
+    kafka:
+      ssl:
+        rejectUnauthorized: true
+
+"
+`;
+
+exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 11`] = `
+"{
+  \\"name\\": \\"streetlights-kafka-api\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"description\\": \\"The Smartylighting Streetlights API allows you to remotely manage the city lights.  ### Check out its awesome features:  * Turn a specific streetlight on/off 🌃 * Dim a specific streetlight 😎 * Receive real-time information about environmental lighting conditions 📈\\",
+  \\"main\\": \\"./src/api\\",
+  \\"dependencies\\": {
+    \\"chalk\\": \\"4.1.2\\",
+    \\"dotenv\\": \\"8.1.0\\",
+    \\"hermesjs\\": \\"2.x\\",
+    \\"hermesjs-router\\": \\"1.x\\",
+    \\"asyncapi-validator\\": \\"3.0.0\\",
+    \\"node-fetch\\": \\"2.6.0\\",
+    \\"node-yaml-config\\": \\"0.0.4\\",
+    \\"hermesjs-kafka\\": \\"2.x\\"
+  }
+}"
+`;
+
 exports[`template integration tests for generated files using the generator and mqtt example - v2 spec should generate proper handlers and routes files 1`] = `
 "const handler = module.exports = {};
 

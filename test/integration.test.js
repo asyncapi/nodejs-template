@@ -122,71 +122,76 @@ describe('template integration tests for generated files using the generator and
   );
 });
 
-// describe('template integration tests for generated files using the generator and kafka example - v3 spec', () => {
-//   jest.setTimeout(30000);
+describe('template integration tests for generated files using the generator and kafka example - v3 spec', () => {
+  jest.setTimeout(30000);
 
-//   // const outputDir = generateFolderName();
-//   // const params = {
-//   //   server: 'test',
-//   //   securityScheme: 'certs',
-//   //   certFilesDir: './mocks/kafka/dummyCerts'
-//   // };
-//   // const kafkaExamplePath = './mocks/kafka/asyncapi-v3.yml';
+  const outputDir = generateFolderName();
+  const kafkaExamplePath = './mocks/kafka/asyncapi-v3.yml';
 
-//   it.each`
-//     server                  | description
-//     ${'scram-connections'}         | ${'should generate proper handlers and routes files'}
-//   `(
-//     '$description',
-//     async ({ server}) => {
-//       const outputDir = generateFolderName();
-//       const params = {
-//         server
-//       };
-//       const mqttExamplePath = './mocks/kafka/asyncapi-v3.yml';
+  it.each`
+    server                  | description
+    ${'scram-connections'}         | ${'should generate proper handlers and routes files'}
+  `(
+    '$description',
+    async ({ server}) => {
+      const params = {
+        server
+      };
 
-//       const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
-//       await generator.generateFromFile(path.resolve('test', mqttExamplePath));
+      const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
+      await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
 
-//       const expectedFiles = [
-//         '/src/api/handlers/lightTurnOff.js',
-//         '/src/api/handlers/lightingMeasured.js',
-//         '/src/api/handlers/lightTurnOn.js',
-//         '/src/api/handlers/lightsDim.js',
-//         '/src/api/routes/lightTurnOff.js',
-//         '/src/api/routes/lightingMeasured.js',
-//         '/src/api/routes/lightTurnOn.js',
-//         '/src/api/routes/lightsDim.js',
-//         '/src/api/index.js',
-//         '/config/common.yml',
-//         '/package.json'
-//       ];
-//       for (const index in expectedFiles) {
-//         const file = await readFile(path.join(outputDir, expectedFiles[index]), 'utf8');
-//         expect(file).toMatchSnapshot();
-//       }
-//     }
-//   );
+      const expectedFiles = [
+        '/src/api/handlers/lightTurnOff.js',
+        '/src/api/handlers/lightingMeasured.js',
+        '/src/api/handlers/lightTurnOn.js',
+        '/src/api/handlers/lightsDim.js',
+        '/src/api/routes/lightTurnOff.js',
+        '/src/api/routes/lightingMeasured.js',
+        '/src/api/routes/lightTurnOn.js',
+        '/src/api/routes/lightsDim.js',
+        '/src/api/index.js',
+        '/config/common.yml',
+        '/package.json'
+      ];
+      for (const index in expectedFiles) {
+        const file = await readFile(path.join(outputDir, expectedFiles[index]), 'utf8');
+        expect(file).toMatchSnapshot();
+      }
+    }
+  );
   
-//   // it('should generate proper config for X509 security', async() => {
-//   //   const expectedSecuritySetting = 'rejectUnauthorized: true';
-//   //   const expectedConfigFile = '/config/common.yml';
+  /*
+  it('should generate proper config for X509 security', async() => {
+    const params = {
+      server: 'test',
+      securityScheme: 'certs',
+      certFilesDir: './mocks/kafka/dummyCerts'
+    };
+    const expectedSecuritySetting = 'rejectUnauthorized: true';
+    const expectedConfigFile = '/config/common.yml';
 
-//   //   const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
-//   //   await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
+    const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
+    await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
 
-//   //   const file = await readFile(path.join(outputDir, expectedConfigFile), 'utf8');
-//   //   expect(file.includes(expectedSecuritySetting)).toBeTruthy();
-//   // });
+    const file = await readFile(path.join(outputDir, expectedConfigFile), 'utf8');
+    expect(file.includes(expectedSecuritySetting)).toBeTruthy();
+  });
 
-//   // it('should generate proper variable that points to custom cert files location', async() => {
-//   //   const expectedVariable = 'const certFilesDir = \'./mocks/kafka/dummyCerts\';';
-//   //   const expectedFile = '/src/api/index.js';
+  it('should generate proper variable that points to custom cert files location', async() => {
+    const params = {
+      server: 'test',
+      securityScheme: 'certs',
+      certFilesDir: './mocks/kafka/dummyCerts'
+    };
+    const expectedVariable = 'const certFilesDir = \'./mocks/kafka/dummyCerts\';';
+    const expectedFile = '/src/api/index.js';
 
-//   //   const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
-//   //   await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
+    const generator = new Generator(path.normalize('./'), outputDir, { forceWrite: true, templateParams: params });
+    await generator.generateFromFile(path.resolve('test', kafkaExamplePath));
 
-//   //   const file = await readFile(path.join(outputDir, expectedFile), 'utf8');
-//   //   expect(file.includes(expectedVariable)).toBeTruthy();
-//   // });
-// });
+    const file = await readFile(path.join(outputDir, expectedFile), 'utf8');
+    expect(file.includes(expectedVariable)).toBeTruthy();
+  });
+  */
+});
