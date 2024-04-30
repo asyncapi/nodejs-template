@@ -80,7 +80,7 @@ function sendHandler(operation, channelName) {
 
       ${
         operation.messages().all().map(message => `try {
-          nValidated = await validateMessage(message.payload,'${ channelName }','${ operation.message(i).name() }','subscribe', nValidated);
+          nValidated = await validateMessage(message.payload,'${ channelName }','${ message.name() }','subscribe', nValidated);
         } catch { };`).join('\n')
       }
 
@@ -118,7 +118,7 @@ function routeCode(channel) {
     ${generalImport}
   `;
 
-  for (let operation of channel.operations()) {
+  for (const operation of channel.operations()) {
     if (operation.isSend()) {
       routeHandler += sendHandler(operation, channel.id());
     }

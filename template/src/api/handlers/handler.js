@@ -171,7 +171,7 @@ export default function handlerRender({
       ${general}
     `;
     
-    for (let operation of channel.operations()) {
+    for (const operation of channel.operations()) {
       if (operation.isSend()) {
         routeHandler += sendHandler(operation);
       }

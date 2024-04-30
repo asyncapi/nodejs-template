@@ -93,7 +93,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
     const handlers = asyncapi.channels().all().map(channel => {
         const channelName = channel.id();
         const x = channel.operations().all().map(operation => {
-            let operationId = operation.id();
+            const operationId = operation.id();
             return `${convertOpertionIdToMiddlewareFn(operationId)} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(operationId)}`
         });
         return x;
