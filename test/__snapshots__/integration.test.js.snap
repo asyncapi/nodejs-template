@@ -317,7 +317,7 @@ const handlers = {
   registerReceiveLightMeasurementMiddleware: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').registerReceiveLightMeasurementMiddleware,
   registerTurnOnMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').registerTurnOnMiddleware,
   registerTurnOffMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').registerTurnOffMiddleware,
-  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware,
+  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware
 }
 
 const client = {
@@ -696,7 +696,7 @@ const handlers = {
   registerReceiveLightMeasurementMiddleware: require('./handlers/smartylighting-streetlights-1-0-event-{streetlightId}-lighting-measured').registerReceiveLightMeasurementMiddleware,
   registerTurnOnMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on').registerTurnOnMiddleware,
   registerTurnOffMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off').registerTurnOffMiddleware,
-  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware,
+  registerDimLightMiddleware: require('./handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim').registerDimLightMiddleware
 }
 
 const client = {

@@ -67,6 +67,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
     app.use(logger);
     
     // Channels
+    
     ${channelsMiddleware}
     
     app.use(errorLogger);
