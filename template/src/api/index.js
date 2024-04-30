@@ -22,7 +22,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
     `;
 
     const channelHandlerImports = asyncapi.channels().all().map(channel => {
-        const channelName = channel.address();
+        const channelName = channel.id();
         return `const ${camelCase(channelName)} = require('./routes/${convertToFilename(channelName)}.js');`;
     }).join('\n');
 
@@ -46,7 +46,7 @@ export default function indexEntrypointFile({asyncapi, params}) {
     `
 
     const channelsMiddleware = asyncapi.channels().all().map(channel => {
-        const channelName = channel.address();
+        const channelName = channel.id();
         let channelLogic = '';
         if (channel.operations().filterByReceive().length > 0) {
             channelLogic += `console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('${channelName}'));
@@ -90,16 +90,11 @@ export default function indexEntrypointFile({asyncapi, params}) {
     `;
 
     const handlers = asyncapi.channels().all().map(channel => {
-        const channelName = channel.address();
-        let handler = '';
-        for (let operation of channel.operations()) {
-            const operationId = operation.id();
-            if (operation.isReceive())
-            handler += `${convertOpertionIdToMiddlewareFn(operationId)} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(operationId)},`;
-            if (operation.isSend())
-            handler += `${convertOpertionIdToMiddlewareFn(operationId)} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(operationId)},`;
-        }
-        return handler;
+        const channelName = channel.id();
+        return channel.operations().all().map(operation => {
+            let operationId = operation.id();
+            return `${convertOpertionIdToMiddlewareFn(operationId)} : require('./handlers/${convertToFilename(channelName)}').${convertOpertionIdToMiddlewareFn(operationId)}`
+        }).join(',');
     }).join('\n');
 
     return <File name={'index.js'}>
