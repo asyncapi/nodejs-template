@@ -162,10 +162,9 @@ describe('template integration tests for generated files using the generator and
     }
   );
   
-  /*
   it('should generate proper config for X509 security', async() => {
     const params = {
-      server: 'test',
+      server: 'scram-connections',
       securityScheme: 'certs',
       certFilesDir: './mocks/kafka/dummyCerts'
     };
@@ -181,7 +180,7 @@ describe('template integration tests for generated files using the generator and
 
   it('should generate proper variable that points to custom cert files location', async() => {
     const params = {
-      server: 'test',
+      server: 'scram-connections',
       securityScheme: 'certs',
       certFilesDir: './mocks/kafka/dummyCerts'
     };
@@ -194,5 +193,4 @@ describe('template integration tests for generated files using the generator and
     const file = await readFile(path.join(outputDir, expectedFile), 'utf8');
     expect(file.includes(expectedVariable)).toBeTruthy();
   });
-  */
 });
