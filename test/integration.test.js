@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 const path = require('path');
 const Generator = require('@asyncapi/generator');
 const { readFile } = require('fs').promises;
