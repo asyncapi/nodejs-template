@@ -7,10 +7,15 @@ export default function packageFile({ asyncapi, params }) {
     dotenv: '8.1.0',
     hermesjs: '2.x',
     'hermesjs-router': '1.x',
-    'asyncapi-validator': '3.0.0',
     'node-fetch': '2.6.0',
     'node-yaml-config': '0.0.4',
   };
+
+  const majorSpecVersion = parseInt(asyncapi.version().split('.')[0], 10);
+  const isSpecV3 = (majorSpecVersion === 3);
+  if (!isSpecV3) {
+    dependencies['asyncapi-validator'] = '3.0.0';
+  }
 
   const serverProtocol = asyncapi.allServers().get(params.server).protocol();
   if (serverProtocol === 'mqtt' || serverProtocol === 'mqtts') {
