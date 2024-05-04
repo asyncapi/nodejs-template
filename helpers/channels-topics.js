@@ -51,7 +51,7 @@ export function toHermesTopic(str) {
 }
 
 export function channelNamesWithReceive(asyncapi) {
-  return asyncapi.channels().filterByReceive().map(channel => channel.id());
+  return asyncapi.channels().filterByReceive().map(channel => channel.address());
 }
 
 export function host(url) {

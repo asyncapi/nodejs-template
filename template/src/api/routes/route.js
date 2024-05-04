@@ -2,13 +2,36 @@
 import { File } from '@asyncapi/generator-react-sdk';
 import { camelCase, convertToFilename, toHermesTopic } from '../../../../helpers/index';
 
-function receiveHandler(operation, channelName, channelAddress) {
+function receiveHandler(operation, channelName, channelAddress, isSpecV3) {
   if (!operation.isReceive()) {
     return '';
   }
 
   const operationId = operation.id();
   const message = operation.messages().all()[0];
+  const messageValidationLogic = (operation.messages().length > 1) ? `
+  /*
+  * TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
+  * code to just validate the message against the combined message schema which will
+  * include the \`oneOf\` in the JSON schema - let the JSON schema validator handle the
+  * oneOf semantics (rather than each generator having to emit conditional code)
+  */
+  let nValidated = 0;
+  // For oneOf, only one message schema should match.
+  // Validate payload against each message and count those which validate
+
+  ${
+    operation.messages().all().map(message => `try {
+      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', nValidated);
+    } catch { };`).join('\n')
+  }
+
+  if (nValidated === 1) {
+    await ${camelCase(channelName)}Handler._${operationId}({message});
+    next()
+  } else {
+    throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
+  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish');`;
 
   return `
   ${operation.hasSummary()  ? `
@@ -18,37 +41,9 @@ function receiveHandler(operation, channelName, channelAddress) {
   `: ''}
   router.use('${toHermesTopic(channelAddress)}', async (message, next) => {
     try {
-      ${(operation.messages().length > 1)
-        ? `
-      /*
-      * TODO: If https://github.com/asyncapi/parser-js/issues/372 is addressed, simplify this
-      * code to just validate the message against the combined message schema which will
-      * include the \`oneOf\` in the JSON schema - let the JSON schema validator handle the
-      * oneOf semantics (rather than each generator having to emit conditional code)
-      */
-      let nValidated = 0;
-      // For oneOf, only one message schema should match.
-      // Validate payload against each message and count those which validate
-
-      ${
-        operation.messages().all().map(message => `try {
-          nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', nValidated);
-        } catch { };`).join('\n')
-      }
-
-      if (nValidated === 1) {
-        await ${camelCase(channelName)}Handler._${operationId}({message});
-        next()
-      } else {
-        throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
-      }
-        `
-        : `
-      await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish');
+      ${isSpecV3 ? '' : messageValidationLogic}
       await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
-        `
-      }
     } catch (e) {
       next(e);
     }
@@ -56,13 +51,30 @@ function receiveHandler(operation, channelName, channelAddress) {
   `;
 }
 
-function sendHandler(operation, channelName, channelAddress) {
+function sendHandler(operation, channelName, channelAddress, isSpecV3) {
   if (!operation.isSend()) {
     return '';
   }
 
   const operationId = operation.id();
   const message = operation.messages().all()[0];
+  const messageValidationLogic = (operation.messages().length > 1) ? `
+  let nValidated = 0;
+  // For oneOf, only one message schema should match.
+  // Validate payload against each message and count those which validate
+
+  ${
+    operation.messages().all().map(message => `try {
+      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', nValidated);
+    } catch { };`).join('\n')
+  }
+
+  if (nValidated === 1) {
+    await ${camelCase(channelName)}Handler._${operationId}({message});
+    next()
+  } else {
+    throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
+  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');`
   
   return `
   ${operation.hasSummary()  ? `
@@ -70,33 +82,11 @@ function sendHandler(operation, channelName, channelAddress) {
    * ${ operation.summary() }
    */
   `: ''}
-  router.use('${toHermesTopic(channelAddress)}', async (message, next) => {
+  router.useOutbound('${toHermesTopic(channelAddress)}', async (message, next) => {
     try {
-      ${(operation.messages().length > 1)
-        ? `
-      let nValidated = 0;
-      // For oneOf, only one message schema should match.
-      // Validate payload against each message and count those which validate
-
-      ${
-        operation.messages().all().map(message => `try {
-          nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', nValidated);
-        } catch { };`).join('\n')
-      }
-
-      if (nValidated === 1) {
-        await ${camelCase(channelName)}Handler._${operationId}({message});
-        next()
-      } else {
-        throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
-      }
-        `
-        : `
-      await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');
+      ${isSpecV3 ? '' : messageValidationLogic}
       await ${camelCase(channelName)}Handler._${ operationId }({message});
       next();
-        `
-      }
     } catch (e) {
       next(e);
     }
@@ -104,7 +94,7 @@ function sendHandler(operation, channelName, channelAddress) {
   `;
 }
 
-function routeCode(channel) {
+function routeCode(channel, isSpecV3) {
   const channelName = channel.id();
   const generalImport = `
   const Router = require('hermesjs/lib/router');
@@ -120,10 +110,10 @@ function routeCode(channel) {
 
   for (const operation of channel.operations()) {
     if (operation.isSend()) {
-      routeHandler += sendHandler(operation, channel.id(), channel.address());
+      routeHandler += sendHandler(operation, channel.id(), channel.address(), isSpecV3);
     }
     if (operation.isReceive()) {
-      routeHandler += receiveHandler(operation, channel.id(), channel.address());
+      routeHandler += receiveHandler(operation, channel.id(), channel.address(), isSpecV3);
     }
   }
 
@@ -131,7 +121,9 @@ function routeCode(channel) {
 }
 
 export default function routeRender({asyncapi}) {
+  let majorSpecVersion = parseInt(asyncapi.version().split('.')[0]);
+  let isSpecV3 = (majorSpecVersion === 3);
   return asyncapi.channels().all().map(channel => {
-    return routeCode(channel);
+    return routeCode(channel, isSpecV3);
   });
 }

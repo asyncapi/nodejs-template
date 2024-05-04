@@ -46,15 +46,16 @@ export default function indexEntrypointFile({asyncapi, params}) {
     `
 
     const channelsMiddleware = asyncapi.channels().all().map(channel => {
-        const channelName = channel.id();
+        const channelName = channel.address();
+        const channelOperationId = channel.id();
         let channelLogic = '';
         if (channel.operations().filterByReceive().length > 0) {
             channelLogic += `console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('${channelName}'));
-            app.use(${camelCase(channelName)});`;
+            app.use(${camelCase(channelOperationId)});`;
         }
         if (channel.operations().filterBySend().length > 0) {
             channelLogic += `console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('${channelName}'));
-            app.useOutbound(${camelCase(channelName)});`;
+            app.useOutbound(${camelCase(channelOperationId)});`;
         }
         return channelLogic;
     }).join('\n');
