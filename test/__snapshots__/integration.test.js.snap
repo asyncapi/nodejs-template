@@ -165,15 +165,13 @@ const router = new Router();
 const lightTurnOffHandler = require('../handlers/lightTurnOff');
 module.exports = router;
 
-router.use('smartylighting.streetlights.1.0.action.:streetlightId.turn.off', async (message, next) => {
+router.useOutbound('smartylighting.streetlights.1.0.action.:streetlightId.turn.off', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.turn.off', 'turnOnOff', 'subscribe');
     await lightTurnOffHandler._turnOff({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -196,12 +194,10 @@ module.exports = router;
 router.use('smartylighting.streetlights.1.0.event.:streetlightId.lighting.measured', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.event.{streetlightId}.lighting.measured', 'lightMeasured', 'publish');
     await lightingMeasuredHandler._receiveLightMeasurement({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -217,15 +213,13 @@ const router = new Router();
 const lightTurnOnHandler = require('../handlers/lightTurnOn');
 module.exports = router;
 
-router.use('smartylighting.streetlights.1.0.action.:streetlightId.turn.on', async (message, next) => {
+router.useOutbound('smartylighting.streetlights.1.0.action.:streetlightId.turn.on', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.turn.on', 'turnOnOff', 'subscribe');
     await lightTurnOnHandler._turnOn({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -241,15 +235,13 @@ const router = new Router();
 const lightsDimHandler = require('../handlers/lightsDim');
 module.exports = router;
 
-router.use('smartylighting.streetlights.1.0.action.:streetlightId.dim', async (message, next) => {
+router.useOutbound('smartylighting.streetlights.1.0.action.:streetlightId.dim', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting.streetlights.1.0.action.{streetlightId}.dim', 'dimLight', 'subscribe');
     await lightsDimHandler._dimLight({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -287,13 +279,13 @@ app.use(logger);
 
 // Channels
 
-console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('lightingMeasured'));
+console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('smartylighting.streetlights.1.0.event.{streetlightId}.lighting.measured'));
 app.use(lightingMeasured);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOn'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting.streetlights.1.0.action.{streetlightId}.turn.on'));
 app.useOutbound(lightTurnOn);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOff'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting.streetlights.1.0.action.{streetlightId}.turn.off'));
 app.useOutbound(lightTurnOff);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightsDim'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting.streetlights.1.0.action.{streetlightId}.dim'));
 app.useOutbound(lightsDim);
 
 app.use(errorLogger);
@@ -348,7 +340,7 @@ exports[`template integration tests for generated files using the generator and 
       consumerOptions:
         groupId: streetlightsKafkaApi
       topics:
-      - lightingMeasured
+      - smartylighting.streetlights.1.0.event.{streetlightId}.lighting.measured
       topicSeparator: '__'
       topicPrefix:
 
@@ -551,15 +543,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdDimHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/dim', 'dimLight', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdDimHandler._dimLight({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -575,15 +565,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOffHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off', 'turnOnOff', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler._turnOff({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -599,15 +587,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOnHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'turnOnOff', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler._turnOn({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -629,13 +615,11 @@ module.exports = router;
 
 router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'lightMeasured', 'publish');
     await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler._receiveLightMeasurement({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -930,15 +914,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdDimHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-dim');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/dim', 'dimLight', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdDimHandler._dimLight({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -954,15 +936,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOffHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-off');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off', 'turnOnOff', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOffHandler._turnOff({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -978,15 +958,13 @@ const router = new Router();
 const smartylightingStreetlights10ActionStreetlightIdTurnOnHandler = require('../handlers/smartylighting-streetlights-1-0-action-{streetlightId}-turn-on');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'turnOnOff', 'subscribe');
     await smartylightingStreetlights10ActionStreetlightIdTurnOnHandler._turnOn({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1008,13 +986,11 @@ module.exports = router;
 
 router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
-
     await validateMessage(message.payload, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'lightMeasured', 'publish');
     await smartylightingStreetlights10EventStreetlightIdLightingMeasuredHandler._receiveLightMeasurement({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1309,15 +1285,13 @@ const router = new Router();
 const lightTurnOffHandler = require('../handlers/lightTurnOff');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/off', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/off', 'turnOnOff', 'subscribe');
     await lightTurnOffHandler._turnOff({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1340,12 +1314,10 @@ module.exports = router;
 router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measured', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured', 'lightMeasured', 'publish');
     await lightingMeasuredHandler._receiveLightMeasurement({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1361,15 +1333,13 @@ const router = new Router();
 const lightTurnOnHandler = require('../handlers/lightTurnOn');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/on', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/turn/on', 'turnOnOff', 'subscribe');
     await lightTurnOnHandler._turnOn({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1385,15 +1355,13 @@ const router = new Router();
 const lightsDimHandler = require('../handlers/lightsDim');
 module.exports = router;
 
-router.use('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
+router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/dim', async (message, next) => {
   try {
 
-    await validateMessage(message.payload, 'smartylighting/streetlights/1/0/action/{streetlightId}/dim', 'dimLight', 'subscribe');
     await lightsDimHandler._dimLight({
       message
     });
     next();
-
   } catch (e) {
     next(e);
   }
@@ -1431,13 +1399,13 @@ app.use(logger);
 
 // Channels
 
-console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('lightingMeasured'));
+console.log(cyan.bold.inverse(' SUB '), gray('Subscribed to'), yellow('smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured'));
 app.use(lightingMeasured);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOn'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting/streetlights/1/0/action/{streetlightId}/turn/on'));
 app.useOutbound(lightTurnOn);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightTurnOff'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting/streetlights/1/0/action/{streetlightId}/turn/off'));
 app.useOutbound(lightTurnOff);
-console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('lightsDim'));
+console.log(yellow.bold.inverse(' PUB '), gray('Will eventually publish to'), yellow('smartylighting/streetlights/1/0/action/{streetlightId}/dim'));
 app.useOutbound(lightsDim);
 
 app.use(errorLogger);
@@ -1486,7 +1454,7 @@ exports[`template integration tests for generated files using the generator and 
 
     mqtt:
       url: mqtt://test.mosquitto.org:1883/
-      topics: [\\"lightingMeasured\\"]
+      topics: [\\"smartylighting/streetlights/1/0/event/+/lighting/measured\\"]
       qos:
       protocol: mqtt
       retain:
