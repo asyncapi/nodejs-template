@@ -74,7 +74,7 @@ function sendHandler(operation, channelName, channelAddress, isSpecV3) {
     next()
   } else {
     throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
-  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');`
+  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');`;
   
   return `
   ${operation.hasSummary()  ? `
@@ -121,8 +121,8 @@ function routeCode(channel, isSpecV3) {
 }
 
 export default function routeRender({asyncapi}) {
-  let majorSpecVersion = parseInt(asyncapi.version().split('.')[0]);
-  let isSpecV3 = (majorSpecVersion === 3);
+  const majorSpecVersion = parseInt(asyncapi.version().split('.')[0], 10);
+  const isSpecV3 = (majorSpecVersion === 3);
   return asyncapi.channels().all().map(channel => {
     return routeCode(channel, isSpecV3);
   });
