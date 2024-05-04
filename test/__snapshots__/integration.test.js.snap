@@ -370,7 +370,6 @@ exports[`template integration tests for generated files using the generator and 
     \\"dotenv\\": \\"8.1.0\\",
     \\"hermesjs\\": \\"2.x\\",
     \\"hermesjs-router\\": \\"1.x\\",
-    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"node-fetch\\": \\"2.6.0\\",
     \\"node-yaml-config\\": \\"0.0.4\\",
     \\"hermesjs-kafka\\": \\"2.x\\"
@@ -741,9 +740,9 @@ exports[`template integration tests for generated files using the generator and 
     \\"dotenv\\": \\"8.1.0\\",
     \\"hermesjs\\": \\"2.x\\",
     \\"hermesjs-router\\": \\"1.x\\",
-    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"node-fetch\\": \\"2.6.0\\",
     \\"node-yaml-config\\": \\"0.0.4\\",
+    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"hermesjs-mqtt\\": \\"2.x\\"
   }
 }"
@@ -1112,9 +1111,9 @@ exports[`template integration tests for generated files using the generator and 
     \\"dotenv\\": \\"8.1.0\\",
     \\"hermesjs\\": \\"2.x\\",
     \\"hermesjs-router\\": \\"1.x\\",
-    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"node-fetch\\": \\"2.6.0\\",
     \\"node-yaml-config\\": \\"0.0.4\\",
+    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"hermesjs-mqtt\\": \\"2.x\\"
   }
 }"
@@ -1483,7 +1482,6 @@ exports[`template integration tests for generated files using the generator and 
     \\"dotenv\\": \\"8.1.0\\",
     \\"hermesjs\\": \\"2.x\\",
     \\"hermesjs-router\\": \\"1.x\\",
-    \\"asyncapi-validator\\": \\"3.0.0\\",
     \\"node-fetch\\": \\"2.6.0\\",
     \\"node-yaml-config\\": \\"0.0.4\\",
     \\"hermesjs-mqtt\\": \\"2.x\\"
