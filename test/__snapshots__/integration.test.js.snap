@@ -158,9 +158,7 @@ handler._dimLight = async ({
 
 exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 5`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightTurnOffHandler = require('../handlers/lightTurnOff');
 module.exports = router;
@@ -180,9 +178,7 @@ router.useOutbound('smartylighting.streetlights.1.0.action.:streetlightId.turn.o
 
 exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 6`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightingMeasuredHandler = require('../handlers/lightingMeasured');
 module.exports = router;
@@ -206,9 +202,7 @@ router.use('smartylighting.streetlights.1.0.event.:streetlightId.lighting.measur
 
 exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 7`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightTurnOnHandler = require('../handlers/lightTurnOn');
 module.exports = router;
@@ -228,9 +222,7 @@ router.useOutbound('smartylighting.streetlights.1.0.action.:streetlightId.turn.o
 
 exports[`template integration tests for generated files using the generator and kafka example - v3 spec should generate proper handlers and routes files 8`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightsDimHandler = require('../handlers/lightsDim');
 module.exports = router;
@@ -1277,9 +1269,7 @@ handler._dimLight = async ({
 
 exports[`template integration tests for generated files using the generator and mqtt example - v3 spec should generate proper handlers and routes files 5`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightTurnOffHandler = require('../handlers/lightTurnOff');
 module.exports = router;
@@ -1299,9 +1289,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
 
 exports[`template integration tests for generated files using the generator and mqtt example - v3 spec should generate proper handlers and routes files 6`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightingMeasuredHandler = require('../handlers/lightingMeasured');
 module.exports = router;
@@ -1325,9 +1313,7 @@ router.use('smartylighting/streetlights/1/0/event/:streetlightId/lighting/measur
 
 exports[`template integration tests for generated files using the generator and mqtt example - v3 spec should generate proper handlers and routes files 7`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightTurnOnHandler = require('../handlers/lightTurnOn');
 module.exports = router;
@@ -1347,9 +1333,7 @@ router.useOutbound('smartylighting/streetlights/1/0/action/:streetlightId/turn/o
 
 exports[`template integration tests for generated files using the generator and mqtt example - v3 spec should generate proper handlers and routes files 8`] = `
 "const Router = require('hermesjs/lib/router');
-const {
-  validateMessage
-} = require('../../lib/message-validator');
+
 const router = new Router();
 const lightsDimHandler = require('../handlers/lightsDim');
 module.exports = router;

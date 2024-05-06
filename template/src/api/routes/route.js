@@ -98,7 +98,7 @@ function routeCode(channel, isSpecV3) {
   const channelName = channel.id();
   const generalImport = `
   const Router = require('hermesjs/lib/router');
-  const { validateMessage } = require('../../lib/message-validator');
+  ${isSpecV3 ? "": "const { validateMessage } = require('../../lib/message-validator');"}
   const router = new Router();
   const ${ camelCase(channelName) }Handler = require('../handlers/${convertToFilename(channelName)}');
   module.exports = router;
