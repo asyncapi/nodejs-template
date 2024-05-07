@@ -50,12 +50,8 @@ export function toHermesTopic(str) {
   return str.replace(/\{([^}]+)\}/g, ':$1');
 }
 
-export function channelNamesWithPublish(asyncapi) {
-  const result = [];
-  asyncapi.channelNames().forEach((name) => {
-    if (asyncapi.channel(name).hasPublish()) result.push(name);
-  });
-  return result;
+export function channelNamesWithReceive(asyncapi) {
+  return asyncapi.channels().filterByReceive().map(channel => channel.address());
 }
 
 export function host(url) {

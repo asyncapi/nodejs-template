@@ -64,12 +64,12 @@ $ npm install -g @asyncapi/cli
 
 # Run generation from the root of the template to use tes MQTT example
 # To use the template
-$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi.yml @asyncapi/nodejs-template -o test/output -p server=production
+$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi-v3.yml @asyncapi/nodejs-template -o test/output -p server=production
 
 # OR
 
 # To test your local changes provided inside template
-$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi.yml ./ -o test/output -p server=production
+$ asyncapi generate fromTemplate test/mocks/mqtt/asyncapi-v3.yml ./ -o test/output -p server=production
 
 ##
 ## Install dependencies of generated library
@@ -100,10 +100,6 @@ $ npm run test:example
 $ npm install mqtt -g
 
 #You should see the sent message in the logs of the started example.
-#Notice that the server automatically validates incoming messages and logs out validation errors
-
-#publish an invalid message.
-$ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": "3", "sentAt": "2017-06-07T12:34:32.000Z"}'
 
 #publish a valid message
 $ mqtt pub -t 'smartylighting/streetlights/1/0/event/123/lighting/measured' -h 'test.mosquitto.org' -m '{"id": 1, "lumens": 3, "sentAt": "2017-06-07T12:34:32.000Z"}'
@@ -123,7 +119,6 @@ To avoid this, user code remains external to the generated code, functioning as 
 Facilitating this separation involves creating handlers and associating them with their respective routes. These handlers can then be seamlessly integrated into the template's workflow by importing the appropriate methods to register the handlers. In doing so, the template's `client.register<operationId>Middleware` method becomes the bridge between the user-written handlers and the generated code. This can be used to register middlewares for specific methods on specific channels.
 
 Look closely into [example script](test/example/script.js) that works with library generated using [this MQTT based AsyncAPI document](test/mocks/mqtt/asyncapi.yml). Look at available handlers API for reading incomming messages and processing outgoing messages. Learn how to start generated server with `init()` and also learn how to send messages, if needed.
-```
 
 ## Template configuration
 
