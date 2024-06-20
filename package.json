@@ -38,6 +38,7 @@
     "eslint-plugin-react": "^7.34.1",
     "filenamify": "^4.3.0",
     "js-beautify": "^1.15.1",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "markdown-toc": "^1.2.0"
   },
