@@ -1,8 +1,11 @@
-const { red, gray } = require('chalk');
+const { red, gray, green } = require('chalk');
 
 module.exports = (err, message, next) => {
   if (err.name === 'AsyncAPIValidationError') {
     console.error(red(`❗  Message Rejected. ${err.message}`));
+    if(err.warning) {
+      console.warn(green(`⛔ ${err.warning}`));
+    }
   } else {
     console.error(red(`❗  ${err.message}`));
     if (err.stack)

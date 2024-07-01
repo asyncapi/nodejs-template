@@ -76,6 +76,10 @@
       "certFilesDir": {
         "description": "Directory where application certificates are located. This parameter is needed when you use X509 security scheme and your cert files are not located in the root of your application.",
         "default": "./"
+      },
+      "messageRuntimeValidation": {
+        "description": "Enable or disable runtime validation of message identifiers.",
+        "default": true
       }
     },
     "nonRenderableFiles": [

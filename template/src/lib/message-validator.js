@@ -16,7 +16,10 @@ function validateMessageIdentifiers(asyncApiSpec) {
   return missingNames;
 }
 
-function performPreGenValidation(asyncApiFilePath) {
+function performPreGenValidation(asyncApiFilePath, messageRuntimeValidation) {
+  if (messageRuntimeValidation === false) {
+    return;
+  }
   const fileContents = fs.readFileSync(asyncApiFilePath, 'utf8');
   const asyncApiSpec = yaml.load(fileContents);
 
@@ -24,20 +27,30 @@ function performPreGenValidation(asyncApiFilePath) {
 
   if (missingNames.length > 0) {
     const errorMessage = `msgIdentifier "name" does not exist for message(s): ${missingNames.join(', ')}`;
-    throw new Error(errorMessage);
+    const warningMessage = 'If you are not able to modify your AsyncAPI document to add missing message IDs, then disable runtime validation logic by passing parameter messageRuntimeValidation set to false';
+    const error = new Error(errorMessage);
+    error.warning = warningMessage;
+    error.name = 'AsyncAPIValidationError';
+    throw error;
   }
 }
 
 // Try to parse the payload, and increment nValidated if parsing was successful.
-module.exports.validateMessage = async (
+async function validateMessage (
   payload,
   channelName,
   messageName,
   operation,
+  messageRuntimeValidation,
   nValidated = 0
-) => {
+) {
+  if (messageRuntimeValidation === false) {
+    return nValidated + 1;
+  }
+
+  const asyncApiFilePath = path.resolve(__dirname, "../../asyncapi.yaml");
   try {
-    const asyncApiFilePath = path.resolve(__dirname, "../../asyncapi.yaml");
+    performPreGenValidation(asyncApiFilePath, messageRuntimeValidation);
     const va = await AsyncApiValidator.fromSource(asyncApiFilePath, {
       msgIdentifier: "name",
     });
@@ -49,4 +62,8 @@ module.exports.validateMessage = async (
     error.name = "AsyncAPIValidationError";
     throw error;
   }
+};
+
+module.exports = {
+  validateMessage
 };
