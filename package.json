@@ -78,7 +78,7 @@
         "default": "./"
       },
       "messageRuntimeValidation": {
-        "description": "Enable or disable runtime validation of message identifiers.",
+        "description": "Enable or disable runtime validation of messages against schemas provided in AsyncAPI document.",
         "default": true
       }
     },
