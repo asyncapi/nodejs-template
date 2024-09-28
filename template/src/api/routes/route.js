@@ -2,7 +2,7 @@
 import { File } from '@asyncapi/generator-react-sdk';
 import { camelCase, convertToFilename, toHermesTopic } from '../../../../helpers/index';
 
-function receiveHandler(operation, channelName, channelAddress, isSpecV3) {
+function receiveHandler(operation, channelName, channelAddress, isSpecV3, messageRuntimeValidation) {
   if (!operation.isReceive()) {
     return '';
   }
@@ -22,7 +22,7 @@ function receiveHandler(operation, channelName, channelAddress, isSpecV3) {
 
   ${
     operation.messages().all().map(message => `try {
-      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', nValidated);
+      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', ${messageRuntimeValidation}, nValidated);
     } catch { };`).join('\n')
   }
 
@@ -31,7 +31,7 @@ function receiveHandler(operation, channelName, channelAddress, isSpecV3) {
     next()
   } else {
     throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
-  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish');`;
+  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','publish', ${messageRuntimeValidation});`;
 
   return `
   ${operation.hasSummary()  ? `
@@ -51,7 +51,7 @@ function receiveHandler(operation, channelName, channelAddress, isSpecV3) {
   `;
 }
 
-function sendHandler(operation, channelName, channelAddress, isSpecV3) {
+function sendHandler(operation, channelName, channelAddress, isSpecV3, messageRuntimeValidation) {
   if (!operation.isSend()) {
     return '';
   }
@@ -65,7 +65,7 @@ function sendHandler(operation, channelName, channelAddress, isSpecV3) {
 
   ${
     operation.messages().all().map(message => `try {
-      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', nValidated);
+      nValidated = await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', nValidated, ${messageRuntimeValidation});
     } catch { };`).join('\n')
   }
 
@@ -74,7 +74,7 @@ function sendHandler(operation, channelName, channelAddress, isSpecV3) {
     next()
   } else {
     throw new Error(\`\${nValidated} of ${ operation.messages().length } message schemas matched when exactly 1 should match\`);
-  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe');`;
+  }` : `await validateMessage(message.payload,'${ channelAddress }','${ message.name() }','subscribe', ${messageRuntimeValidation});`;
   
   return `
   ${operation.hasSummary()  ? `
@@ -94,7 +94,7 @@ function sendHandler(operation, channelName, channelAddress, isSpecV3) {
   `;
 }
 
-function routeCode(channel, isSpecV3) {
+function routeCode(channel, isSpecV3, messageRuntimeValidation) {
   const channelName = channel.id();
   const generalImport = `
   const Router = require('hermesjs/lib/router');
@@ -110,20 +110,21 @@ function routeCode(channel, isSpecV3) {
 
   for (const operation of channel.operations()) {
     if (operation.isSend()) {
-      routeHandler += sendHandler(operation, channel.id(), channel.address(), isSpecV3);
+      routeHandler += sendHandler(operation, channel.id(), channel.address(), isSpecV3, messageRuntimeValidation);
     }
     if (operation.isReceive()) {
-      routeHandler += receiveHandler(operation, channel.id(), channel.address(), isSpecV3);
+      routeHandler += receiveHandler(operation, channel.id(), channel.address(), isSpecV3, messageRuntimeValidation);
     }
   }
 
   return <File name={`${convertToFilename(channelName)}.js`}>{routeHandler}</File>;
 }
 
-export default function routeRender({asyncapi}) {
+export default function routeRender({asyncapi, params}) {
   const majorSpecVersion = parseInt(asyncapi.version().split('.')[0], 10);
   const isSpecV3 = (majorSpecVersion === 3);
+  const messageRuntimeValidation = params.messageRuntimeValidation;
   return asyncapi.channels().all().map(channel => {
-    return routeCode(channel, isSpecV3);
+    return routeCode(channel, isSpecV3, messageRuntimeValidation);
   });
 }
