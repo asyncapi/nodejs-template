@@ -42,11 +42,11 @@
     "markdown-toc": "^1.2.0"
   },
   "devDependencies": {
-    "@asyncapi/generator": "^1.17.25",
+    "@asyncapi/generator": "^3.2.0",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-sonarjs": "^0.11.0",
-    "jest": "^27.5.1",
+    "jest": "^30.2.0",
     "node-fetch": "^2.7.0",
     "rimraf": "^5.0.5"
   },
